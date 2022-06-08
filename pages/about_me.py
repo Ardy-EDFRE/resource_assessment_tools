@@ -4,7 +4,7 @@ import streamlit as st
 def app():
     st.markdown("# 📱 Resource Assessment Tools 📉")
 
-    st.markdown("**ONE STOP SOLUTION FOR ALL YOUR DATA NEEDS**_")
+    st.markdown("**ONE STOP SOLUTION FOR ALL YOUR DATA NEEDS**")
     st.markdown("## Introduction")
 
     st.markdown("## Tool Description")

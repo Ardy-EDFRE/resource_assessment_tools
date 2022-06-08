@@ -11,7 +11,7 @@ import streamlit as st
 
 
 def app():
-    st.title("DNV Solar Resource Estimate")
+    st.markdown("# DNV Solar Resource Estimate")
 
     @st.cache(allow_output_mutation=True)
     def get_chart(data, field, title, x_value, y_value, x_title, y_title):
