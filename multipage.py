@@ -5,10 +5,10 @@ through an object oriented framework.
 
 # Import necessary libraries 
 import streamlit as st
-import matplotlib.pyplot as plt
-
-plt.style.use("dark_background")
-st.set_page_config(layout="wide")
+# import matplotlib.pyplot as plt
+#
+# plt.style.use("dark_background")
+# st.set_page_config(layout="wide")
 
 
 # Define the multipage class to manage the multiple apps in our program 
