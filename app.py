@@ -7,6 +7,12 @@ from PIL import  Image
 from multipage import MultiPage
 from pages import iec_v2, dnv_solar, about_me # import your pages here
 
+import streamlit as st
+import matplotlib.pyplot as plt
+
+plt.style.use("dark_background")
+st.set_page_config(layout="wide")
+
 # Create an instance of the app 
 app = MultiPage()
 
@@ -16,7 +22,7 @@ display = np.array(display)
 # st.image(display, width = 400)
 # st.title("Data Storyteller Application")
 col1, col2 = st.columns(2)
-col1.image(display, width = 400)
+col1.image(display)
 col2.title("Resource Assessment Tools")
 
 # Add all your application here
