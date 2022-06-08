@@ -115,8 +115,6 @@ def app():
 
         data_values = [system_attributes_df, metadata_df, ghi_chart, ghi_df, summary_annually_df, summary_monthly_df]
 
-        st.session_state.dnv_values = data_values
-
         return system_attributes_df, metadata_df, ghi_chart, ghi_df, summary_annually_df, summary_monthly_df
 
     @st.cache(allow_output_mutation=True)
@@ -257,13 +255,13 @@ def app():
                                    IsBifacial, InverterType, LandUse, ManualWash,
                                    Clearance, Pitch, DCDerate, Availability)
 
-    if st.session_state.dnv_values:
-        system_attr_df = st.session_state.dnv_values[0]
-        metadata_df = st.session_state.dnv_values[1]
-        energy_chart = st.session_state.dnv_values[2]
-        energy_df = st.session_state.dnv_values[3]
-        sum_annual_df = st.session_state.dnv_values[4]
-        sum_monthly_df = st.session_state.dnv_values[5]
+    if dnv_values:
+        system_attr_df = dnv_values[0]
+        metadata_df = dnv_values[1]
+        energy_chart = dnv_values[2]
+        energy_df = dnv_values[3]
+        sum_annual_df = dnv_values[4]
+        sum_monthly_df = dnv_values[5]
 
         excel = write_excel(system_attr_df, metadata_df,
                             energy_df, sum_annual_df,
