@@ -25,7 +25,7 @@ def app():
 
     st.text("For each sector, there are rules governing whether or not the sector passes the test")
     st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/sector_evaluation.JPG")
-    st.text(f"""In this step we will:
+    st.text(f"""    In this step we will:
     1. Find the slope of the plane of best fit given a terrain file
     2. Find the terrain variation of this plane
     3. Return a True/False pass grade for the sector
