@@ -1,5 +1,5 @@
 <!-- Add logo -->
-<!--  ![App Logo]([https://i.stack.imgur.com/ARgpq.jp](https://i.stack.imgur.com/ARgpq.jpg) -->
+<!--  ![App Logo]([https://i.stack.imgur.com/ARgpq.jpg]) -->
 
 ![data-storyteller](https://i.stack.imgur.com/ARgpq.jpg)
 
