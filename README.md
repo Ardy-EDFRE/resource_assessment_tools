@@ -1,4 +1,3 @@
-A collection of tools that can be used by Wind &amp; Solar teams to analyze specific resource assessments.
 <!-- Add logo -->
 <!--  ![App Logo](https://i.stack.imgur.com/ARgpq.jpg) -->
 
@@ -13,6 +12,7 @@ _**ONE STOP SOLUTION FOR ALL YOUR DATA NEEDS**_
 ## Introduction 
 
 ## Tool Description 
+A collection of tools that can be used by Wind &amp; Solar teams to analyze specific resource assessments.
 
 ## Features 
 
