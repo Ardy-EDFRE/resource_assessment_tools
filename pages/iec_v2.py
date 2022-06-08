@@ -36,7 +36,7 @@ def app():
         "|  6 | (8*L, 16*L) | Not applicable  | Not applicable                         | Outside measurement sector |",
         extensions=['tables'])
 
-    st.markdown(sector_markdown)
+    st.markdown("\n".join(sector_markdown))
 
     # BUSINESS LOGIC
     def createResultTxtFiles(outputResultsFileName):
