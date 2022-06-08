@@ -1,7 +1,7 @@
 <!-- Add logo -->
 <!--  ![App Logo]([https://i.stack.imgur.com/ARgpq.jp](https://i.stack.imgur.com/ARgpq.jpg) -->
 
-![data-storyteller](https://i.stack.imgur.com/ARgpq.jp)
+![data-storyteller](https://i.stack.imgur.com/ARgpq.jpg)
 
 [![forthebadge](https://forthebadge.com/images/badges/built-by-developers.svg)](https://forthebadge.com)
 [![pythonbadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
