@@ -23,19 +23,18 @@ from streamlit_folium import folium_static
 def app():
     st.title("IEC Terrain Assessment")
 
-    sector_table = f"""
-                    |    | Distance    | Maximum Slope   | Maximum Terrain Variation From Plane   | Sector                     |\n
-                    |----+-------------+-----------------+----------------------------------------+----------------------------|\n
-                    |  0 | (0, 2*L)    | <3% plane       | <1/3 (H - 0.5*D)                       | 360                        |\n
-                    |  1 | (2*L, 4*L)  | <5% plane       | <2/3 (H - 0.5*D)                       | Measurement sector         |\n
-                    |  2 | (2*L, 4*L)  | <10% max pnt    | Not applicable                         | Outside measurement sector |\n
-                    |  3 | (4*L, 8*L)  | <10% plane      | <(H - 0.5*D)                           | Measurement sector         |\n
-                    |  4 | (4*L, 8*L)  | Not applicable  | Not applicable                         | Outside measurement sector |\n
-                    |  5 | (8*L, 16*L) | <10% max pnt    | <4/3 (H - 0.5*D)                       | Measurement sector         |\n
-                    |  6 | (8*L, 16*L) | Not applicable  | Not applicable                         | Outside measurement sector |\n
-                    """
+    sector_table = [
+                    "|    | Distance    | Maximum Slope   | Maximum Terrain Variation From Plane   | Sector                     |",
+                    "|  0 | (0, 2*L)    | <3% plane       | <1/3 (H - 0.5*D)                       | 360                        |",
+                    "|  1 | (2*L, 4*L)  | <5% plane       | <2/3 (H - 0.5*D)                       | Measurement sector         |",
+                    "|  2 | (2*L, 4*L)  | <10% max pnt    | Not applicable                         | Outside measurement sector |",
+                    "|  3 | (4*L, 8*L)  | <10% plane      | <(H - 0.5*D)                           | Measurement sector         |",
+                    "|  4 | (4*L, 8*L)  | Not applicable  | Not applicable                         | Outside measurement sector |",
+                    "|  5 | (8*L, 16*L) | <10% max pnt    | <4/3 (H - 0.5*D)                       | Measurement sector         |",
+                    "|  6 | (8*L, 16*L) | Not applicable  | Not applicable                         | Outside measurement sector |",
+                    ]
 
-    st.markdown(sector_table)
+    st.markdown("\n".join(sector_table))
 
     # BUSINESS LOGIC
     def createResultTxtFiles(outputResultsFileName):
