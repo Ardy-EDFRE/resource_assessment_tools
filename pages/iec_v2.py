@@ -19,6 +19,7 @@ import streamlit as st
 import folium
 from streamlit_folium import st_folium, folium_static
 
+
 def app():
     # BUSINESS LOGIC
     def createResultTxtFiles(outputResultsFileName):
@@ -816,13 +817,11 @@ def app():
         st.write("Total time: " + str(elapsed_time))
         output2_csv = pd.read_csv(outputResultsFileName[:-4] + '_details.csv')
         convert_csv = convert_df(output2_csv)
+        st.write(output2_csv)
 
-    download_iec_details = st.sidebar.checkbox("Download IEC detailed CSV")
-    if download_iec_details:
         st.download_button(
             label="Download data as CSV",
             data=convert_csv,
             file_name='output.csv',
             mime='text/csv',
         )
-        st.write(output2_csv)
