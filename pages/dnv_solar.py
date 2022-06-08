@@ -255,36 +255,36 @@ def app():
                                    IsBifacial, InverterType, LandUse, ManualWash,
                                    Clearance, Pitch, DCDerate, Availability)
 
-    if dnv_values:
-        system_attr_df = dnv_values[0]
-        metadata_df = dnv_values[1]
-        energy_chart = dnv_values[2]
-        energy_df = dnv_values[3]
-        sum_annual_df = dnv_values[4]
-        sum_monthly_df = dnv_values[5]
+        if dnv_values:
+            system_attr_df = dnv_values[0]
+            metadata_df = dnv_values[1]
+            energy_chart = dnv_values[2]
+            energy_df = dnv_values[3]
+            sum_annual_df = dnv_values[4]
+            sum_monthly_df = dnv_values[5]
 
-        excel = write_excel(system_attr_df, metadata_df,
-                            energy_df, sum_annual_df,
-                            sum_monthly_df)
+            excel = write_excel(system_attr_df, metadata_df,
+                                energy_df, sum_annual_df,
+                                sum_monthly_df)
 
-        st.subheader('System Attribute Inputs')
-        st.dataframe(system_attr_df)
-        st.subheader('Metadata')
-        st.dataframe(metadata_df)
-        st.subheader("Monthly Net Energy")
-        st.altair_chart(energy_chart.interactive(), use_container_width=True)
-        st.dataframe(energy_df)
-        st.subheader('Summary result annually')
-        st.dataframe(sum_annual_df)
-        st.subheader('Summary result monthly')
-        st.dataframe(sum_monthly_df)
+            st.subheader('System Attribute Inputs')
+            st.dataframe(system_attr_df)
+            st.subheader('Metadata')
+            st.dataframe(metadata_df)
+            st.subheader("Monthly Net Energy")
+            st.altair_chart(energy_chart.interactive(), use_container_width=True)
+            st.dataframe(energy_df)
+            st.subheader('Summary result annually')
+            st.dataframe(sum_annual_df)
+            st.subheader('Summary result monthly')
+            st.dataframe(sum_monthly_df)
 
-        st.sidebar.download_button(
-            label="Download",
-            data=excel,
-            file_name="EnergyEstimate.xlsx",
-            mime="application/vnd.ms-excel"
-        )
+            st.sidebar.download_button(
+                label="Download",
+                data=excel,
+                file_name="EnergyEstimate.xlsx",
+                mime="application/vnd.ms-excel"
+            )
 
         # Pages to add on maybe
         # page_names_to_funcs = {
