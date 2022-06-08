@@ -5,7 +5,7 @@ from PIL import  Image
 
 # Custom imports 
 from multipage import MultiPage
-from pages import iec_v2, dnv_solar # import your pages here
+from pages import iec_v2, dnv_solar, sector # import your pages here
 
 # Create an instance of the app 
 app = MultiPage()
