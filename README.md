@@ -1,4 +1,3 @@
-# resource_assessment_tools
 A collection of tools that can be used by Wind &amp; Solar teams to analyze specific resource assessments.
 <!-- Add logo -->
 <!--  ![App Logo](https://i.stack.imgur.com/ARgpq.jpg) -->
@@ -8,7 +7,7 @@ A collection of tools that can be used by Wind &amp; Solar teams to analyze spec
 [![forthebadge](https://forthebadge.com/images/badges/built-by-developers.svg)](https://forthebadge.com)
 [![pythonbadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
 
-# 📱 Data Storyteller 📉
+# 📱 Resource Assessment Tools 📉
 
 _**ONE STOP SOLUTION FOR ALL YOUR DATA NEEDS**_ 
 ## Introduction 
