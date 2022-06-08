@@ -15,9 +15,22 @@ def app():
 
     st.markdown("**How it works**")
     st.markdown(f"""
-                Solar Resource Compass accesses and compares irradiance data from multiple data providers and allows you to see how they compare for your project location. By default, Solar Resource Compass will access data from NREL (satellite and MTS datasets), SolarGIS, Meteonorm and DNV’s SunSpot irradiance model. The results of the analysis include a statistical comparison of the available sources presented in a convenient table, chart and map. User can also upload their own data for comparsion.
-                Solar Resource Compass also generates monthly soiling  loss estimates for both dust soiling and snow soiling. By incorporating industry standard models and DNV analytics, precipitation and snowfall data is automatically accessed and used to estimate the impact on energy generation. The loss profiles are presented in a monthly table to use in popular energy modeling software.
-                With the proliferation of bifacial modules, developers and investors also need guidance on albedo - the light reflected off the ground and on to the back surface of solar modules. Solar Resource Compass addresses this need through the use of a proprietary model that calculates a monthly albedo profile that can be used in any commerical energy modeling software.
+                Solar Resource Compass accesses and compares irradiance data from multiple data providers
+                and allows you to see how they compare for your project location. By default,
+                Solar Resource Compass will access data from NREL (satellite and MTS datasets), 
+                SolarGIS, Meteonorm and DNV’s SunSpot irradiance model. The results of the analysis
+                include a statistical comparison of the available sources presented in a convenient
+                table, chart and map. User can also upload their own data for comparsion.
+                
+                Solar Resource Compass also generates monthly soiling  loss estimates for both dust soiling
+                and snow soiling. By incorporating industry standard models and DNV analytics, precipitation
+                and snowfall data is automatically accessed and used to estimate the impact on energy generation.
+                The loss profiles are presented in a monthly table to use in popular energy modeling software.
+                
+                With the proliferation of bifacial modules, developers and investors also need guidance
+                on albedo - the light reflected off the ground and on to the back surface of solar modules.
+                Solar Resource Compass addresses this need through the use of a proprietary model that calculates
+                a monthly albedo profile that can be used in any commerical energy modeling software.
                 """)
 
     @st.cache(allow_output_mutation=True)
