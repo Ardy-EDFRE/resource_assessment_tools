@@ -2,14 +2,6 @@ import streamlit as st
 
 
 def app():
-    st.markdown("<!-- Add logo -->")
-    st.markdown("<!--  ![App Logo]([[https://i.stack.imgur.com/ARgpq.jpg](https://github.com/Ardy-EDFRE/resource_assessment_tools/blob/main/edf_logo.jpg](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/edf_logo.jpg))) -->")
-    st.markdown("![data-storyteller](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/edf_logo.jpg)")
-                
-    st.markdown("[![forthebadge](https://forthebadge.com/images/badges/built-by-developers.svg)](https://forthebadge.com)")
-    st.markdown("[![pythonbadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)")
-    st.markdown("[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/ardy-edfre/resource_assessment_tools/main/app.py)")
-
     st.markdown("# 📱 Resource Assessment Tools 📉")
 
     st.markdown("**ONE STOP SOLUTION FOR ALL YOUR DATA NEEDS**_")
