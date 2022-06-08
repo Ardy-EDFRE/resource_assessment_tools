@@ -17,10 +17,27 @@ import csv
 import time
 import streamlit as st
 import folium
-from streamlit_folium import st_folium, folium_static
+from streamlit_folium import folium_static
+import markdown
 
 
 def app():
+    st.title("IEC Terrain Assessment")
+
+    sector_markdown = markdown.markdown(
+        "|    | Distance    | Maximum Slope   | Maximum Terrain Variation From Plane   | Sector                     |"
+        "|----+-------------+-----------------+----------------------------------------+----------------------------|"
+        "|  0 | (0, 2*L)    | <3% plane       | <1/3 (H - 0.5*D)                       | 360                        |"
+        "|  1 | (2*L, 4*L)  | <5% plane       | <2/3 (H - 0.5*D)                       | Measurement sector         |"
+        "|  2 | (2*L, 4*L)  | <10% max pnt    | Not applicable                         | Outside measurement sector |"
+        "|  3 | (4*L, 8*L)  | <10% plane      | <(H - 0.5*D)                           | Measurement sector         |"
+        "|  4 | (4*L, 8*L)  | Not applicable  | Not applicable                         | Outside measurement sector |"
+        "|  5 | (8*L, 16*L) | <10% max pnt    | <4/3 (H - 0.5*D)                       | Measurement sector         |"
+        "|  6 | (8*L, 16*L) | Not applicable  | Not applicable                         | Outside measurement sector |",
+        extensions=['tables'])
+
+    st.markdown(sector_markdown)
+
     # BUSINESS LOGIC
     def createResultTxtFiles(outputResultsFileName):
         try:
