@@ -825,12 +825,12 @@ def app():
 
         for point in range(0, len(turbine_list)):
             folium.Marker(turbine_list[point],
-                          popup=turbines_df['Alternate'][point]
+                          popup=turbines_df[point]
                           ).add_to(turbines_cluster)
 
         for point in range(0, len(mets_list)):
             folium.Marker(mets_list[point],
-                          popup=mets_df['Alternate'][point]
+                          popup=mets_df[point]
                           ).add_to(mets_cluster)
 
         bounding_box = turbines_cluster.get_bounds()
