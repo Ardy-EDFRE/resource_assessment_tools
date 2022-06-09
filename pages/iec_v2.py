@@ -954,10 +954,12 @@ def app():
 
         output2_csv = pd.read_csv(outputResultsFileName[:-4] + '_details.csv')
 
-        st.form_submit_button("Download data as CSV", on_click=download_df(output2_csv))
-        #
+        with st.form("data_form", clear_on_submit=False):
+            st.write(output2_csv)
+
+            st.form_submit_button("Download data as CSV", on_click=download_df(output2_csv))
+
         # convert_csv = convert_df(output2_csv)
-        # st.write(output2_csv)
         #
         # st.download_button(
         #     label="Download data as CSV",
