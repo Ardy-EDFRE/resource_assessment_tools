@@ -1,7 +1,7 @@
 <!-- Add logo -->
 <!--  ![App Logo]([[https://i.stack.imgur.com/ARgpq.jpg](https://github.com/Ardy-EDFRE/resource_assessment_tools/blob/main/edf_logo.jpg](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/edf_logo.jpg))) -->
 
-![data-storyteller](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/edf_logo.jpg)
+![data-storyteller](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_medium_logo.png)
 
 [![forthebadge](https://forthebadge.com/images/badges/built-by-developers.svg)](https://forthebadge.com)
 [![pythonbadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
@@ -58,7 +58,7 @@ $ streamlit run app.py
 
 ## Other Content
 
-## 🤝 How to Contribute? [3]
+## 🤝 How to Contribute?
 
 - Take a look at the Existing Issues or create your own Issues!
 - Wait for the Issue to be assigned to you after which you can start working on it.
