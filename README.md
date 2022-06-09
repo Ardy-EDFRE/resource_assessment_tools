@@ -21,14 +21,16 @@ A collection of tools that can be used by Wind &amp; Solar teams to analyze spec
 
 The application also uses Streamlit for a multiclass page implementation which can be viewed in the `multipage.py` file. The UI of the application can be seen here. The application is divided into multiple modules, each of which have been described below.
 
-![UI of the application](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/tool_homepage.JPG)
+![UI of the application](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/tool_homepage.JPG)
 
 
 _📌 **IEC Terrain Assessment**_ <br/>
 
- 
+ ![UI of the IEC Terrain Results](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/iec_results.JPG)
 
 _📌 **DNV Solar Energy Estimate**_ <br/>
+
+ ![UI of the DNV Results](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/dnv_solar_results.JPG)
 
 
 ## Technology Stack 
