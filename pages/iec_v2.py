@@ -769,7 +769,7 @@ def app():
                 'CRS {} '.format(
                     turbine_CRSCheck.crs, raster_CRSCheck.crs))
 
-    display_turbine_layout_map = st.sidebar.checkbox("Display Turbine Layout on Map")
+    display_turbine_layout_map = st.sidebar.checkbox("Display Turbine Layout on Map", help="This checkbox will display a map visualization of the input Turbine shapefiles")
     if display_turbine_layout_map:
         turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
         turbines_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Primary Turbine']
@@ -872,7 +872,7 @@ def app():
     #     mets_map.fit_bounds([bounding_box])
     #     folium_static(mets_map, width=800, height=800)
 
-    run_iec = st.sidebar.button("Run IEC Terrain Assessment")
+    run_iec = st.sidebar.button("Run IEC Terrain Assessment", help="This will run the process for evaluation sectors and generate an output for display & download")
     if run_iec:
         # process all pairs
         startTime = time.time()
