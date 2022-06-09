@@ -17,8 +17,7 @@ import time
 import streamlit as st
 import folium
 from streamlit_folium import folium_static
-from shapely.geometry import Point
-import utm
+import os, shutil
 
 
 def app():
@@ -904,6 +903,7 @@ def app():
         elapsed_time = time.time() - startTime
         elapsed_time = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
         st.write("Total time: " + str(elapsed_time))
+
         output2_csv = pd.read_csv(outputResultsFileName[:-4] + '_details.csv')
         convert_csv = convert_df(output2_csv)
         st.write(output2_csv)
@@ -914,6 +914,12 @@ def app():
             file_name='output.csv',
             mime='text/csv',
         )
+
+        if os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv'):
+            path1 = os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv')
+            csv_abs_path = os.path.dirname(os.path.abspath(outputResultsFileName))
+            path2 = os.path.expanduser(csv_abs_path)
+            shutil.move(path1, path2)
 
     st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png",
              width=50)
