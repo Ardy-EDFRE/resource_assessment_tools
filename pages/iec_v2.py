@@ -802,12 +802,13 @@ def app():
     display_iec_map = st.sidebar.checkbox("Display Met Pairs on Map")
     if display_iec_map:
         met_pairs_df = met_pairs_df.astype(
-            {"target_turbine_x": int, "target_turbine_y": int, "target_met_x": int, "target_met_y": int})
+            {"target_turbine_x": float, "target_turbine_y": float, "target_met_x": float, "target_met_y": float})
 
-        turbines_pairs_df = met_pairs_df.iloc[:, [met_pairs_df.get_loc(c) for c in
-                                                  ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y', ]]]
+        turbines_pairs_df = met_pairs_df.iloc[:, [met_pairs_df.columns.get_loc(c) for c in
+                                                  ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y']]]
 
-        mets_unique_df = met_pairs_df.iloc[:, [met_pairs_df.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
+        mets_unique_df = met_pairs_df.iloc[:,
+                         [met_pairs_df.columns.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
 
         turbines_pairs_df['geometry'] = [Point(xy) for xy in
                                          zip(turbines_pairs_df.target_turbine_x, turbines_pairs_df.target_turbine_y)]
@@ -830,10 +831,22 @@ def app():
         mets_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
 
         for point in range(0, len(turbine_list)):
-            folium.Marker(turbine_list[point]).add_to(turbines_cluster)
+            turbine_icon = folium.features.CustomIcon(
+                'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
+                icon_size=(40, 40))
+            folium.Marker(turbine_list[point],
+                          popup='Turbine',
+                          icon=turbine_icon
+                          ).add_to(turbines_cluster)
 
         for point in range(0, len(mets_list)):
-            folium.Marker(mets_list[point]).add_to(mets_cluster)
+            met_icon = folium.features.CustomIcon(
+                'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
+                icon_size=(40, 40))
+            folium.Marker(mets_list[point],
+                          popup='Met',
+                          icon=met_icon
+                          ).add_to(mets_cluster)
 
         bounding_box = turbines_cluster.get_bounds()
         mets_map.fit_bounds([bounding_box])
