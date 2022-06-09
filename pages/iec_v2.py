@@ -915,13 +915,11 @@ def app():
             mime='text/csv',
         )
 
-        move_file = st.sidebar.button("Move downloaded output to folder location")
-        if move_file:
-            if os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv'):
-                path1 = os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv')
-                csv_abs_path = os.path.dirname(os.path.abspath(outputResultsFileName))
-                path2 = os.path.expanduser(csv_abs_path)
-                shutil.move(path1, path2)
+        if os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv'):
+            path1 = os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv')
+            csv_abs_path = os.path.dirname(os.path.abspath(outputResultsFileName))
+            path2 = os.path.expanduser(csv_abs_path)
+            shutil.move(path1, path2)
 
     st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png",
              width=50)
