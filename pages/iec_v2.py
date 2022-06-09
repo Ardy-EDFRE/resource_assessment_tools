@@ -827,8 +827,8 @@ def app():
         mets_points = mets_unique_df[["lat", "long"]]
         mets_list = mets_points.values.tolist()
 
-        turbines_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
-        mets_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
+        turbines_pairs_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
+        mets_pairs_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
 
         for point in range(0, len(turbine_pairs_list)):
             turbine_icon = folium.features.CustomIcon(
@@ -837,7 +837,7 @@ def app():
             folium.Marker(turbine_pairs_list[point],
                           popup='Turbine',
                           icon=turbine_icon
-                          ).add_to(turbines_cluster)
+                          ).add_to(turbines_pairs_cluster)
 
         for point in range(0, len(mets_list)):
             met_icon = folium.features.CustomIcon(
@@ -846,9 +846,9 @@ def app():
             folium.Marker(mets_list[point],
                           popup='Met',
                           icon=met_icon
-                          ).add_to(mets_cluster)
+                          ).add_to(mets_pairs_cluster)
 
-        bounding_box = turbines_cluster.get_bounds()
+        bounding_box = turbines_pairs_cluster.get_bounds()
         mets_map.fit_bounds([bounding_box])
         folium_static(mets_map, width=800, height=800)
 
