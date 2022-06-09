@@ -774,8 +774,8 @@ def app():
     display_iec_map = st.sidebar.checkbox("Display Turbine Layout on Map")
     if display_iec_map:
         turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
-        turbines_df = turbine_CRSCheck.iloc[0, [turbine_CRSCheck.columns.get_loc(c) for c in ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y']]]
-        mets_df = turbine_CRSCheck.iloc[0, [turbine_CRSCheck.columns.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
+        turbines_df = turbine_CRSCheck.iloc[:, [turbine_CRSCheck.columns.get_loc(c) for c in ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y']]]
+        mets_df = turbine_CRSCheck.iloc[:, [turbine_CRSCheck.columns.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
         turbines_df["long"] = turbines_df.geometry.x
         turbines_df["lat"] = turbines_df.geometry.y
         mets_df["long"] = mets_df.geometry.x
