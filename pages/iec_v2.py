@@ -762,8 +762,8 @@ def app():
                 'CRS {} '.format(
                     turbine_CRSCheck.crs, raster_CRSCheck.crs))
 
-    display_iec_map = st.sidebar.checkbox("Display Turbine Layout on Map")
-    if display_iec_map:
+    display_turbine_layout_map = st.sidebar.checkbox("Display Turbine Layout on Map")
+    if display_turbine_layout_map:
         turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
         turbines_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Primary Turbine']
         mets_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Alt']
@@ -799,8 +799,8 @@ def app():
         turbine_map.fit_bounds([bounding_box])
         folium_static(turbine_map, width=800, height=800)
 
-    display_iec_map = st.sidebar.checkbox("Display Met Pairs on Map")
-    if display_iec_map:
+    display_met_pairs_map = st.sidebar.checkbox("Display Met Pairs on Map")
+    if display_met_pairs_map:
         met_pairs_df = met_pairs_df.astype(
             {"target_turbine_x": float, "target_turbine_y": float, "target_met_x": float, "target_met_y": float})
 
