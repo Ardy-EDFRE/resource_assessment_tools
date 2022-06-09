@@ -18,6 +18,7 @@ import time
 import streamlit as st
 import folium
 from streamlit_folium import folium_static
+from shapely.geometry import Point
 
 
 def app():
@@ -54,7 +55,6 @@ def app():
                              'max_terrain_variation'))
         csvfile.close()
 
-
     def getParamsFromFile(paramsFiles):
         pairLines = []
         pairsFile = open(paramsFiles["pair_path"], "r+")
@@ -62,7 +62,6 @@ def app():
         pairsFile.close()
 
         return pairLines
-
 
     def createParams(pl):
         plList = pl.split(',')
@@ -83,7 +82,6 @@ def app():
 
         return params
 
-
     def results2csv(pairResults, outputResultsFileName):
         # write detail output
         outputResultsFileDetailsName = outputResultsFileName[:-4] + '_details.csv'
@@ -97,12 +95,14 @@ def app():
         for p in pairResults:
             if p['max_terrain_variation'] is None:
                 tmpString = (
-                    str(p['pass_IEC_Test']), str(p['target_turbine_fid']), str(p['target_met_fid']), str(p['centered_on']),
+                    str(p['pass_IEC_Test']), str(p['target_turbine_fid']), str(p['target_met_fid']),
+                    str(p['centered_on']),
                     p['name'], str(p['angle']).replace(',', '-'), p['actual_slope_method'], str(p['actual_slope']),
                     str(p['max_slope']))
             else:
                 tmpString = (
-                    str(p['pass_IEC_Test']), str(p['target_turbine_fid']), str(p['target_met_fid']), str(p['centered_on']),
+                    str(p['pass_IEC_Test']), str(p['target_turbine_fid']), str(p['target_met_fid']),
+                    str(p['centered_on']),
                     p['name'], str(p['angle']).replace(',', '-'), p['actual_slope_method'], str(p['actual_slope']),
                     str(p['max_slope']),
                     str(p['actual_terrain_variation']), str(round(p['max_terrain_variation'], 4)))
@@ -122,8 +122,8 @@ def app():
             (str(pairResults[0]['target_turbine_fid']), str(pairResults[0]['target_met_fid']), str(pairPassesIEC)))
         outputResultsFile.close()
 
-
-    def format_sectors(origin, centered_on, include_angles, exclude_angles, target_turbine_fid, target_met_fid, L, H, D):
+    def format_sectors(origin, centered_on, include_angles, exclude_angles, target_turbine_fid, target_met_fid, L, H,
+                       D):
         sectors = []
         center_sector = [
             Sector(
@@ -217,19 +217,18 @@ def app():
 
         return sectors
 
-
     def transform_by_coordinate_system(df, raster_elevation):
         """
         Using the input CRS and raster data, convert X,Y points to common CRS
         """
         turbine_crs = df.geometry.crs
         raster_crs = raster_elevation.crs  # Pass CRS of image from rasterio
-        df['raster_coords'] = df.geometry.apply(lambda point: pyproj.transform(turbine_crs, raster_crs, point.x, point.y))
+        df['raster_coords'] = df.geometry.apply(
+            lambda point: pyproj.transform(turbine_crs, raster_crs, point.x, point.y))
         df['X'] = df['geometry'].apply(lambda point: point.x)
         df['Y'] = df['geometry'].apply(lambda point: point.y)
         # JL shouldn't you assign the raster_crs to the df dataframe itself df.crs = raster_crs
         return df
-
 
     def get_turbine_elevation(target, raster_elevation):
         """
@@ -242,7 +241,6 @@ def app():
         # row, col = elevation.index(x, y) # spatial --> image coordinates
         return {'Z': float(elevation_band_1[raster_elevation.index(target['X'], target['Y'])])}
 
-
     def get_utm_distance(po, p):
         """
         Given Universal Transverse Mercator points p_0 and p, find the Euclidean distance between them
@@ -251,7 +249,6 @@ def app():
         difY = p['Y'] - po['Y']
         dist = math.sqrt(difX ** 2 + difY ** 2)
         return dist
-
 
     def get_sectors(target_turbine, target_met, df):
         """
@@ -287,7 +284,6 @@ def app():
         )
         return pd.concat([df_target_turbine, df_target_met])
 
-
     def alpha_sector(LD):
         """
         Calculate alpha, the angle (in radians) which is blocked out by the ratio
@@ -299,7 +295,6 @@ def app():
         degree = math.degrees(arctan)
         alpha = 1.3 * degree + 10
         return alpha
-
 
     def calc_angles(direction, alpha):
         """
@@ -313,7 +308,6 @@ def app():
             alphaFin = alphaFin - 360
         return int(round(alphaOri)), int(round(alphaFin))
 
-
     def get_direction_degrees(po, p):
         """
         Given two points p_0 and p, find the direction of the vector connection them
@@ -326,7 +320,6 @@ def app():
         ))
         bearing2 = (90 - angle) % 360
         return bearing2
-
 
     def condense(list_of_tuples):
         """
@@ -365,7 +358,6 @@ def app():
             del l[0]
 
         return l
-
 
     def evaluate_sector(sector, raster):
         """
@@ -460,8 +452,8 @@ def app():
 
         return sector.to_dict()
 
-
-    def slope_interpolated_plane_and_terrain_variation(sector, rasterData, nodataMask, raster_noDataValue, rasterCellSize,
+    def slope_interpolated_plane_and_terrain_variation(sector, rasterData, nodataMask, raster_noDataValue,
+                                                       rasterCellSize,
                                                        xCellsFromLeft2Origin, yCellsFromLeft2Origin, xxMatrixInd,
                                                        yyMatrixInd):
         """
@@ -470,7 +462,8 @@ def app():
         """
 
         # extract terrain grid values (x,y,z) in grid coordinates centered in the sector.origin (turb or met)
-        rasX, rasY, rasZ = get_sector_terrain_as_xyz_grid_surface_centeredInOrigin(sector, rasterData, raster_noDataValue,
+        rasX, rasY, rasZ = get_sector_terrain_as_xyz_grid_surface_centeredInOrigin(sector, rasterData,
+                                                                                   raster_noDataValue,
                                                                                    xCellsFromLeft2Origin,
                                                                                    yCellsFromLeft2Origin)
 
@@ -508,7 +501,6 @@ def app():
 
         sector.actual_slope = slp_perc
 
-
     def slope_perc_from_origin_to_all_other_pnts(sector, rasterData, nodataMask, rasterCellSize, xxInd, yyInd):
         """
         Get the maximum slope in percentage from the sector origin to all other terrain points
@@ -523,7 +515,6 @@ def app():
         slopes = np.where(nodataMask, np.abs(
             np.divide(difElev, dist_from_origin, out=np.zeros_like(difElev), where=dist_from_origin != 0)), np.NaN)
         sector.actual_slope = np.nanmax(slopes) * 100
-
 
     def get_sector_terrain_as_xyz_grid_surface_centeredInOrigin(sector, rasterData, raster_noDataValue,
                                                                 xCellsFromLeft2Origin, yCellsFromLeft2Origin):
@@ -553,11 +544,9 @@ def app():
 
         return rasX, rasY, rasZ
 
-
     def write_shapefile(polygons, crs):
         polygons_df = geopandas.GeoDataFrame(crs=crs, geometry=polygons)
         polygons_df.to_file(filename='polygon.shp', driver="ESRI Shapefile")
-
 
     def plot_terrain_and_plane(X, Y, Z, sector, coeffs):
         """
@@ -575,7 +564,6 @@ def app():
         plt3d.plot_surface(xx, yy, zz, alpha=0.2)
         plt3d.scatter(X, Y, Z)
         plt.show()
-
 
     def process_pair(params):
         try:
@@ -624,7 +612,8 @@ def app():
         ##        df = transform_by_coordinate_system(df, raster_elevation)
 
         df['LD_target_turbine'] = df.apply(
-            lambda x: get_utm_distance({'X': x['geometry'].x, 'Y': x['geometry'].y}, target_turbine) / x['rotor_diameter'],
+            lambda x: get_utm_distance({'X': x['geometry'].x, 'Y': x['geometry'].y}, target_turbine) / x[
+                'rotor_diameter'],
             axis=1)
         df['LD_target_met'] = df.apply(
             lambda x: get_utm_distance({'X': x['geometry'].x, 'Y': x['geometry'].y}, target_met) / x['rotor_diameter'],
@@ -664,7 +653,6 @@ def app():
 
         return output
 
-
     def save_uploaded_file(file_content, file_name):
         """
         Save the uploaded file to a temporary directory
@@ -682,12 +670,10 @@ def app():
 
         return file_path
 
-
     @st.cache
     def convert_df(df):
         # IMPORTANT: Cache the conversion to prevent computation on every rerun
         return df.to_csv().encode('utf-8')
-
 
     # G:\Projects\USA_North\Livingston_County\03_Wind\030_Associated_Met_Masts\Location Selection\nominated_turbines_v3.csv
     # G:\Projects\USA_North\Livingston_County\05_GIS\053_Data\Turbines_v45_UTM_NAD83_20220330.zip
@@ -696,7 +682,8 @@ def app():
     # G:\Projects\CAN_West\Red_Rock\03_Wind\032_Other_Analyses\Met_tower_siting\IEC_Lv22_Results_ed2.csv
 
     # showing the maps
-    m = folium.Map(tiles='OpenStreetMap')
+    turbine_map = folium.Map(tiles='OpenStreetMap')
+    mets_map = folium.Map(tiles='OpenStreetMap')
 
     # Add custom base maps to folium
     basemaps = {
@@ -738,8 +725,11 @@ def app():
     }
 
     # Add custom basemaps
-    basemaps['Google Maps'].add_to(m)
-    basemaps['Google Satellite Hybrid'].add_to(m)
+    basemaps['Google Maps'].add_to(mets_map)
+    basemaps['Google Satellite Hybrid'].add_to(mets_map)
+
+    basemaps['Google Maps'].add_to(turbine_map)
+    basemaps['Google Satellite Hybrid'].add_to(turbine_map)
 
     # Input CSV
     mets_turbs_pairs = st.sidebar.file_uploader("Upload Met Turbine Pairs file location", type='csv')
@@ -760,6 +750,7 @@ def app():
     outputResultsFileName = st.sidebar.text_input("Write or copy & paste your output file location")
 
     if turbine_layout and elevation_raster:
+        met_pairs_df = geopandas.read_file(mets_turbs_pairs)
         turbine_CRSCheck = geopandas.read_file(turbine_layout)
         raster_CRSCheck = rasterio.open(elevation_raster)
 
@@ -771,13 +762,11 @@ def app():
                 'CRS {} '.format(
                     turbine_CRSCheck.crs, raster_CRSCheck.crs))
 
-        st.write(turbine_layout)
-
     display_iec_map = st.sidebar.checkbox("Display Turbine Layout on Map")
     if display_iec_map:
         turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
-        turbines_df = turbine_CRSCheck.iloc[:, [turbine_CRSCheck.columns.get_loc(c) for c in ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y']]]
-        mets_df = turbine_CRSCheck.iloc[:, [turbine_CRSCheck.columns.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
+        turbines_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Primary Turbine']
+        mets_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Alt']
         turbines_df["long"] = turbines_df.geometry.x
         turbines_df["lat"] = turbines_df.geometry.y
         mets_df["long"] = mets_df.geometry.x
@@ -787,8 +776,8 @@ def app():
         mets_points = mets_df[["lat", "long"]]
         mets_list = mets_points.values.tolist()
 
-        turbines_cluster = folium.plugins.MarkerCluster().add_to(m)
-        mets_cluster = folium.plugins.MarkerCluster().add_to(m)
+        turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
+        mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
 
         for point in range(0, len(turbine_list)):
             folium.Marker(turbine_list[point],
@@ -801,8 +790,52 @@ def app():
                           ).add_to(mets_cluster)
 
         bounding_box = turbines_cluster.get_bounds()
-        m.fit_bounds([bounding_box])
-        folium_static(m, width=800, height=800)
+        turbine_map.fit_bounds([bounding_box])
+        folium_static(turbine_map, width=800, height=800)
+
+    display_iec_map = st.sidebar.checkbox("Display Met Pairs on Map")
+    if display_iec_map:
+        met_pairs_df = met_pairs_df.astype(
+            {"target_turbine_x": int, "target_turbine_y": int, "target_met_x": int, "target_met_y": int})
+
+        turbines_pairs_df = met_pairs_df.iloc[:, [met_pairs_df.get_loc(c) for c in
+                                                  ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y', ]]]
+
+        mets_unique_df = met_pairs_df.iloc[:, [met_pairs_df.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
+
+        turbines_pairs_df['geometry'] = [Point(xy) for xy in
+                                         zip(turbines_pairs_df.target_turbine_x, turbines_pairs_df.target_turbine_y)]
+
+        mets_unique_df['geometry'] = [Point(xy) for xy in
+                                      zip(mets_unique_df.target_met_x, mets_unique_df.target_met_y)]
+
+        turbines_pairs_df = turbines_pairs_df.to_crs("EPSG:4326")
+        mets_unique_df = mets_unique_df.to_crs("EPSG:4326")
+        turbines_pairs_df["long"] = turbines_pairs_df.geometry.x
+        turbines_pairs_df["lat"] = turbines_pairs_df.geometry.y
+        mets_unique_df["long"] = mets_unique_df.geometry.x
+        mets_unique_df["lat"] = mets_unique_df.geometry.y
+        turbine_points = turbines_df[["lat", "long"]]
+        turbine_list = turbine_points.values.tolist()
+        mets_points = mets_unique_df[["lat", "long"]]
+        mets_list = mets_points.values.tolist()
+
+        turbines_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
+        mets_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
+
+        for point in range(0, len(turbine_list)):
+            folium.Marker(turbine_list[point],
+                          popup=turbines_df['Alternate'][point]
+                          ).add_to(turbines_cluster)
+
+        for point in range(0, len(mets_list)):
+            folium.Marker(mets_list[point],
+                          popup=mets_df['Alternate'][point]
+                          ).add_to(mets_cluster)
+
+        bounding_box = turbines_cluster.get_bounds()
+        mets_map.fit_bounds([bounding_box])
+        folium_static(mets_map, width=800, height=800)
 
     run_iec = st.sidebar.button("Run IEC Terrain Assessment")
     if run_iec:
@@ -835,8 +868,9 @@ def app():
                 pairResults = process_pair(params)
 
                 results2csv(pairResults, outputResultsFileName)
-                st.write('{}/{} Pair turb: {} - met: {}'.format(counter, len(pairLines[1:]), params['target_turbine_fid'],
-                                                                params['target_met_fid']))
+                st.write(
+                    '{}/{} Pair turb: {} - met: {}'.format(counter, len(pairLines[1:]), params['target_turbine_fid'],
+                                                           params['target_met_fid']))
                 counter += 1
 
         elapsed_time = time.time() - startTime
@@ -853,4 +887,5 @@ def app():
             mime='text/csv',
         )
 
-    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png", width=50)
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png",
+             width=50)
