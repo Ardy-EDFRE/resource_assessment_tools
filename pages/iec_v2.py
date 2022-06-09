@@ -779,11 +779,14 @@ def app():
         turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
         mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
 
+        turbine_icon = folium.features.CustomIcon('', icon_size=(5, 5))
+        met_icon = folium.features.CustomIcon('', icon_size=(5, 5))
+
         for point in range(0, len(turbine_list)):
             folium.Marker(turbine_list[point], popup="Turbine").add_to(turbines_cluster)
 
         for point in range(0, len(mets_list)):
-            folium.Marker(mets_list[point], popup='Met').add_to(mets_cluster)
+            folium.Marker(mets_list[point], popup='Met', icon=folium.Icon(icon="cloud")).add_to(mets_cluster)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
