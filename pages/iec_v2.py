@@ -807,13 +807,12 @@ def app():
         turbines_pairs_df = met_pairs_df.iloc[:, [met_pairs_df.columns.get_loc(c) for c in
                                                   ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y']]]
 
-        turbines_utm = utm.to_latlon(met_pairs_df['target_met_x'], met_pairs_df['target_met_y'], 14, northern=True)
+        turbines_utm = utm.to_latlon(met_pairs_df['target_turbine_x'], met_pairs_df['target_turbine_y'], 14, northern=True)
 
         turbines_pairs_df['target_met_x'] = turbines_utm[0]
         turbines_pairs_df['target_met_y'] = turbines_utm[1]
 
-        mets_unique_df = met_pairs_df.iloc[:,
-                         [met_pairs_df.columns.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
+        mets_unique_df = met_pairs_df.iloc[:, [met_pairs_df.columns.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
 
         mets_utm = utm.to_latlon(met_pairs_df['target_met_x'], met_pairs_df['target_met_y'], 14, northern=True)
 
