@@ -5,12 +5,8 @@ from PIL import Image
 
 def app():
     # Title of the main page
-    display = Image.open('pages/edf_medium_logo.jpg')
-    display = np.array(display)
-    # st.image(display, width = 400)
-    # st.title("Data Storyteller Application")
     col1, col2 = st.columns(2)
-    col1.image(display)
+    col1.image("display")
     col2.title("Resource Assessment Tools")
 
     st.markdown("# 📱 Resource Assessment Tools 📉")
