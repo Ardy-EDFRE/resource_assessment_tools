@@ -822,19 +822,19 @@ def app():
         turbines_pairs_df["lat"] = turbines_pairs_df.geometry.y
         mets_unique_df["long"] = mets_unique_df.geometry.x
         mets_unique_df["lat"] = mets_unique_df.geometry.y
-        turbine_points = turbines_df[["lat", "long"]]
-        turbine_list = turbine_points.values.tolist()
+        turbine_pair_points = turbines_pairs_df[["lat", "long"]]
+        turbine_pairs_list = turbine_pair_points.values.tolist()
         mets_points = mets_unique_df[["lat", "long"]]
         mets_list = mets_points.values.tolist()
 
         turbines_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
         mets_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
 
-        for point in range(0, len(turbine_list)):
+        for point in range(0, len(turbine_pairs_list)):
             turbine_icon = folium.features.CustomIcon(
                 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
                 icon_size=(40, 40))
-            folium.Marker(turbine_list[point],
+            folium.Marker(turbine_pairs_list[point],
                           popup='Turbine',
                           icon=turbine_icon
                           ).add_to(turbines_cluster)
