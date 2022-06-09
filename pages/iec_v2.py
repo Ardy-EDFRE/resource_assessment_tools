@@ -799,69 +799,71 @@ def app():
         turbine_map.fit_bounds([bounding_box])
         folium_static(turbine_map, width=800, height=800)
 
-    display_met_pairs_map = st.sidebar.checkbox("Display Met Pairs on Map")
-    if display_met_pairs_map:
-        met_pairs_df = met_pairs_df.astype(
-            {"target_turbine_x": float, "target_turbine_y": float, "target_met_x": float, "target_met_y": float})
-
-        turbines_pairs_df = met_pairs_df.iloc[:, [met_pairs_df.columns.get_loc(c) for c in
-                                                  ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y']]]
-
-        turbines_utm = utm.to_latlon(met_pairs_df['target_turbine_x'], met_pairs_df['target_turbine_y'], 14, northern=True)
-
-        turbines_pairs_df['target_met_x'] = turbines_utm[0]
-        turbines_pairs_df['target_met_y'] = turbines_utm[1]
-
-        mets_unique_df = met_pairs_df.iloc[:, [met_pairs_df.columns.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
-
-        mets_utm = utm.to_latlon(met_pairs_df['target_met_x'], met_pairs_df['target_met_y'], 14, northern=True)
-
-        mets_unique_df['target_met_x'] = mets_utm[0]
-        mets_unique_df['target_met_y'] = mets_utm[1]
-
-        turbines_pairs_df['geometry'] = [Point(xy) for xy in
-                                         zip(turbines_pairs_df.target_turbine_x, turbines_pairs_df.target_turbine_y)]
-
-        mets_unique_df['geometry'] = [Point(xy) for xy in
-                                      zip(mets_unique_df.target_met_x, mets_unique_df.target_met_y)]
-
-        turbines_pairs_df = turbines_pairs_df.set_crs(4326, allow_override=True)
-        mets_unique_df = mets_unique_df.set_crs(4326, allow_override=True)
-        turbines_pairs_df = turbines_pairs_df.to_crs("EPSG:4326")
-        mets_unique_df = mets_unique_df.to_crs("EPSG:4326")
-        turbines_pairs_df["long"] = turbines_pairs_df.geometry.x
-        turbines_pairs_df["lat"] = turbines_pairs_df.geometry.y
-        mets_unique_df["long"] = mets_unique_df.geometry.x
-        mets_unique_df["lat"] = mets_unique_df.geometry.y
-        turbine_pair_points = turbines_pairs_df[["lat", "long"]]
-        turbine_pairs_list = turbine_pair_points.values.tolist()
-        mets_points = mets_unique_df[["lat", "long"]]
-        mets_list = mets_points.values.tolist()
-
-        turbines_pairs_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
-        mets_pairs_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
-
-        for point in range(0, len(turbine_pairs_list)):
-            turbine_icon = folium.features.CustomIcon(
-                'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
-                icon_size=(40, 40))
-            folium.Marker(turbine_pairs_list[point],
-                          popup='Turbine',
-                          icon=turbine_icon
-                          ).add_to(turbines_pairs_cluster)
-
-        for point in range(0, len(mets_list)):
-            met_icon = folium.features.CustomIcon(
-                'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
-                icon_size=(40, 40))
-            folium.Marker(mets_list[point],
-                          popup='Met',
-                          icon=met_icon
-                          ).add_to(mets_pairs_cluster)
-
-        bounding_box = turbines_pairs_cluster.get_bounds()
-        mets_map.fit_bounds([bounding_box])
-        folium_static(mets_map, width=800, height=800)
+    # display_met_pairs_map = st.sidebar.checkbox("Display Met Pairs on Map")
+    # if display_met_pairs_map:
+    #     met_pairs_df = met_pairs_df.astype(
+    #         {"target_turbine_x": float, "target_turbine_y": float, "target_met_x": float, "target_met_y": float})
+    #
+    #     turbines_pairs_df = met_pairs_df.iloc[:, [met_pairs_df.columns.get_loc(c) for c in
+    #                                               ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y']]]
+    #
+    #     turbines_utm = utm.to_latlon(met_pairs_df['target_turbine_x'], met_pairs_df['target_turbine_y'], 14, northern=True)
+    #
+    #     turbines_pairs_df['target_met_x'] = turbines_utm[0]
+    #     turbines_pairs_df['target_met_y'] = turbines_utm[1]
+    #
+    #     mets_unique_df = met_pairs_df.iloc[:, [met_pairs_df.columns.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
+    #
+    #     mets_utm = utm.to_latlon(met_pairs_df['target_met_x'], met_pairs_df['target_met_y'], 14, northern=True)
+    #
+    #     mets_unique_df['target_met_x'] = mets_utm[0]
+    #     mets_unique_df['target_met_y'] = mets_utm[1]
+    #
+    #     turbines_pairs_df['geometry'] = [Point(xy) for xy in
+    #                                      zip(turbines_pairs_df.target_turbine_x, turbines_pairs_df.target_turbine_y)]
+    #
+    #     mets_unique_df['geometry'] = [Point(xy) for xy in
+    #                                   zip(mets_unique_df.target_met_x, mets_unique_df.target_met_y)]
+    #
+    #     turbines_pairs_df = turbines_pairs_df.set_crs(4326, allow_override=True)
+    #     mets_unique_df = mets_unique_df.set_crs(4326, allow_override=True)
+    #
+    #
+    #
+    #
+    #     turbines_pairs_df["long"] = turbines_pairs_df.geometry.x
+    #     turbines_pairs_df["lat"] = turbines_pairs_df.geometry.y
+    #     mets_unique_df["long"] = mets_unique_df.geometry.x
+    #     mets_unique_df["lat"] = mets_unique_df.geometry.y
+    #     turbine_pair_points = turbines_pairs_df[["lat", "long"]]
+    #     turbine_pairs_list = turbine_pair_points.values.tolist()
+    #     mets_points = mets_unique_df[["lat", "long"]]
+    #     mets_list = mets_points.values.tolist()
+    #
+    #     turbines_pairs_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
+    #     mets_pairs_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
+    #
+    #     for point in range(0, len(turbine_pairs_list)):
+    #         turbine_icon = folium.features.CustomIcon(
+    #             'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
+    #             icon_size=(40, 40))
+    #         folium.Marker(turbine_pairs_list[point],
+    #                       popup='Turbine',
+    #                       icon=turbine_icon
+    #                       ).add_to(turbines_pairs_cluster)
+    #
+    #     for point in range(0, len(mets_list)):
+    #         met_icon = folium.features.CustomIcon(
+    #             'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
+    #             icon_size=(40, 40))
+    #         folium.Marker(mets_list[point],
+    #                       popup='Met',
+    #                       icon=met_icon
+    #                       ).add_to(mets_pairs_cluster)
+    #
+    #     bounding_box = turbines_pairs_cluster.get_bounds()
+    #     mets_map.fit_bounds([bounding_box])
+    #     folium_static(mets_map, width=800, height=800)
 
     run_iec = st.sidebar.button("Run IEC Terrain Assessment")
     if run_iec:
