@@ -19,11 +19,13 @@ def app():
 
     st.markdown("The application also uses Streamlit for a multiclass page implementation which can be viewed in the `multipage.py` file. The UI of the application can be seen here. The application is divided into multiple modules, each of which have been described below.")
 
-    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/tool_homepage.JPG", width=1000)
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/tool_homepage.JPG", width=600)
 
     st.markdown("📌 **IEC Terrain Assessment**")
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/iec_results.JPG", width=600)
 
     st.markdown("📌 **DNV Solar Energy Estimate**")
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/dnv_solar_results.JPG", width=600)
 
     st.markdown("## Technology Stack")
 
