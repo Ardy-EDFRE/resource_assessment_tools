@@ -1,6 +1,4 @@
 import streamlit as st
-import numpy as np
-from PIL import Image
 
 
 def app():
@@ -23,12 +21,9 @@ def app():
 
     st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/tool_homepage.JPG", width=1000)
 
+    st.markdown("📌 **IEC Terrain Assessment**")
 
-    st.markdown("_📌 **IEC Terrain Assessment**")
-
-
-    st.markdown("_📌 **DNV Solar Energy Estimate**")
-
+    st.markdown("📌 **DNV Solar Energy Estimate**")
 
     st.markdown("## Technology Stack")
 
@@ -44,7 +39,6 @@ def app():
     st.markdown("- Fork the Repo and create a Branch for any Issue that you are working upon.")
     st.markdown("- Create a Pull Request which will be promptly reviewed and suggestions would be added to improve it.")
     st.markdown("- Add Screenshots to help us know what this Script is all about.")
-
 
     st.markdown("# 👨‍💻 Contributors ✨")
 
