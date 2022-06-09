@@ -782,7 +782,7 @@ def app():
         for point in range(0, len(turbine_list)):
             turbine_icon = folium.features.CustomIcon(
                 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
-                icon_size=(25, 25))
+                icon_size=(40, 40))
             folium.Marker(turbine_list[point],
                           popup="Turbine",
                           icon=turbine_icon).add_to(turbines_cluster)
@@ -790,7 +790,7 @@ def app():
         for point in range(0, len(mets_list)):
             met_icon = folium.features.CustomIcon(
                 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
-                icon_size=(25, 25))
+                icon_size=(40, 40))
             folium.Marker(mets_list[point],
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
