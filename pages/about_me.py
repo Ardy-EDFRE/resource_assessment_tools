@@ -5,7 +5,7 @@ from PIL import Image
 
 def app():
     # Title of the main page
-    display = Image.open('edf_medium_logo.jpg')
+    display = Image.open('pages/edf_medium_logo.jpg')
     display = np.array(display)
     # st.image(display, width = 400)
     # st.title("Data Storyteller Application")
