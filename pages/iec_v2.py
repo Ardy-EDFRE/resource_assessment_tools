@@ -816,8 +816,8 @@ def app():
         mets_unique_df['geometry'] = [Point(xy) for xy in
                                       zip(mets_unique_df.target_met_x, mets_unique_df.target_met_y)]
 
-        turbines_pairs_df = turbines_pairs_df.to_crs("EPSG:4326")
-        mets_unique_df = mets_unique_df.to_crs("EPSG:4326")
+        turbines_pairs_df = turbines_pairs_df.set_crs("EPSG:4326")
+        mets_unique_df = mets_unique_df.set_crs("EPSG:4326")
         turbines_pairs_df["long"] = turbines_pairs_df.geometry.x
         turbines_pairs_df["lat"] = turbines_pairs_df.geometry.y
         mets_unique_df["long"] = mets_unique_df.geometry.x
