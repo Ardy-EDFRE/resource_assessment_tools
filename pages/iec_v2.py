@@ -780,14 +780,10 @@ def app():
         mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
 
         for point in range(0, len(turbine_list)):
-            folium.Marker(turbine_list[point],
-                          popup=turbines_df['Primary Turbine'][point]
-                          ).add_to(turbines_cluster)
+            folium.Marker(turbine_list[point]).add_to(turbines_cluster)
 
         for point in range(0, len(mets_list)):
-            folium.Marker(mets_list[point],
-                          popup=mets_df['Alt'][point]
-                          ).add_to(mets_cluster)
+            folium.Marker(mets_list[point]).add_to(mets_cluster)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
@@ -824,14 +820,10 @@ def app():
         mets_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
 
         for point in range(0, len(turbine_list)):
-            folium.Marker(turbine_list[point],
-                          popup=turbines_df[point]
-                          ).add_to(turbines_cluster)
+            folium.Marker(turbine_list[point]).add_to(turbines_cluster)
 
         for point in range(0, len(mets_list)):
-            folium.Marker(mets_list[point],
-                          popup=mets_df[point]
-                          ).add_to(mets_cluster)
+            folium.Marker(mets_list[point]).add_to(mets_cluster)
 
         bounding_box = turbines_cluster.get_bounds()
         mets_map.fit_bounds([bounding_box])
