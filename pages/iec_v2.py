@@ -17,7 +17,11 @@ import time
 import streamlit as st
 import folium
 from streamlit_folium import folium_static
-import os, shutil
+import os
+import shutil
+import streamlit.components.v1 as components
+import base64
+import json
 
 
 def app():
@@ -674,6 +678,50 @@ def app():
         # IMPORTANT: Cache the conversion to prevent computation on every rerun
         return df.to_csv().encode('utf-8')
 
+    def download_button(object_to_download, download_filename):
+        """
+        Generates a link to download the given object_to_download.
+        Params:
+        ------
+        object_to_download:  The object to be downloaded.
+        download_filename (str): filename and extension of file. e.g. mydata.csv,
+        Returns:
+        -------
+        (str): the anchor tag to download object_to_download
+        """
+        if isinstance(object_to_download, pd.DataFrame):
+            object_to_download = object_to_download.to_csv(index=False)
+
+        # Try JSON encode for everything else
+        else:
+            object_to_download = json.dumps(object_to_download)
+
+        try:
+            # some strings <-> bytes conversions necessary here
+            b64 = base64.b64encode(object_to_download.encode()).decode()
+
+        except AttributeError as e:
+            b64 = base64.b64encode(object_to_download).decode()
+
+        dl_link = f"""
+        <html>
+        <head>
+        <title>Start Auto Download file</title>
+        <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script>
+        $('<a href="data:text/csv;base64,{b64}" download="{download_filename}">')[0].click()
+        </script>
+        </head>
+        </html>
+        """
+        return dl_link
+
+    def download_df(df_for_download):
+        components.html(
+            download_button(df_for_download, outputResultsFileName),
+            height=0,
+        )
+
     # G:\Projects\USA_North\Livingston_County\03_Wind\030_Associated_Met_Masts\Location Selection\nominated_turbines_v3.csv
     # G:\Projects\USA_North\Livingston_County\05_GIS\053_Data\Turbines_v45_UTM_NAD83_20220330.zip
 
@@ -905,21 +953,24 @@ def app():
         st.write("Total time: " + str(elapsed_time))
 
         output2_csv = pd.read_csv(outputResultsFileName[:-4] + '_details.csv')
-        convert_csv = convert_df(output2_csv)
-        st.write(output2_csv)
 
-        st.download_button(
-            label="Download data as CSV",
-            data=convert_csv,
-            file_name='output.csv',
-            mime='text/csv',
-        )
-
-        if os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv'):
-            path1 = os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv')
-            csv_abs_path = os.path.dirname(os.path.abspath(outputResultsFileName))
-            path2 = os.path.expanduser(csv_abs_path)
-            shutil.move(path1, path2)
+        st.form_submit_button("Download data as CSV", on_click=download_df(output2_csv))
+        #
+        # convert_csv = convert_df(output2_csv)
+        # st.write(output2_csv)
+        #
+        # st.download_button(
+        #     label="Download data as CSV",
+        #     data=convert_csv,
+        #     file_name='output.csv',
+        #     mime='text/csv',
+        # )
+        #
+        # if os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv'):
+        #     path1 = os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv')
+        #     csv_abs_path = os.path.dirname(os.path.abspath(outputResultsFileName))
+        #     path2 = os.path.expanduser(csv_abs_path)
+        #     shutil.move(path1, path2)
 
     st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png",
              width=50)
