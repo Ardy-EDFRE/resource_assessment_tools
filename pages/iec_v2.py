@@ -774,22 +774,35 @@ def app():
     display_iec_map = st.sidebar.checkbox("Display Turbine Layout on Map")
     if display_iec_map:
         turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
-        turbine_CRSCheck["long"] = turbine_CRSCheck.geometry.x
-        turbine_CRSCheck["lat"] = turbine_CRSCheck.geometry.y
-        turbine_points = turbine_CRSCheck[["lat", "long"]]
+        turbines_df = turbine_CRSCheck.iloc[0, [turbine_CRSCheck.columns.get_loc(c) for c in ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y']]]
+        mets_df = turbine_CRSCheck.iloc[0, [turbine_CRSCheck.columns.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
+        turbines_df["long"] = turbines_df.geometry.x
+        turbines_df["lat"] = turbines_df.geometry.y
+        mets_df["long"] = mets_df.geometry.x
+        mets_df["lat"] = mets_df.geometry.y
+        turbine_points = turbines_df[["lat", "long"]]
         turbine_list = turbine_points.values.tolist()
+        mets_points = mets_df[["lat", "long"]]
+        mets_list = mets_points.values.tolist()
 
-        marker_cluster = folium.plugins.MarkerCluster().add_to(m)
+        turbines_cluster = folium.plugins.MarkerCluster().add_to(m)
+        mets_cluster = folium.plugins.MarkerCluster().add_to(m)
 
         for point in range(0, len(turbine_list)):
             folium.Marker(turbine_list[point],
-                          popup=turbine_CRSCheck['Alternate'][point]
-                          ).add_to(marker_cluster)
-        bounding_box = marker_cluster.get_bounds()
+                          popup=turbines_df['Alternate'][point]
+                          ).add_to(turbines_cluster)
+
+        for point in range(0, len(mets_list)):
+            folium.Marker(mets_list[point],
+                          popup=mets_df['Alternate'][point]
+                          ).add_to(mets_cluster)
+
+        bounding_box = turbines_cluster.get_bounds()
         m.fit_bounds([bounding_box])
         folium_static(m, width=800, height=800)
 
-    run_iec = st.sidebar.checkbox("Run IEC Terrain Assessment")
+    run_iec = st.sidebar.button("Run IEC Terrain Assessment")
     if run_iec:
         # process all pairs
         startTime = time.time()
