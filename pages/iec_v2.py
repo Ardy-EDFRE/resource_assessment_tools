@@ -1,4 +1,3 @@
-from io import StringIO
 from matplotlib import pyplot as plt
 import rasterio
 import rasterio.mask
@@ -19,6 +18,7 @@ import streamlit as st
 import folium
 from streamlit_folium import folium_static
 from shapely.geometry import Point
+import utm
 
 
 def app():
@@ -807,8 +807,18 @@ def app():
         turbines_pairs_df = met_pairs_df.iloc[:, [met_pairs_df.columns.get_loc(c) for c in
                                                   ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y']]]
 
+        turbines_utm = utm.to_latlon(met_pairs_df['target_met_x'], met_pairs_df['target_met_y'], 14, northern=True)
+
+        turbines_pairs_df['target_met_x'] = turbines_utm[0]
+        turbines_pairs_df['target_met_y'] = turbines_utm[1]
+
         mets_unique_df = met_pairs_df.iloc[:,
                          [met_pairs_df.columns.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
+
+        mets_utm = utm.to_latlon(met_pairs_df['target_met_x'], met_pairs_df['target_met_y'], 14, northern=True)
+
+        mets_unique_df['target_met_x'] = mets_utm[0]
+        mets_unique_df['target_met_y'] = mets_utm[1]
 
         turbines_pairs_df['geometry'] = [Point(xy) for xy in
                                          zip(turbines_pairs_df.target_turbine_x, turbines_pairs_df.target_turbine_y)]
@@ -816,8 +826,6 @@ def app():
         mets_unique_df['geometry'] = [Point(xy) for xy in
                                       zip(mets_unique_df.target_met_x, mets_unique_df.target_met_y)]
 
-        turbines_pairs_df = turbines_pairs_df.set_crs("EPSG:4326")
-        mets_unique_df = mets_unique_df.set_crs("EPSG:4326")
         turbines_pairs_df = turbines_pairs_df.to_crs("EPSG:4326")
         mets_unique_df = mets_unique_df.to_crs("EPSG:4326")
         turbines_pairs_df["long"] = turbines_pairs_df.geometry.x

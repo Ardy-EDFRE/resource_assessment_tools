@@ -15,3 +15,4 @@ pyproj~=3.0.0.post1
 numpy~=1.20.1
 shapely~=1.7.1
 openpyxl==3.0.10
+utm==0.7.0
