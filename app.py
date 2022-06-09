@@ -1,9 +1,4 @@
-import os
-import streamlit as st
-import numpy as np
-from PIL import Image
-
-# Custom imports 
+# Custom imports
 from multipage import MultiPage
 # import your pages here
 from pages import iec_v2, dnv_solar, about_me
@@ -16,15 +11,6 @@ st.set_page_config(layout="wide")
 
 # Create an instance of the app 
 app = MultiPage()
-
-# Title of the main page
-display = Image.open('edf_logo.jpg')
-display = np.array(display)
-# st.image(display, width = 400)
-# st.title("Data Storyteller Application")
-col1, col2 = st.columns(2)
-col1.image(display)
-col2.title("Resource Assessment Tools")
 
 # Add all your application here
 app.add_page("About the page", about_me.app)
