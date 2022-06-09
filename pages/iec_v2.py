@@ -31,7 +31,7 @@ def app():
     3. Return a True/False pass grade for the sector
             """)
 
-    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/sector_evaluation.JPG")
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/sector_evaluation.JPG")
 
     # BUSINESS LOGIC
     def createResultTxtFiles(outputResultsFileName):
@@ -838,4 +838,4 @@ def app():
             mime='text/csv',
         )
 
-    st.markdown("![Watermark Company Logo](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/edf_small_logo.png)")
+    st.markdown("![Watermark Company Logo](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png)")

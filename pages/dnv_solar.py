@@ -307,7 +307,7 @@ def app():
             )
 
     st.markdown(
-        "![Watermark Company Logo](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/edf_small_logo.png)")
+        "![Watermark Company Logo](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png)")
 
         # Pages to add on maybe
         # page_names_to_funcs = {

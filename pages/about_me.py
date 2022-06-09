@@ -6,7 +6,7 @@ from PIL import Image
 def app():
     # Title of the main page
     col1, col2 = st.columns(2)
-    col1.image("display")
+    col1.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_medium_logo.png")
     col2.title("Resource Assessment Tools")
 
     st.markdown("# 📱 Resource Assessment Tools 📉")
@@ -23,7 +23,7 @@ def app():
 
     st.markdown("The application also uses Streamlit for a multiclass page implementation which can be viewed in the `multipage.py` file. The UI of the application can be seen here. The application is divided into multiple modules, each of which have been described below.")
 
-    st.markdown("![UI of the application](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/tool_homepage.JPG)")
+    st.markdown("![UI of the application](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/tool_homepage.JPG)")
 
 
     st.markdown("_📌 **IEC Terrain Assessment**_ <br/>")
@@ -54,4 +54,4 @@ def app():
 
     st.markdown("any feedback or queries, please reach out to [ardeshir.beheshti@edf-re.com](ardeshir.beheshti@edf-re.com).")
 
-    st.markdown("![Watermark Company Logo](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/edf_small_logo.png)")
+    st.markdown("![Watermark Company Logo](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png)")
