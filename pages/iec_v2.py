@@ -771,7 +771,7 @@ def app():
                 'CRS {} '.format(
                     turbine_CRSCheck.crs, raster_CRSCheck.crs))
 
-    st.dataframe(turbine_CRSCheck)
+        st.dataframe(turbine_CRSCheck)
 
     display_iec_map = st.sidebar.checkbox("Display Turbine Layout on Map")
     if display_iec_map:
