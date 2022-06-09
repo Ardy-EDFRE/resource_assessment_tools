@@ -306,8 +306,7 @@ def app():
                 mime="application/vnd.ms-excel"
             )
 
-    st.markdown(
-        "![Watermark Company Logo](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png)")
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png", width=100)
 
         # Pages to add on maybe
         # page_names_to_funcs = {

@@ -6,7 +6,7 @@ from PIL import Image
 def app():
     # Title of the main page
     col1, col2 = st.columns(2)
-    col1.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_medium_logo.png")
+    col1.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_medium_logo.png", width=400)
     col2.title("Resource Assessment Tools")
 
     st.markdown("# 📱 Resource Assessment Tools 📉")
@@ -54,4 +54,4 @@ def app():
 
     st.markdown("any feedback or queries, please reach out to [ardeshir.beheshti@edf-re.com](ardeshir.beheshti@edf-re.com).")
 
-    st.markdown("![Watermark Company Logo](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png)")
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png", width=100)
