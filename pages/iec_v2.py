@@ -27,6 +27,8 @@ import json
 def app():
     st.markdown("# IEC Terrain Assessment")
 
+    st.markdown("**How it works**")
+
     st.markdown("For each sector, there are rules governing whether or not the sector passes the test")
 
     st.markdown(f"""    In this step we will:
@@ -35,7 +37,9 @@ def app():
     3. Return a True/False pass grade for the sector
             """)
 
-    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/sector_evaluation.JPG")
+    st.markdown("For each sector, there are rules governing whether or not the sector passes the test")
+
+    st.markdown("We need all the files into UTM WGS84 coordinates")
 
     # BUSINESS LOGIC
     def createResultTxtFiles(outputResultsFileName):
@@ -735,22 +739,22 @@ def app():
     basemaps['Google Satellite Hybrid'].add_to(turbine_map)
 
     # Input CSV
-    mets_turbs_pairs = st.sidebar.file_uploader("Upload Met Turbine Pairs file location", type='csv')
+    mets_turbs_pairs = st.sidebar.file_uploader("Upload Met Turbine Pairs file location", type='csv', help="Please use only the extension .csv")
     if mets_turbs_pairs:
         mets_turbs_pairs = save_uploaded_file(mets_turbs_pairs, mets_turbs_pairs.name)
 
     # Input Geospatial
-    turbine_layout = st.sidebar.file_uploader("Upload Turbine Layout file location", type=['zip', 'kml'])
+    turbine_layout = st.sidebar.file_uploader("Upload Turbine Layout file location", type=['zip', 'kml'], help="Please zip all your shapefile extensions (.dbf, .cpg, .prj, .shp, .sbn) and upload as .zip or upload with KML as .kml")
     if turbine_layout:
         turbine_layout = save_uploaded_file(turbine_layout, turbine_layout.name)
 
     # Input Elevation
-    elevation_raster = st.sidebar.file_uploader("Upload elevation file location", type='tif')
+    elevation_raster = st.sidebar.file_uploader("Upload elevation file location", type='tif', help="Please use only use .tif. The size of the dem file (till 20km away from the project boundary).")
     if elevation_raster:
         elevation_raster = save_uploaded_file(elevation_raster, elevation_raster.name)
 
     # Outputs
-    outputResultsFileName = st.sidebar.text_input("Write or copy & paste your output file location")
+    outputResultsFileName = st.sidebar.text_input("Write you output file name", help="Please use only the extension .csv")
 
     if turbine_layout and elevation_raster:
         met_pairs_df = geopandas.read_file(mets_turbs_pairs)
