@@ -5,9 +5,7 @@ from PIL import Image
 
 def app():
     # Title of the main page
-    col1, col2 = st.columns(2)
-    col1.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_medium_logo.png", width=400)
-    col2.title("Resource Assessment Tools")
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_medium_logo.png", width=400)
 
     st.markdown("# 📱 Resource Assessment Tools 📉")
 
@@ -23,13 +21,13 @@ def app():
 
     st.markdown("The application also uses Streamlit for a multiclass page implementation which can be viewed in the `multipage.py` file. The UI of the application can be seen here. The application is divided into multiple modules, each of which have been described below.")
 
-    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/tool_homepage.JPG", width=500)
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/tool_homepage.JPG", width=1000)
 
 
-    st.markdown("_📌 **IEC Terrain Assessment**_ <br/>")
+    st.markdown("_📌 **IEC Terrain Assessment**")
 
 
-    st.markdown("_📌 **DNV Solar Energy Estimate**_ <br/>")
+    st.markdown("_📌 **DNV Solar Energy Estimate**")
 
 
     st.markdown("## Technology Stack")
@@ -54,4 +52,4 @@ def app():
 
     st.markdown("any feedback or queries, please reach out to [ardeshir.beheshti@edf-re.com](ardeshir.beheshti@edf-re.com).")
 
-    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png", width=100)
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png", width=50)

@@ -838,4 +838,4 @@ def app():
             mime='text/csv',
         )
 
-    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png", width=100)
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png", width=50)

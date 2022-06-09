@@ -306,7 +306,7 @@ def app():
                 mime="application/vnd.ms-excel"
             )
 
-    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png", width=100)
+    st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png", width=50)
 
         # Pages to add on maybe
         # page_names_to_funcs = {
