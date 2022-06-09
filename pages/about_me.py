@@ -5,7 +5,7 @@ from PIL import Image
 
 def app():
     # Title of the main page
-    display = Image.open('edf_logo.jpg')
+    display = Image.open('edf_medium_logo.jpg')
     display = np.array(display)
     # st.image(display, width = 400)
     # st.title("Data Storyteller Application")
@@ -57,3 +57,5 @@ def app():
     st.markdown("## Contact")
 
     st.markdown("any feedback or queries, please reach out to [ardeshir.beheshti@edf-re.com](ardeshir.beheshti@edf-re.com).")
+
+    st.markdown("![Watermark Company Logo](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/edf_small_logo.png)")

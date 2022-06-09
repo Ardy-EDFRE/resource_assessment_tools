@@ -837,3 +837,5 @@ def app():
             file_name='output.csv',
             mime='text/csv',
         )
+
+    st.markdown("![Watermark Company Logo](https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/edf_small_logo.png)")
