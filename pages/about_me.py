@@ -39,7 +39,7 @@ def app():
 
     st.markdown("## Other Content")
 
-    st.markdown("## 🤝 How to Contribute? [3]")
+    st.markdown("## 🤝 How to Contribute?")
 
     st.markdown("- Take a look at the Existing Issues or create your own Issues!")
     st.markdown("- Wait for the Issue to be assigned to you after which you can start working on it.")
