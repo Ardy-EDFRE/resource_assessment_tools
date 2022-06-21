@@ -914,12 +914,11 @@ def app():
                               icon=met_icon).add_to(mets_cluster)
 
             polygon_sector = geopandas.GeoDataFrame(crs='epsg:4326', geometry=paired_results[0][0]['polygon'])
-            folium.Polygon(polygon_sector).add_to(map)
+            folium.GeoJson(polygon_sector["geometry"]).add_to(turbine_map)
 
             bounding_box = turbines_cluster.get_bounds()
             turbine_map.fit_bounds([bounding_box])
             folium_static(turbine_map, width=800, height=800)
-
 
         convert_csv = convert_df(details_output_csv)
 
