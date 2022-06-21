@@ -918,7 +918,7 @@ def app():
 
 
 
-        st.write(paired_results[0])
+        st.write(paired_results[0][0]['polygon'])
 
         convert_csv = convert_df(details_output_csv)
 
