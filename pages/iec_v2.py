@@ -895,6 +895,7 @@ def app():
 
         sectors_df = {'geometry': paired_results}
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs=4326)
+        sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
 
         st.write(sectors_gdf)
 
