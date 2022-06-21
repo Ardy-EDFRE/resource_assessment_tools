@@ -893,7 +893,7 @@ def app():
 
         sectors_dict = paired_results[0]
 
-        for key, value in sectors_dict.items():
+        for key, value in paired_results.items():
             st.write(key, value)
 
         # for sectors_dictionary in paired_results[0]:
