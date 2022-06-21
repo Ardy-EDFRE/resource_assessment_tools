@@ -895,7 +895,7 @@ def app():
 
         tmp_sector_gdf = geopandas.GeoDataFrame(geometry=paired_results)
 
-        st.dataframe(tmp_sector_gdf)
+        st.write(tmp_sector_gdf)
 
         # # geometry_sectors = paired_results[0][0]['polygon']
         #
