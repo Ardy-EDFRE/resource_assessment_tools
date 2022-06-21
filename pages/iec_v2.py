@@ -913,7 +913,8 @@ def app():
                               popup='Met',
                               icon=met_icon).add_to(mets_cluster)
 
-            folium.Polygon(paired_results[0][0]['polygon']).add_to(map)
+            polygon_sector = geopandas.GeoDataFrame(crs='epsg:4326', geometry=paired_results[0][0]['polygon'])
+            folium.Polygon(polygon_sector).add_to(map)
 
             bounding_box = turbines_cluster.get_bounds()
             turbine_map.fit_bounds([bounding_box])
