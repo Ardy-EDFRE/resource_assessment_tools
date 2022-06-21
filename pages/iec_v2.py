@@ -899,7 +899,7 @@ def app():
 
         # geometry_sectors = paired_results[0][0]['polygon']
 
-        polygon_sectors_gdf = geopandas.GeoDataFrame(geometry=list(sectors_geometry.values()))
+        polygon_sectors_gdf = geopandas.GeoDataFrame(geometry=list(sectors_geometry.values(), crs="EPSG:4326"))
         st.dataframe(polygon_sectors_gdf)
         # folium.GeoJson(polygon_sectors_gdf).add_to(turbine_map)
 
