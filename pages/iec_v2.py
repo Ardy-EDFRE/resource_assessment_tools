@@ -896,11 +896,7 @@ def app():
 
         sectors_geojson = sectors_gdf.to_json()
         folium.Choropleth(geo_data=sectors_geojson,
-                          data=sectors_geojson,
-                          fill_color="YlGn",
-                          fill_opacity=0.7,
-                          line_opacity=.1,
-                          ).add_to(turbine_map)
+                          data=sectors_geojson).add_to(turbine_map)
 
         folium.LayerControl().add_to(turbine_map)
 
