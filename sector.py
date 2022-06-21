@@ -123,39 +123,6 @@ class Sector(object):
             raise Exception('Sector needs a max slope')
 
     @property
-    def polygon(self):
-        if self._polygon is not None:
-            return self._polygon
-        else:
-            self._polygon = self.get_polygon()
-            return self._polygon
-
-    @polygon.setter
-    def polygon(self, value):
-        if isinstance(value, shapely.geometry.polygon.Polygon):
-            self._polygon=value
-        else:
-            raise ValueError("Sector.polygon must be of type shapely.geometry.polygon.Polygon")
-
-    @property
-    def coords(self):
-        if self._polygon is not None:
-            self._coords = [tuple((x,y)) for x,y in self._polygon.exterior.coords]
-            return self._coords
-        else:
-            self._polygon = self.get_polygon()
-            return self.coords
-
-    @property
-    def angle(self):
-        if self._type == 'circle':
-            return (0, 360)
-        elif self._type == 'segment':
-            return self._angle
-        else:
-            raise AttributeError('Sector "type" needs to be set to either "segment" or "circle"')
-
-    @property
     def actual_slope(self):
         if self._actual_slope:
             return round(self._actual_slope, 4)
@@ -294,6 +261,39 @@ class Sector(object):
             origin = shapely.geometry.Point(self.origin['X'], self.origin['Y'])
             circle = origin.buffer(self._upper_distance_bound)
             return circle
+
+    @property
+    def polygon(self):
+        if self._polygon is not None:
+            return self._polygon
+        else:
+            self._polygon = self.get_polygon()
+            return self._polygon
+
+    @polygon.setter
+    def polygon(self, value):
+        if isinstance(value, shapely.geometry.polygon.Polygon):
+            self._polygon=value
+        else:
+            raise ValueError("Sector.polygon must be of type shapely.geometry.polygon.Polygon")
+
+    @property
+    def coords(self):
+        if self._polygon is not None:
+            self._coords = [tuple((x,y)) for x,y in self._polygon.exterior.coords]
+            return self._coords
+        else:
+            self._polygon = self.get_polygon()
+            return self.coords
+
+    @property
+    def angle(self):
+        if self._type == 'circle':
+            return (0, 360)
+        elif self._type == 'segment':
+            return self._angle
+        else:
+            raise AttributeError('Sector "type" needs to be set to either "segment" or "circle"')
 
     def get_polygon_old(self):
         """
