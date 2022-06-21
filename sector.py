@@ -57,7 +57,7 @@ class Sector(object):
         self._slope_assessment = slope_assessment
         self._pass_IEC_Test = pass_IEC_Test
         self._get_polygon = polygon
-        self._polygon = None
+        self._polygon = polygon
         self._coords = None
         self._plane = None
 
@@ -258,11 +258,13 @@ class Sector(object):
             center_circle = origin.buffer(1)
             sector_vertex_array += [(p[0], p[1]) for p in center_circle.exterior.coords]
             sector_polygon = shapely.geometry.Polygon((p[0], p[1]) for p in sector_vertex_array)
-            return sector_polygon
+            self._get_polygon = sector_polygon
+            return self._get_polygon
         else:
             origin = shapely.geometry.Point(self.origin['X'], self.origin['Y'])
             circle = origin.buffer(self._upper_distance_bound)
-            return circle
+            self._get_polygon = circle
+            return self._get_polygon
 
     @property
     def polygon(self):
