@@ -891,9 +891,9 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        geometry_sectors = geopandas.GeoSeries(paired_results[0][0]['polygon'])
+        geometry_sectors = paired_results[0][0]['polygon']
 
-        st.write(geometry_sectors.is_valid)
+        st.write(geometry_sectors)
 
         # polygon_sector = geopandas.GeoDataFrame(crs='epsg:4326', geometry=geometry_sectors)
         # # folium.GeoJson(polygon_sector["geometry"]).add_to(turbine_map)
