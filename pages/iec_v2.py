@@ -891,7 +891,8 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        geometry_sectors = paired_results[0][0]['polygon']
+        # geometry_sectors = paired_results[0][0]['polygon']
+        geometry_sectors = paired_results[0]
 
         st.write(geometry_sectors)
 
