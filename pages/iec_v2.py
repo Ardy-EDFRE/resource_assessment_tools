@@ -915,7 +915,10 @@ def app():
 
         st.write(sector_results_output)
         st.write(details_output_csv)
-        st.write(paired_results)
+
+
+
+        st.write(paired_results[0])
 
         convert_csv = convert_df(details_output_csv)
 
