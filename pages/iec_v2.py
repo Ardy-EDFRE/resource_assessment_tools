@@ -552,7 +552,7 @@ def app():
 
     def plot_terrain_and_plane(X, Y, Z, sector, coeffs):
         """
-        Useful debugging tool. Plot a the terrain as X,Y,Z scatter and
+        Useful debugging tool. Plot the terrain as X,Y,Z scatter and
         the plane of best fit by meshgrid
         """
         # Create the trend surface using the regression model

@@ -28,7 +28,8 @@ class Sector(object):
         terrain_assessment=None,
         slope_assessment=None,
         pass_IEC_Test=None,
-        type='segment'
+        type='segment',
+        polygon=None
     ):
         self._type = type
         self._origin = origin
@@ -54,7 +55,7 @@ class Sector(object):
         self._terrain_assessment = terrain_assessment
         self._slope_assessment = slope_assessment
         self._pass_IEC_Test = pass_IEC_Test
-        self._polygon = None
+        self._polygon = polygon
         self._coords = None
         self._plane = None
 
@@ -151,12 +152,6 @@ class Sector(object):
             return (0, 360)
         elif self._type == 'segment':
             return self._angle
-##            if self._include == True:
-##                return self._angle
-##            if self._include == False:
-##                return  (self._angle[1], self._angle[0])
-##            else:
-##                raise AttributeError('Angle inclusion not set- thus cannot determine correct sector!')
         else:
             raise AttributeError('Sector "type" needs to be set to either "segment" or "circle"')
 
@@ -208,12 +203,12 @@ class Sector(object):
         else:
             raise ValueError("actual_below_plane_terrain_variation must be type 'float'")
 
-    
     @property
     def pass_IEC_Test(self):
         if self._pass_IEC_Test:
             return self._pass_IEC_Test
 
+    @property
     def get_polygon(self):
         """
         Given an angle, a target turbine (with attached metadata),
@@ -299,7 +294,6 @@ class Sector(object):
             origin = shapely.geometry.Point(self.origin['X'], self.origin['Y'])
             circle = origin.buffer(self._upper_distance_bound)
             return circle
-
 
     def get_polygon_old(self):
         """
@@ -436,7 +430,8 @@ class Sector(object):
             "terrain_assessment": self._terrain_assessment,
             "slope_assessment": self._slope_assessment,
             "pass_IEC_Test": self._pass_IEC_Test,
-            "type" : self._type
+            "type" : self._type,
+            "polygon": self._polygon
         }
 
 def create_point_from_distance_and_angle(x, y, distance, angle):
