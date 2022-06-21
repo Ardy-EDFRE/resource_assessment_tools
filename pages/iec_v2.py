@@ -893,6 +893,10 @@ def app():
 
         st.write(paired_results)
 
+        tmp_sector_gdf = geopandas.GeoDataFrame(geometry=list(paired_results))
+
+        st.dataframe(tmp_sector_gdf)
+
         # # geometry_sectors = paired_results[0][0]['polygon']
         #
         # polygon_sectors_gdf = geopandas.GeoDataFrame(geometry=list(sectors_geometry.values(), crs="EPSG:4326"))
