@@ -686,6 +686,7 @@ def app():
     # showing the maps
     turbine_map = folium.Map(tiles='OpenStreetMap')
     mets_map = folium.Map(tiles='OpenStreetMap')
+    sectors_map = folium.Map(tiles='OpenStreetMap')
 
     # Add custom base maps to folium
     basemaps = {
@@ -729,9 +730,10 @@ def app():
     # Add custom basemaps
     basemaps['Google Maps'].add_to(mets_map)
     basemaps['Google Satellite Hybrid'].add_to(mets_map)
-
     basemaps['Google Maps'].add_to(turbine_map)
     basemaps['Google Satellite Hybrid'].add_to(turbine_map)
+    basemaps['Google Maps'].add_to(sectors_map)
+    basemaps['Google Satellite Hybrid'].add_to(sectors_map)
 
     # Input CSV
     mets_turbs_pairs = st.sidebar.file_uploader("Upload Met Turbine Pairs file location", type='csv',
@@ -893,7 +895,9 @@ def app():
 
         sectors_df = {'geometry': paired_results}
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs=4326)
-        folium.GeoJson(data=sectors_gdf['geometry']).add_to(turbine_map)
+        folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
+
+        folium_static(sectors_map, width=800, height=800)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
