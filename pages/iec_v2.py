@@ -891,13 +891,13 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        st.write(paired_results)
-
         sectors_df = {'geometry': paired_results}
+
+        st.write(sectors_df)
 
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs=4326)
 
-        st.dataframe(sectors_gdf)
+        st.write(sectors_gdf)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
