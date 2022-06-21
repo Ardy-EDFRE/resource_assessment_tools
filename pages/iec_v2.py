@@ -891,10 +891,17 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        geometry_sectors = paired_results[0][0]['polygon']
+        sectors_geometry = []
 
-        polygon_sector = geopandas.GeoSeries(geometry_sectors)
-        folium.GeoJson(polygon_sector).add_to(turbine_map)
+        for sectors_dictionary in paired_results[0]:
+            for sectors in sectors_dictionary[0]:
+                sectors_geometry.append(sectors['polygon'])
+
+        # geometry_sectors = paired_results[0][0]['polygon']
+
+        polygon_sectors_gdf = geopandas.GeoDataFrame(geometry=list(sectors_geometry.values()))
+        st.dataframe(polygon_sectors_gdf)
+        # folium.GeoJson(polygon_sectors_gdf).add_to(turbine_map)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
