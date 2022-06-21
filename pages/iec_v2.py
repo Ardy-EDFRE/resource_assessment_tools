@@ -893,14 +893,14 @@ def app():
 
         st.write(paired_results)
 
-        polygon_sectors_gdf = geopandas.GeoDataFrame(geometry=paired_results)
-        st.dataframe(polygon_sectors_gdf)
+        import shapely
 
-        # # geometry_sectors = paired_results[0][0]['polygon']
-        #
-        # polygon_sectors_gdf = geopandas.GeoDataFrame(geometry=list(sectors_geometry.values(), crs="EPSG:4326"))
-        # st.dataframe(polygon_sectors_gdf)
-        # # folium.GeoJson(polygon_sectors_gdf).add_to(turbine_map)
+        tmp_sectors_df = pd.DataFrame.from_records(data=paired_results, columns=['g'])
+
+        tmp_sectors_df['geometry'] = tmp_sectors_df['g'].apply(lambda x: shapely.wkt.loads(x))
+        tmp_sectors_gdf = geopandas.GeoDataFrame(data=tmp_sectors_df, geometry=tmp_sectors_df['geometry'], crs=4326)
+
+        st.dataframe(tmp_sectors_gdf)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
