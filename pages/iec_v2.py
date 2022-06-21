@@ -895,6 +895,7 @@ def app():
 
         sectors_df = {'geometry': paired_results}
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs=4326)
+        sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
         sectors_polys = folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
 
         sectors_bounding_box = sectors_polys.get_bounds()
