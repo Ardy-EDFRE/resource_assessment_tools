@@ -29,7 +29,8 @@ class Sector(object):
         slope_assessment=None,
         pass_IEC_Test=None,
         type='segment',
-        polygon=None
+        polygon=None,
+
     ):
         self._type = type
         self._origin = origin
@@ -55,7 +56,8 @@ class Sector(object):
         self._terrain_assessment = terrain_assessment
         self._slope_assessment = slope_assessment
         self._pass_IEC_Test = pass_IEC_Test
-        self._polygon = None
+        self._get_polygon = polygon
+        self._polygon = polygon
         self._coords = None
         self._plane = None
 
