@@ -891,16 +891,17 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
+        bounding_box = turbines_cluster.get_bounds()
+        turbine_map.fit_bounds([bounding_box])
+        folium_static(turbine_map, width=800, height=800)
+
         sectors_df = {'geometry': paired_results}
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs=4326)
 
         sectors_geojson = sectors_gdf.to_json()
-        folium.GeoJson(data=sectors_geojson,
-                                         style_function=lambda x: {'fillColor': 'orange'}).add_to(turbine_map)
-
-        bounding_box = turbines_cluster.get_bounds()
-        turbine_map.fit_bounds([bounding_box])
-        folium_static(turbine_map, width=800, height=800)
+        folium.Choropleth(sectors_geojson,
+                          data=sectors_geojson,
+                          fill_color='YlOrBr').add_to(turbine_map)
 
     run_iec = st.sidebar.button("Run IEC Terrain Assessment",
                                 help="This will run the process for evaluation sectors and generate an output for display & download")
