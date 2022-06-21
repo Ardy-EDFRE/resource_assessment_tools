@@ -893,9 +893,8 @@ def app():
 
         st.write(paired_results)
 
-        test_poly = paired_results[0]
-
-        st.write(type(test_poly))
+        polygon_sectors_gdf = geopandas.GeoDataFrame(geometry=paired_results)
+        st.dataframe(polygon_sectors_gdf)
 
         # # geometry_sectors = paired_results[0][0]['polygon']
         #
