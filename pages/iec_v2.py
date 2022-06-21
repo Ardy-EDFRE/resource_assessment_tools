@@ -897,9 +897,10 @@ def app():
         from shapely import wkt
         from shapely.geometry import MultiPolygon
 
-        multi_sectors_geom = MultiPolygon(map(wkt.loads, paired_results))
+        multi_sectors_geom = wkt.loads(paired_results)
+        multi_poly_sectors = MultiPolygon(multi_sectors_geom)
 
-        tmp_sectors_df = pd.DataFrame.from_records(data=multi_sectors_geom, columns=['g'])
+        tmp_sectors_df = pd.DataFrame.from_records(data=multi_poly_sectors, columns=['g'])
 
         tmp_sectors_df['geometry'] = tmp_sectors_df['g'].apply(lambda x: shapely.wkt.loads(x))
         tmp_sectors_gdf = geopandas.GeoDataFrame(data=tmp_sectors_df, geometry=tmp_sectors_df['geometry'], crs=4326)
