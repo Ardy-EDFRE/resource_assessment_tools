@@ -894,7 +894,7 @@ def app():
         st.write(paired_results)
 
         import shapely
-        from shapely.wkt import wkt
+        from shapely import wkt
         from shapely.geometry import MultiPolygon
 
         multi_sectors_geom = MultiPolygon(map(wkt.loads, paired_results))
