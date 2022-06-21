@@ -910,7 +910,7 @@ def app():
         elapsed_time = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
         st.write("Total time: " + str(elapsed_time))
 
-        sector_results_output = pd.read_csv(outputResultsFileName[:-4])
+        sector_results_output = pd.read_csv(outputResultsFileName)
         details_output_csv = pd.read_csv(outputResultsFileName[:-4] + '_details.csv')
 
         st.write(sector_results_output)
