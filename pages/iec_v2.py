@@ -893,12 +893,7 @@ def app():
 
         sectors_df = {'geometry': paired_results}
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs=4326)
-
-        sectors_geojson = sectors_gdf.to_json()
-        folium.Choropleth(geo_data=sectors_geojson,
-                          data=sectors_geojson).add_to(turbine_map)
-
-        folium.LayerControl().add_to(turbine_map)
+        folium.GeoJson(data=sectors_gdf['geometry']).add_to(turbine_map)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
