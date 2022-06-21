@@ -897,7 +897,7 @@ def app():
 
         x, y = test_poly.exterior.coords.xy
 
-        st.write(x, y)
+        st.write(type(x, y))
 
         # # geometry_sectors = paired_results[0][0]['polygon']
         #
