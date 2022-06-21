@@ -734,22 +734,26 @@ def app():
     basemaps['Google Satellite Hybrid'].add_to(turbine_map)
 
     # Input CSV
-    mets_turbs_pairs = st.sidebar.file_uploader("Upload Met Turbine Pairs file location", type='csv', help="Please use only the extension .csv")
+    mets_turbs_pairs = st.sidebar.file_uploader("Upload Met Turbine Pairs file location", type='csv',
+                                                help="Please use only the extension .csv")
     if mets_turbs_pairs:
         mets_turbs_pairs = save_uploaded_file(mets_turbs_pairs, mets_turbs_pairs.name)
 
     # Input Geospatial
-    turbine_layout = st.sidebar.file_uploader("Upload Turbine Layout file location", type=['zip', 'kml'], help="Please zip all your shapefile extensions (.dbf, .cpg, .prj, .shp, .sbn) and upload as .zip or upload with KML as .kml")
+    turbine_layout = st.sidebar.file_uploader("Upload Turbine Layout file location", type=['zip', 'kml'],
+                                              help="Please zip all your shapefile extensions (.dbf, .cpg, .prj, .shp, .sbn) and upload as .zip or upload with KML as .kml")
     if turbine_layout:
         turbine_layout = save_uploaded_file(turbine_layout, turbine_layout.name)
 
     # Input Elevation
-    elevation_raster = st.sidebar.file_uploader("Upload elevation file location", type='tif', help="Please use only use .tif. The size of the dem file (till 20km away from the project boundary).")
+    elevation_raster = st.sidebar.file_uploader("Upload elevation file location", type='tif',
+                                                help="Please use only use .tif. The size of the dem file (till 20km away from the project boundary).")
     if elevation_raster:
         elevation_raster = save_uploaded_file(elevation_raster, elevation_raster.name)
 
     # Outputs
-    outputResultsFileName = st.sidebar.text_input("Write you output file name", help="Please use only the extension .csv")
+    outputResultsFileName = st.sidebar.text_input("Write you output file name",
+                                                  help="Please use only the extension .csv")
 
     if turbine_layout and elevation_raster:
         met_pairs_df = geopandas.read_file(mets_turbs_pairs)
@@ -830,26 +834,8 @@ def app():
     #     mets_map.fit_bounds([bounding_box])
     #     folium_static(mets_map, width=800, height=800)
 
-    paramsFiles_sector_polys = {"turbine_shapefile_path": turbine_layout,
-                   "raster_path": elevation_raster,
-                   "pair_path": mets_turbs_pairs}
-
-    # get pairs from file
-    pair_lines_sector_polys = getParamsFromFile(paramsFiles_sector_polys)
-
-    paired_results_sector_polys = []
-
-    if pair_lines_sector_polys:
-        line_list = len(pair_lines_sector_polys)
-        line_count = line_list - 1
-        line_count = line_count * -1
-        for pl in pair_lines_sector_polys[line_count:]:
-            params = createParams(pl)
-            # run the IEC test on this pair
-            pairResults = process_pair(params)
-            paired_results_sector_polys.append(pairResults)
-
-    display_turbine_layout_map = st.sidebar.checkbox("Display Turbine Layout on Map", help="This checkbox will display a map visualization of the input Turbine shapefiles")
+    display_turbine_layout_map = st.sidebar.checkbox("Display Turbine Layout on Map",
+                                                     help="This checkbox will display a map visualization of the input Turbine shapefiles")
 
     if display_turbine_layout_map:
         turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
@@ -863,6 +849,25 @@ def app():
         turbine_list = turbine_points.values.tolist()
         mets_points = mets_df[["lat", "long"]]
         mets_list = mets_points.values.tolist()
+
+        paramsFiles_sector_polys = {"turbine_shapefile_path": turbine_layout,
+                                    "raster_path": elevation_raster,
+                                    "pair_path": mets_turbs_pairs}
+
+        # get pairs from file
+        pair_lines_sector_polys = getParamsFromFile(paramsFiles_sector_polys)
+
+        paired_results_sector_polys = []
+
+        if pair_lines_sector_polys:
+            line_list = len(pair_lines_sector_polys)
+            line_count = line_list - 1
+            line_count = line_count * -1
+            for pl in pair_lines_sector_polys[line_count:]:
+                params = createParams(pl)
+                # run the IEC test on this pair
+                pairResults = process_pair(params)
+                paired_results_sector_polys.append(pairResults)
 
         turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
         mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
@@ -890,7 +895,8 @@ def app():
         turbine_map.fit_bounds([bounding_box])
         folium_static(turbine_map, width=800, height=800)
 
-    run_iec = st.sidebar.button("Run IEC Terrain Assessment", help="This will run the process for evaluation sectors and generate an output for display & download")
+    run_iec = st.sidebar.button("Run IEC Terrain Assessment",
+                                help="This will run the process for evaluation sectors and generate an output for display & download")
     if run_iec:
         # process all pairs
         startTime = time.time()
