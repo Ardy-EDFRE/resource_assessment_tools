@@ -897,7 +897,7 @@ def app():
 
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs=4326)
 
-        # st.write(sectors_gdf)
+        st.write(sectors_gdf)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
