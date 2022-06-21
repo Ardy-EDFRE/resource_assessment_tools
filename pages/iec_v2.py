@@ -893,7 +893,7 @@ def app():
 
         st.write(paired_results)
 
-        tmp_sector_gdf = geopandas.GeoDataFrame(geometry=list(paired_results))
+        tmp_sector_gdf = geopandas.GeoDataFrame(geometry=paired_results)
 
         st.dataframe(tmp_sector_gdf)
 
