@@ -271,7 +271,7 @@ class Sector(object):
         if self._polygon is not None:
             return self._polygon
         else:
-            self._polygon = self.get_polygon()
+            self._polygon = self.get_polygon
             return self._polygon
 
     @polygon.setter
