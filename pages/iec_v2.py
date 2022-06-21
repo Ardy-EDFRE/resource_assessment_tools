@@ -850,24 +850,27 @@ def app():
         mets_points = mets_df[["lat", "long"]]
         mets_list = mets_points.values.tolist()
 
-        paramsFiles_sector_polys = {"turbine_shapefile_path": turbine_layout,
-                                    "raster_path": elevation_raster,
-                                    "pair_path": mets_turbs_pairs}
+        paramsFiles = {"turbine_shapefile_path": turbine_layout,
+                       "raster_path": elevation_raster,
+                       "pair_path": mets_turbs_pairs}
+
+        # create txt file to hold output results
+        createResultTxtFiles(outputResultsFileName)
 
         # get pairs from file
-        pair_lines_sector_polys = getParamsFromFile(paramsFiles_sector_polys)
+        pairLines = getParamsFromFile(paramsFiles)
 
-        paired_results_sector_polys = []
+        paired_results = []
 
-        if pair_lines_sector_polys:
-            line_list = len(pair_lines_sector_polys)
+        if pairLines:
+            line_list = len(pairLines)
             line_count = line_list - 1
             line_count = line_count * -1
-            for pl in pair_lines_sector_polys[line_count:]:
+            for pl in pairLines[line_count:]:
                 params = createParams(pl)
                 # run the IEC test on this pair
                 pairResults = process_pair(params)
-                paired_results_sector_polys.append(pairResults)
+                paired_results.append(pairResults)
 
         turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
         mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
@@ -888,7 +891,7 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        polygon_sector = geopandas.GeoDataFrame(crs='epsg:4326', geometry=paired_results_sector_polys[0][0]['polygon'])
+        polygon_sector = geopandas.GeoDataFrame(crs='epsg:4326', geometry=paired_results[0][0]['polygon'])
         # folium.GeoJson(polygon_sector["geometry"]).add_to(turbine_map)
 
         bounding_box = turbines_cluster.get_bounds()
