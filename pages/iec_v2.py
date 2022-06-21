@@ -881,44 +881,44 @@ def app():
         st.write(sector_results_output)
         st.write(details_output_csv)
 
-        if display_turbine_layout_map:
-            turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
-            turbines_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Primary Turbine']
-            mets_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Alt']
-            turbines_df["long"] = turbines_df.geometry.x
-            turbines_df["lat"] = turbines_df.geometry.y
-            mets_df["long"] = mets_df.geometry.x
-            mets_df["lat"] = mets_df.geometry.y
-            turbine_points = turbines_df[["lat", "long"]]
-            turbine_list = turbine_points.values.tolist()
-            mets_points = mets_df[["lat", "long"]]
-            mets_list = mets_points.values.tolist()
+    if display_turbine_layout_map:
+        turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
+        turbines_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Primary Turbine']
+        mets_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Alt']
+        turbines_df["long"] = turbines_df.geometry.x
+        turbines_df["lat"] = turbines_df.geometry.y
+        mets_df["long"] = mets_df.geometry.x
+        mets_df["lat"] = mets_df.geometry.y
+        turbine_points = turbines_df[["lat", "long"]]
+        turbine_list = turbine_points.values.tolist()
+        mets_points = mets_df[["lat", "long"]]
+        mets_list = mets_points.values.tolist()
 
-            turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
-            mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
+        turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
+        mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
 
-            for point in range(0, len(turbine_list)):
-                turbine_icon = folium.features.CustomIcon(
-                    'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
-                    icon_size=(40, 40))
-                folium.Marker(turbine_list[point],
-                              popup="Turbine",
-                              icon=turbine_icon).add_to(turbines_cluster)
+        for point in range(0, len(turbine_list)):
+            turbine_icon = folium.features.CustomIcon(
+                'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
+                icon_size=(40, 40))
+            folium.Marker(turbine_list[point],
+                          popup="Turbine",
+                          icon=turbine_icon).add_to(turbines_cluster)
 
-            for point in range(0, len(mets_list)):
-                met_icon = folium.features.CustomIcon(
-                    'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
-                    icon_size=(40, 40))
-                folium.Marker(mets_list[point],
-                              popup='Met',
-                              icon=met_icon).add_to(mets_cluster)
+        for point in range(0, len(mets_list)):
+            met_icon = folium.features.CustomIcon(
+                'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
+                icon_size=(40, 40))
+            folium.Marker(mets_list[point],
+                          popup='Met',
+                          icon=met_icon).add_to(mets_cluster)
 
-            polygon_sector = geopandas.GeoDataFrame(crs='epsg:4326', geometry=paired_results[0][0]['polygon'])
-            folium.GeoJson(polygon_sector["geometry"]).add_to(turbine_map)
+        polygon_sector = geopandas.GeoDataFrame(crs='epsg:4326', geometry=paired_results[0][0]['polygon'])
+        # folium.GeoJson(polygon_sector["geometry"]).add_to(turbine_map)
 
-            bounding_box = turbines_cluster.get_bounds()
-            turbine_map.fit_bounds([bounding_box])
-            folium_static(turbine_map, width=800, height=800)
+        bounding_box = turbines_cluster.get_bounds()
+        turbine_map.fit_bounds([bounding_box])
+        folium_static(turbine_map, width=800, height=800)
 
         convert_csv = convert_df(details_output_csv)
 
