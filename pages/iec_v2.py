@@ -894,7 +894,7 @@ def app():
         geometry_sectors = paired_results[0][0]['polygon']
 
         polygon_sector = geopandas.GeoDataFrame(crs='epsg:4326', geometry=geometry_sectors)
-        st.write(polygon_sector)
+        st.dataframe(polygon_sector)
         # folium.GeoJson(polygon_sector["geometry"]).add_to(turbine_map)
 
         bounding_box = turbines_cluster.get_bounds()
