@@ -55,7 +55,7 @@ class Sector(object):
         self._terrain_assessment = terrain_assessment
         self._slope_assessment = slope_assessment
         self._pass_IEC_Test = pass_IEC_Test
-        self._polygon = polygon
+        self._polygon = None
         self._coords = None
         self._plane = None
 
