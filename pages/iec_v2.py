@@ -900,8 +900,7 @@ def app():
 
         sectors_geojson = sectors_gdf.to_json()
         folium.Choropleth(sectors_geojson,
-                          data=sectors_geojson,
-                          fill_color='YlOrBr').add_to(turbine_map)
+                          data=sectors_geojson).add_to(turbine_map)
 
     run_iec = st.sidebar.button("Run IEC Terrain Assessment",
                                 help="This will run the process for evaluation sectors and generate an output for display & download")
