@@ -891,10 +891,7 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        sectors_list = paired_results[0]
-        sectors_dict = dict.fromkeys(sectors_list, 1)
-
-        for key, value in sectors_dict.iteritems():
+        for key, value in paired_results.iteritems():
             st.write(key, value)
 
         # for sectors_dictionary in paired_results[0]:
