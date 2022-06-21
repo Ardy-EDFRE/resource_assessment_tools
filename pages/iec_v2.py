@@ -764,8 +764,6 @@ def app():
                 'CRS {} '.format(
                     turbine_CRSCheck.crs, raster_CRSCheck.crs))
 
-    display_turbine_layout_map = st.sidebar.checkbox("Display Turbine Layout on Map", help="This checkbox will display a map visualization of the input Turbine shapefiles")
-
     # display_met_pairs_map = st.sidebar.checkbox("Display Met Pairs on Map")
     # if display_met_pairs_map:
     #     met_pairs_df = met_pairs_df.astype(
@@ -832,54 +830,26 @@ def app():
     #     mets_map.fit_bounds([bounding_box])
     #     folium_static(mets_map, width=800, height=800)
 
-    run_iec = st.sidebar.button("Run IEC Terrain Assessment", help="This will run the process for evaluation sectors and generate an output for display & download")
-    if run_iec:
-        # process all pairs
-        startTime = time.time()
+    paramsFiles_sector_polys = {"turbine_shapefile_path": turbine_layout,
+                   "raster_path": elevation_raster,
+                   "pair_path": mets_turbs_pairs}
 
-        # testing pairs 110RD 80HH 2.3RD
-        # G:\Projects\USA_North\Slate_Creek\03_Wind\035_Operational Analysis\20200302_NPC\SlateCreek_IEC_data.mxd
-        # G:\Projects\USA_North\Slate_Creek\03_Wind\035_Operational Analysis\20200302_NPC\iec_SlateCreek_WTGs_nad83utm14\mets_buff_2_3RD.shp
+    # get pairs from file
+    pair_lines_sector_polys = getParamsFromFile(paramsFiles_sector_polys)
 
-        paramsFiles = {"turbine_shapefile_path": turbine_layout,
-                       "raster_path": elevation_raster,
-                       "pair_path": mets_turbs_pairs}
+    paired_results_sector_polys = []
 
-        # create txt file to hold output results
-        createResultTxtFiles(outputResultsFileName)
+    if pair_lines_sector_polys:
+        line_list = len(pair_lines_sector_polys)
+        line_count = line_list - 1
+        line_count = line_count * -1
+        for pl in pair_lines_sector_polys[line_count:]:
+            params = createParams(pl)
+            # run the IEC test on this pair
+            pairResults = process_pair(params)
+            paired_results_sector_polys.append(pairResults)
 
-        # get pairs from file
-        pairLines = getParamsFromFile(paramsFiles)
-
-        counter = 1
-
-        paired_results = []
-
-        if pairLines:
-            line_list = len(pairLines)
-            line_count = line_list - 1
-            line_count = line_count * -1
-            for pl in pairLines[line_count:]:
-                params = createParams(pl)
-                # run the IEC test on this pair
-                pairResults = process_pair(params)
-                paired_results.append(pairResults)
-
-                results2csv(pairResults, outputResultsFileName)
-                st.write(
-                    '{}/{} Pair turb: {} - met: {}'.format(counter, len(pairLines[1:]), params['target_turbine_fid'],
-                                                           params['target_met_fid']))
-                counter += 1
-
-        elapsed_time = time.time() - startTime
-        elapsed_time = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
-        st.write("Total time: " + str(elapsed_time))
-
-        sector_results_output = pd.read_csv(outputResultsFileName)
-        details_output_csv = pd.read_csv(outputResultsFileName[:-4] + '_details.csv')
-
-        st.write(sector_results_output)
-        st.write(details_output_csv)
+    display_turbine_layout_map = st.sidebar.checkbox("Display Turbine Layout on Map", help="This checkbox will display a map visualization of the input Turbine shapefiles")
 
     if display_turbine_layout_map:
         turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
@@ -913,12 +883,58 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        polygon_sector = geopandas.GeoDataFrame(crs='epsg:4326', geometry=paired_results[0][0]['polygon'])
+        polygon_sector = geopandas.GeoDataFrame(crs='epsg:4326', geometry=paired_results_sector_polys[0][0]['polygon'])
         # folium.GeoJson(polygon_sector["geometry"]).add_to(turbine_map)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
         folium_static(turbine_map, width=800, height=800)
+
+    run_iec = st.sidebar.button("Run IEC Terrain Assessment", help="This will run the process for evaluation sectors and generate an output for display & download")
+    if run_iec:
+        # process all pairs
+        startTime = time.time()
+
+        # testing pairs 110RD 80HH 2.3RD
+        # G:\Projects\USA_North\Slate_Creek\03_Wind\035_Operational Analysis\20200302_NPC\SlateCreek_IEC_data.mxd
+        # G:\Projects\USA_North\Slate_Creek\03_Wind\035_Operational Analysis\20200302_NPC\iec_SlateCreek_WTGs_nad83utm14\mets_buff_2_3RD.shp
+
+        paramsFiles = {"turbine_shapefile_path": turbine_layout,
+                       "raster_path": elevation_raster,
+                       "pair_path": mets_turbs_pairs}
+
+        # create txt file to hold output results
+        createResultTxtFiles(outputResultsFileName)
+
+        # get pairs from file
+        pairLines = getParamsFromFile(paramsFiles)
+
+        counter = 1
+
+        if pairLines:
+            line_list = len(pairLines)
+            line_count = line_list - 1
+            line_count = line_count * -1
+            for pl in pairLines[line_count:]:
+                params = createParams(pl)
+                # run the IEC test on this pair
+                pairResults = process_pair(params)
+
+                results2csv(pairResults, outputResultsFileName)
+                st.write(
+                    '{}/{} Pair turb: {} - met: {}'.format(counter, len(pairLines[1:]), params['target_turbine_fid'],
+                                                           params['target_met_fid']))
+                counter += 1
+
+        elapsed_time = time.time() - startTime
+        elapsed_time = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
+        st.write("Total time: " + str(elapsed_time))
+
+        sector_results_output = pd.read_csv(outputResultsFileName)
+        details_output_csv = pd.read_csv(outputResultsFileName[:-4] + '_details.csv')
+
+        st.write(sector_results_output)
+        st.write(details_output_csv)
 
         convert_csv = convert_df(details_output_csv)
 
