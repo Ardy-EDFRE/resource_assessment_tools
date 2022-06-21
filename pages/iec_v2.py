@@ -870,7 +870,7 @@ def app():
                 params = createParams(pl)
                 # run the IEC test on this pair
                 pairResults = process_pair(params)
-                paired_results.append(pairResults)
+                paired_results.append(pairResults[0]['polygon'])
 
         turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
         mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
@@ -891,15 +891,8 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        sectors_dict = paired_results[0]
+        st.write(paired_results)
 
-        for key, value in paired_results.items():
-            st.write(key, value)
-
-        # for sectors_dictionary in paired_results[0]:
-        #     for sectors in sectors_dictionary[0]:
-        #         sectors_geometry.append(sectors['polygon'])
-        #
         # # geometry_sectors = paired_results[0][0]['polygon']
         #
         # polygon_sectors_gdf = geopandas.GeoDataFrame(geometry=list(sectors_geometry.values(), crs="EPSG:4326"))
