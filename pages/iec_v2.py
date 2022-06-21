@@ -894,8 +894,12 @@ def app():
         st.write(paired_results)
 
         import shapely
+        from shapely.wkt import wkt
+        from shapely.geometry import MultiPolygon
 
-        tmp_sectors_df = pd.DataFrame.from_records(data=paired_results, columns=['g'])
+        multi_sectors_geom = MultiPolygon(map(wkt.loads, paired_results))
+
+        tmp_sectors_df = pd.DataFrame.from_records(data=multi_sectors_geom, columns=['g'])
 
         tmp_sectors_df['geometry'] = tmp_sectors_df['g'].apply(lambda x: shapely.wkt.loads(x))
         tmp_sectors_gdf = geopandas.GeoDataFrame(data=tmp_sectors_df, geometry=tmp_sectors_df['geometry'], crs=4326)
