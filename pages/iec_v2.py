@@ -893,19 +893,11 @@ def app():
 
         st.write(paired_results)
 
-        import shapely
-        from shapely import wkt
-        from shapely.geometry import MultiPolygon
+        sectors_df = {'geometry': paired_results}
 
-        multi_sectors_geom = wkt.loads(paired_results)
-        multi_poly_sectors = MultiPolygon(multi_sectors_geom)
+        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs=4326)
 
-        tmp_sectors_df = pd.DataFrame.from_records(data=multi_poly_sectors, columns=['g'])
-
-        tmp_sectors_df['geometry'] = tmp_sectors_df['g'].apply(lambda x: shapely.wkt.loads(x))
-        tmp_sectors_gdf = geopandas.GeoDataFrame(data=tmp_sectors_df, geometry=tmp_sectors_df['geometry'], crs=4326)
-
-        st.dataframe(tmp_sectors_gdf)
+        st.dataframe(sectors_gdf)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
