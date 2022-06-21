@@ -17,11 +17,6 @@ import time
 import streamlit as st
 import folium
 from streamlit_folium import folium_static
-import os
-import shutil
-import streamlit.components.v1 as components
-import base64
-import json
 
 
 def app():
@@ -893,6 +888,8 @@ def app():
 
         counter = 1
 
+        paired_results = []
+
         if pairLines:
             line_list = len(pairLines)
             line_count = line_list - 1
@@ -901,6 +898,7 @@ def app():
                 params = createParams(pl)
                 # run the IEC test on this pair
                 pairResults = process_pair(params)
+                paired_results.append(pairResults)
 
                 results2csv(pairResults, outputResultsFileName)
                 st.write(
@@ -912,11 +910,14 @@ def app():
         elapsed_time = time.strftime("%H:%M:%S", time.gmtime(elapsed_time))
         st.write("Total time: " + str(elapsed_time))
 
-        output2_csv = pd.read_csv(outputResultsFileName[:-4] + '_details.csv')
+        sector_results_output = pd.read_csv(outputResultsFileName[:-4] )
+        details_output_csv = pd.read_csv(outputResultsFileName[:-4] + '_details.csv')
 
-        st.write(output2_csv)
+        st.write(sector_results_output)
+        st.write(details_output_csv)
+        st.write(paired_results)
 
-        convert_csv = convert_df(output2_csv)
+        convert_csv = convert_df(details_output_csv)
 
         st.download_button(
             label="Download data as CSV",
