@@ -909,11 +909,11 @@ def app():
         # sectors_polys = sectors_gdf[["lat", "long"]]
         # sectors_list = sectors_polys.values.tolist()
 
-        sectors_polys = folium.GeoJson(data=sectors_json,
+        folium.GeoJson(data=sectors_json,
                                        style_function=lambda x: {'fillColor': 'orange'}).add_to(sectors_map)
 
-        sectors_bounding_box = sectors_polys.get_bounds()
-        sectors_map.fit_bounds([sectors_bounding_box])
+        # sectors_bounding_box = sectors_polys.get_bounds()
+        # sectors_map.fit_bounds([sectors_bounding_box])
         folium_static(sectors_map, width=800, height=800)
 
         bounding_box = turbines_cluster.get_bounds()
