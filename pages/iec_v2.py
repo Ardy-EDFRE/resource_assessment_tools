@@ -897,12 +897,12 @@ def app():
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs=4326)
         sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
 
-        sectors_gdf.plot
+        sectors_gdf.plot(figsize=(15, 10))
+        st.pyplot()
 
         # ax = sectors_gdf[sectors_gdf.continent == 'North America'].plot(
         #     color='white', edgecolor='black')
         # sectors_gdf.plot(ax=ax, color='red')
-        # st.pyplot()
 
         # st.write(sectors_gdf)
 
