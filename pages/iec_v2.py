@@ -898,12 +898,21 @@ def app():
                           icon=met_icon).add_to(mets_cluster)
 
         sectors_df = {'geometry': paired_results}
-        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs="EPSG:4326")
-        sectors_gdf = sectors_gdf.to_crs(epsg=4326)
 
-        sectors_json = sectors_gdf.to_json()
+        for _, r in sectors_df.iterrows():
+            sectors_geo = geopandas.GeoSeries(r['geometry'].simplify(tolerance=0.001))
+            sectors_json = sectors_geo.to_json()
+            sectors_json = folium.GeoJson(data=sectors_json,
+                                          style_function=lambda x: {'fillColor': 'orange'})
+            folium.Popup(r['id']).add_to(sectors_json)
+            sectors_json.add_to(sectors_map)
 
-        st.write(sectors_json)
+        # sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs="EPSG:4326")
+        # sectors_gdf = sectors_gdf.to_crs(epsg=4326)
+        #
+        # sectors_json = sectors_gdf.to_json()
+        #
+        # st.write(sectors_json)
 
         # sectors_gdf['lon'] = sectors_gdf.centroid.x
         # sectors_gdf['lat'] = sectors_gdf.centroid.y
@@ -916,7 +925,7 @@ def app():
 
         # sectors_bounding_box = sectors_polys.get_bounds()
         # sectors_map.fit_bounds([sectors_bounding_box])
-        # folium_static(sectors_map, width=800, height=800)
+        folium_static(sectors_map, width=800, height=800)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
