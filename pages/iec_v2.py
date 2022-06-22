@@ -900,8 +900,6 @@ def app():
         sectors_df = pd.DataFrame({'Geometry': paired_results})
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry', crs="EPSG:26916")
         sectors_gdf = sectors_gdf.to_crs(epsg=26916)
-        st.write(sectors_gdf.crs)
-        st.write(sectors_gdf)
 
         # sectors_df = {'geometry': paired_results}
 
