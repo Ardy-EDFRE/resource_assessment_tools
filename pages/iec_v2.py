@@ -897,7 +897,9 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        sectors_df = {'geometry': paired_results}
+        sectors_df = pd.DataFrame({'geometry': paired_results})
+
+        # sectors_df = {'geometry': paired_results}
 
         for _, r in sectors_df.iterrows():
             sectors_geo = geopandas.GeoSeries(r['geometry'].simplify(tolerance=0.001))
