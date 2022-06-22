@@ -1,4 +1,4 @@
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 import rasterio
 import rasterio.mask
 from rasterio.io import MemoryFile
@@ -17,6 +17,10 @@ import time
 import streamlit as st
 import folium
 from streamlit_folium import folium_static
+import warnings
+import plotly.graph_objs as go
+
+warnings.filterwarnings('ignore')
 
 
 def app():
@@ -895,23 +899,13 @@ def app():
 
         sectors_df = {'geometry': paired_results}
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs=4326)
-        sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
+        sectors_gdf.to_crs(pyproj.CRS.from_epsg(4326), inplace=True)
 
-        sectors_gdf.plot(figsize=(15, 10))
-        st.pyplot()
+        sectors_polys = folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
 
-        # ax = sectors_gdf[sectors_gdf.continent == 'North America'].plot(
-        #     color='white', edgecolor='black')
-        # sectors_gdf.plot(ax=ax, color='red')
-
-        # st.write(sectors_gdf)
-
-        # sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
-        # sectors_polys = folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
-        #
-        # sectors_bounding_box = sectors_polys.get_bounds()
-        # sectors_map.fit_bounds([sectors_bounding_box])
-        # folium_static(sectors_map, width=800, height=800)
+        sectors_bounding_box = sectors_polys.get_bounds()
+        sectors_map.fit_bounds([sectors_bounding_box])
+        folium_static(sectors_map, width=800, height=800)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
