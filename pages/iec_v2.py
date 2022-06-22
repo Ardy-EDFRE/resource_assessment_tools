@@ -18,7 +18,7 @@ import streamlit as st
 import folium
 from streamlit_folium import folium_static
 import warnings
-import plotly.graph_objs as go
+# import plotly.graph_objs as go
 
 warnings.filterwarnings('ignore')
 
