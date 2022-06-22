@@ -897,12 +897,13 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        sectors_df = pd.DataFrame({'geometry': paired_results})
+        sectors_df = pd.DataFrame({'Geometry': paired_results})
+        sectors_df['Geometry'] = geopandas.GeoSeries.from_wkt(sectors_df['Geometry'])
 
         # sectors_df = {'geometry': paired_results}
 
         for _, r in sectors_df.iterrows():
-            sectors_geo = geopandas.GeoSeries(r['geometry'].simplify(tolerance=0.001))
+            sectors_geo = geopandas.GeoSeries(r['Geometry'].simplify(tolerance=0.001))
             sectors_json = sectors_geo.to_json()
             sectors_json = folium.GeoJson(data=sectors_json,
                                           style_function=lambda x: {'fillColor': 'orange'})
