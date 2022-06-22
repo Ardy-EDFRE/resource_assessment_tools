@@ -899,10 +899,11 @@ def app():
 
         sectors_df = pd.DataFrame({'Geometry': paired_results})
         sectors_df['Geometry'] = geopandas.GeoSeries.from_wkt(sectors_df['Geometry'])
+        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry', crs="EPSG:4326")
 
         # sectors_df = {'geometry': paired_results}
 
-        for _, r in sectors_df.iterrows():
+        for _, r in sectors_gdf.iterrows():
             sectors_geo = geopandas.GeoSeries(r['Geometry'].simplify(tolerance=0.001))
             sectors_json = sectors_geo.to_json()
             sectors_json = folium.GeoJson(data=sectors_json,
