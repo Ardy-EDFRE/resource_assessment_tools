@@ -898,10 +898,19 @@ def app():
                           icon=met_icon).add_to(mets_cluster)
 
         sectors_df = {'geometry': paired_results}
-        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs=4326)
-        sectors_gdf.to_crs(pyproj.CRS.from_epsg(4326), inplace=True)
+        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs="EPSG:4326")
+        sectors_gdf = sectors_gdf.to_crs(epsg=4326)
 
-        sectors_polys = folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
+        sectors_json = sectors_gdf.to_json()
+
+        # sectors_gdf['lon'] = sectors_gdf.centroid.x
+        # sectors_gdf['lat'] = sectors_gdf.centroid.y
+        #
+        # sectors_polys = sectors_gdf[["lat", "long"]]
+        # sectors_list = sectors_polys.values.tolist()
+
+        sectors_polys = folium.GeoJson(data=sectors_json,
+                                       style_function=lambda x: {'fillColor': 'orange'}).add_to(sectors_map)
 
         sectors_bounding_box = sectors_polys.get_bounds()
         sectors_map.fit_bounds([sectors_bounding_box])
