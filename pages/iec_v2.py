@@ -897,18 +897,18 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        sectors_df = pd.DataFrame({'Geometry': paired_results})
-        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry', crs="EPSG:26916")
-        sectors_gdf = sectors_gdf.to_crs(epsg=26916)
-
-        # sectors_df = {'geometry': paired_results}
-
-        for _, r in sectors_gdf.iterrows():
-            sectors_geo = geopandas.GeoSeries(r['Geometry'].simplify(tolerance=0.001))
-            sectors_json = sectors_geo.to_json()
-            sectors_json = folium.GeoJson(data=sectors_json,
-                                          style_function=lambda x: {'fillColor': 'orange'})
-            sectors_json.add_to(sectors_map)
+        # sectors_df = pd.DataFrame({'Geometry': paired_results})
+        # sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry', crs="EPSG:26916")
+        # sectors_gdf = sectors_gdf.to_crs(epsg=26916)
+        #
+        # # sectors_df = {'geometry': paired_results}
+        #
+        # for _, r in sectors_gdf.iterrows():
+        #     sectors_geo = geopandas.GeoSeries(r['Geometry'].simplify(tolerance=0.001))
+        #     sectors_json = sectors_geo.to_json()
+        #     sectors_json = folium.GeoJson(data=sectors_json,
+        #                                   style_function=lambda x: {'fillColor': 'orange'})
+        #     sectors_json.add_to(sectors_map)
 
         # sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs="EPSG:4326")
         # sectors_gdf = sectors_gdf.to_crs(epsg=4326)
@@ -928,7 +928,7 @@ def app():
 
         # sectors_bounding_box = sectors_polys.get_bounds()
         # sectors_map.fit_bounds([sectors_bounding_box])
-        folium_static(sectors_map, width=800, height=800)
+        # folium_static(sectors_map, width=800, height=800)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
@@ -998,3 +998,4 @@ def app():
 
     st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png",
              width=50)
+
