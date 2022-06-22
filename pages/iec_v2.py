@@ -907,7 +907,6 @@ def app():
             sectors_json = sectors_geo.to_json()
             sectors_json = folium.GeoJson(data=sectors_json,
                                           style_function=lambda x: {'fillColor': 'orange'})
-            folium.Popup(r['id']).add_to(sectors_json)
             sectors_json.add_to(sectors_map)
 
         # sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs="EPSG:4326")
