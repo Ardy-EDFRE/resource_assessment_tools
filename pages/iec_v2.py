@@ -897,10 +897,13 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        sectors_df = pd.DataFrame({'Geometry': paired_results})
-        st.write(sectors_df)
+        from shapely.geometry import Polygon
 
-        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry')
+        sectors_poly = Polygon(paired_results)
+
+        # sectors_df = pd.DataFrame({'Geometry': paired_results})
+
+        sectors_gdf = geopandas.GeoSeries(sectors_poly)
 
         sectors_gdf.set_crs(epsg=4326, inplace=True)
         sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
