@@ -289,7 +289,7 @@ class Sector(object):
             return self._coords
         else:
             self._polygon = self.get_polygon()
-            return self.coords
+            return self._coords
 
     @property
     def angle(self):
