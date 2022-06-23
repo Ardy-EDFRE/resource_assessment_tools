@@ -898,20 +898,14 @@ def app():
                           icon=met_icon).add_to(mets_cluster)
 
         sectors_df = pd.DataFrame({'Geometry': paired_results})
-        sectors_gdf = geopandas.GeoDataFrame.from_dict(sectors_df, geometry='Geometry')
 
-        from shapely.geometry import Polygon
-
-        sectors_gdf["coordinates"] = sectors_gdf.apply(lambda row: eval(row['Geometry']), axis=1)
-        sectors_gdf["coordinates"] = sectors_gdf.apply(lambda row: [(i[1], i[0]) for i in row['Geometry']], axis=1)
-        sectors_gdf['geometry'] = sectors_gdf.apply(lambda row: Polygon(row['coordinates']), axis=1)
+        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry')
+        sectors_gdf.geometry.map(lambda sectors_gdf: shapely.ops.transform(lambda y, x: (x, y), shapely.wkt.loads(sectors_gdf)))
 
         sectors_gdf.set_crs(epsg=4326, inplace=True)
         sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
 
-        st.write(sectors_gdf)
-
-        x1, y1, x2, y2 = sectors_gdf['geometry'].total_bounds
+        x1, y1, x2, y2 = sectors_gdf['Geometry'].total_bounds
         sectors_map.fit_bounds([y1, x1], [y2, x2])
         folium_static(sectors_map, width=800, height=800)
 
