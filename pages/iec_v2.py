@@ -905,6 +905,9 @@ def app():
         sectors_gdf = sectors_gdf.to_crs("EPSG:26916")
 
         x1, y1, x2, y2 = sectors_gdf['Geometry'].total_bounds
+
+        st.write(x1, y1, x2, y2)
+
         sectors_map.fit_bounds([[x1, y1], [x2, y2]])
         folium.GeoJson(sectors_gdf['Geometry']).add_to(sectors_map)
         folium_static(sectors_map, width=800, height=800)
