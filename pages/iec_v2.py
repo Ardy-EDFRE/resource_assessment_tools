@@ -911,7 +911,7 @@ def app():
                                           style_function=lambda x: {'fillColor': 'orange'})
             sectors_json.add_to(sectors_map)
 
-        x1, y1, x2, y2 = sectors_gdf['geometry'].total_bounds
+        x1, y1, x2, y2 = sectors_gdf['Geometry'].total_bounds
         sectors_map.fit_bounds([y1, x1], [y2, x2])
         folium_static(sectors_map, width=800, height=800)
 
