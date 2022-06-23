@@ -18,7 +18,7 @@ import streamlit as st
 import folium
 from streamlit_folium import folium_static
 import warnings
-# import plotly.graph_objs as go
+import shapely
 
 warnings.filterwarnings('ignore')
 
@@ -897,13 +897,10 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        sectors_df = pd.DataFrame({'geom': paired_results})
-        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geom')
+        sectors_df = pd.DataFrame({'Geometry': paired_results})
+        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry')
 
-        sectors_gdf["long"] = sectors_gdf.geometry.x
-        sectors_gdf["lat"] = sectors_gdf.geometry.y
-
-        sectors_gdf = geopandas.GeoDataFrame(sectors_gdf, geometry=geopandas.points_from_xy(sectors_gdf.long, sectors_gdf.lat))
+        sectors_gdf.geometry.map(lambda polygon: shapely.ops.transform(lambda y, x: (x, y), polygon))
 
         sectors_gdf.set_crs(epsg=4326, inplace=True)
         sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
