@@ -902,8 +902,8 @@ def app():
 
         from shapely.geometry import Polygon
 
-        sectors_gdf["coordinates"] = sectors_gdf.apply(lambda row: eval(row['coordinates']), axis=1)
-        sectors_gdf["coordinates"] = sectors_gdf.apply(lambda row: [(i[1], i[0]) for i in row['coordinates']], axis=1)
+        sectors_gdf["coordinates"] = sectors_gdf.apply(lambda row: eval(row['Geometry']), axis=1)
+        sectors_gdf["coordinates"] = sectors_gdf.apply(lambda row: [(i[1], i[0]) for i in row['Geometry']], axis=1)
         sectors_gdf['geometry'] = sectors_gdf.apply(lambda row: Polygon(row['coordinates']), axis=1)
 
         sectors_gdf.set_crs(epsg=4326, inplace=True)
