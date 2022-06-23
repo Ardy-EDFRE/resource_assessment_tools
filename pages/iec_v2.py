@@ -897,19 +897,16 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        sectors_df = pd.DataFrame({'Geometry': paired_results})
-        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry', crs="EPSG:26916")
+        sectors_df = pd.DataFrame({'geom': paired_results})
+        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geom')
 
-        # sectors_df = {'geometry': paired_results}
+        sectors_gdf["long"] = sectors_gdf.geometry.x
+        sectors_gdf["lat"] = sectors_gdf.geometry.y
 
-        for _, r in sectors_gdf.iterrows():
-            sectors_geo = geopandas.GeoSeries(r['Geometry'])
-            sectors_geo.set_crs(epsg=26916, inplace=True)
-            sectors_geo = sectors_geo.to_crs("EPSG:26916")
-            sectors_json = sectors_geo.to_json()
-            sectors_json = folium.GeoJson(data=sectors_json,
-                                          style_function=lambda x: {'fillColor': 'orange'})
-            sectors_json.add_to(sectors_map)
+        sectors_gdf = geopandas.GeoDataFrame(sectors_gdf, geometry=geopandas.points_from_xy(sectors_gdf.long, sectors_gdf.lat))
+
+        sectors_gdf.set_crs(epsg=4326, inplace=True)
+        sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
 
         x1, y1, x2, y2 = sectors_gdf['Geometry'].total_bounds
         sectors_map.fit_bounds([y1, x1], [y2, x2])
