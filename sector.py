@@ -435,7 +435,8 @@ class Sector(object):
             "slope_assessment": self._slope_assessment,
             "pass_IEC_Test": self._pass_IEC_Test,
             "type" : self._type,
-            "polygon": self._get_polygon
+            "polygon": self._get_polygon,
+            "coords": self._coords
         }
 
 def create_point_from_distance_and_angle(x, y, distance, angle):
