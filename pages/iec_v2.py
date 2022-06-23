@@ -899,11 +899,9 @@ def app():
 
         sectors_df = pd.DataFrame({'Geometry': paired_results})
 
-        # sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry')
-        # sectors_gdf.geometry.map(lambda polygon: shapely.ops.transform(lambda x, y: (y, x), shapely.wkt.loads(polygon)))
-
-        sectors_df['Geometry'].map(lambda polygon: shapely.ops.transform(lambda x, y: (y, x), shapely.wkt.loads(polygon)))
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry')
+        sectors_gdf['wkt'] = sectors_gdf.geometry.to_wkt()
+        sectors_gdf.geometry.map(lambda polygon: shapely.ops.transform(lambda x, y: (y, x), shapely.wkt.loads(polygon)))
 
         sectors_gdf.set_crs(epsg=4326, inplace=True)
         sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
