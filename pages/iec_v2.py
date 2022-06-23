@@ -901,7 +901,7 @@ def app():
 
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry')
         sectors_gdf['wkt'] = sectors_gdf.geometry.to_wkt()
-        sectors_gdf.geometry.map(lambda polygon: shapely.ops.transform(lambda x, y: (y, x), shapely.wkt.loads(polygon)))
+        sectors_gdf.geometry.map(lambda polygon: shapely.ops.transform(lambda y, x: (x, y), shapely.wkt.loads(polygon)))
 
         sectors_gdf.set_crs(epsg=4326, inplace=True)
         sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
