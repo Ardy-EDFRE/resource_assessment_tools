@@ -898,8 +898,9 @@ def app():
                           icon=met_icon).add_to(mets_cluster)
 
         sectors_df = pd.DataFrame({'Geometry': paired_results})
+        sectors_df['Geometry'] = geopandas.GeoSeries.from_wkt(sectors_df['Geometry'])
 
-        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry=sectors_df['Geometry'].apply(shapely.wkt.loads))
+        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry')
 
         sectors_gdf.set_crs(epsg=4326, inplace=True)
         sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
