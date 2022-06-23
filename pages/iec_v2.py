@@ -901,8 +901,9 @@ def app():
         test_poly = paired_results_polys[0]
         x, y = test_poly.exterior.coords.xy
 
+        fig = plt.figure(figsize=(10, 3))
         plt.plot(x, y, c='red')
-        plt.show()
+        st.pyplot(fig)
 
         # sectors_poly = Polygon(paired_results)
         # sectors_df = pd.DataFrame({'Geometry': paired_results_polys})
