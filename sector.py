@@ -30,6 +30,7 @@ class Sector(object):
         pass_IEC_Test=None,
         type='segment',
         polygon=None,
+        coords=None,
 
     ):
         self._type = type
@@ -58,7 +59,7 @@ class Sector(object):
         self._pass_IEC_Test = pass_IEC_Test
         self._get_polygon = polygon
         self._polygon = polygon
-        self._coords = None
+        self._coords = coords
         self._plane = None
 
 
@@ -409,7 +410,6 @@ class Sector(object):
         else:
             # no requirements for this sector
             self._pass_IEC_Test = True
-            
 
     def to_dict(self):
         return {

@@ -18,7 +18,8 @@ import streamlit as st
 import folium
 from streamlit_folium import folium_static
 import warnings
-import shapely
+from shapely.geometry import Polygon
+
 
 warnings.filterwarnings('ignore')
 
@@ -866,7 +867,8 @@ def app():
         # get pairs from file
         pairLines = getParamsFromFile(paramsFiles)
 
-        paired_results = []
+        paired_results_polys = []
+        paired_results_coords = []
 
         if pairLines:
             line_list = len(pairLines)
@@ -876,7 +878,8 @@ def app():
                 params = createParams(pl)
                 # run the IEC test on this pair
                 pairResults = process_pair(params)
-                paired_results.append(pairResults[0]['polygon'])
+                paired_results_polys.append(pairResults[0]['polygon'])
+                paired_results_coords.append(pairResults[0]['coords'])
 
         turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
         mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
@@ -897,25 +900,24 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        from shapely.geometry import Polygon
-
-        st.write(paired_results)
+        st.write(paired_results_polys)
+        st.write(paired_results_coords)
 
         # sectors_poly = Polygon(paired_results)
-        sectors_df = pd.DataFrame({'Geometry': paired_results})
-
-        sectors_gdf = geopandas.GeoSeries(sectors_df)
-
-        sectors_gdf.set_crs(epsg=4326, inplace=True)
-        sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
-
-        x1, y1, x2, y2 = sectors_gdf['Geometry'].total_bounds
-
-        st.write(x1, y1, x2, y2)
-
-        sectors_map.fit_bounds([[x1, y1], [x2, y2]])
-        folium.GeoJson(sectors_gdf['Geometry']).add_to(sectors_map)
-        folium_static(sectors_map, width=800, height=800)
+        # sectors_df = pd.DataFrame({'Geometry': paired_results_polys})
+        #
+        # sectors_gdf = geopandas.GeoSeries(sectors_df)
+        #
+        # sectors_gdf.set_crs(epsg=4326, inplace=True)
+        # sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
+        #
+        # x1, y1, x2, y2 = sectors_gdf['Geometry'].total_bounds
+        #
+        # st.write(x1, y1, x2, y2)
+        #
+        # sectors_map.fit_bounds([[x1, y1], [x2, y2]])
+        # folium.GeoJson(sectors_gdf['Geometry']).add_to(sectors_map)
+        # folium_static(sectors_map, width=800, height=800)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
