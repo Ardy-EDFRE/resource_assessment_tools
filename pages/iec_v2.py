@@ -900,7 +900,7 @@ def app():
         sectors_df = pd.DataFrame({'Geometry': paired_results})
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry')
 
-        sectors_gdf.geometry.map(lambda polygon: shapely.ops.transform(lambda y, x: (x, y), polygon))
+        sectors_gdf.geometry.map(lambda geom: shapely.ops.transform(lambda x, y, z=None: (y, x, z), geom))
 
         sectors_gdf.set_crs(epsg=4326, inplace=True)
         sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
