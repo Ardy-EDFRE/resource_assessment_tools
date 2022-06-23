@@ -869,6 +869,7 @@ def app():
 
         paired_results_polys = []
         paired_results_coords = []
+        paired_results = []
 
         if pairLines:
             line_list = len(pairLines)
@@ -879,7 +880,8 @@ def app():
                 # run the IEC test on this pair
                 pairResults = process_pair(params)
                 paired_results_polys.append(pairResults[0]['polygon'])
-                paired_results_coords.append(pairResults[0]['coords'])
+                paired_results.append(pairResults[0])
+                # paired_results_coords.append(pairResults[0]['coords'])
 
         turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
         mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
@@ -901,7 +903,7 @@ def app():
                           icon=met_icon).add_to(mets_cluster)
 
         st.write(paired_results_polys)
-        st.write(paired_results_coords)
+        st.write(paired_results)
 
         # sectors_poly = Polygon(paired_results)
         # sectors_df = pd.DataFrame({'Geometry': paired_results_polys})
