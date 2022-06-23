@@ -898,6 +898,7 @@ def app():
                           icon=met_icon).add_to(mets_cluster)
 
         sectors_df = pd.DataFrame({'Geometry': paired_results})
+        st.write(sectors_df)
 
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry')
 
