@@ -897,38 +897,23 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        # sectors_df = pd.DataFrame({'Geometry': paired_results})
-        # sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry', crs="EPSG:26916")
-        # sectors_gdf = sectors_gdf.to_crs(epsg=26916)
-        #
-        # # sectors_df = {'geometry': paired_results}
-        #
-        # for _, r in sectors_gdf.iterrows():
-        #     sectors_geo = geopandas.GeoSeries(r['Geometry'].simplify(tolerance=0.001))
-        #     sectors_json = sectors_geo.to_json()
-        #     sectors_json = folium.GeoJson(data=sectors_json,
-        #                                   style_function=lambda x: {'fillColor': 'orange'})
-        #     sectors_json.add_to(sectors_map)
+        sectors_df = pd.DataFrame({'Geometry': paired_results})
+        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry', crs="EPSG:4326")
 
-        # sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='geometry', crs="EPSG:4326")
-        # sectors_gdf = sectors_gdf.to_crs(epsg=4326)
-        #
-        # sectors_json = sectors_gdf.to_json()
-        #
-        # st.write(sectors_json)
+        # sectors_df = {'geometry': paired_results}
 
-        # sectors_gdf['lon'] = sectors_gdf.centroid.x
-        # sectors_gdf['lat'] = sectors_gdf.centroid.y
-        #
-        # sectors_polys = sectors_gdf[["lat", "long"]]
-        # sectors_list = sectors_polys.values.tolist()
+        for _, r in sectors_gdf.iterrows():
+            sectors_geo = geopandas.GeoSeries(r['Geometry'])
+            sectors_geo.set_crs(epsg=4326, inplace=True)
+            sectors_geo = sectors_geo.to_crs("EPSG:4326")
+            sectors_json = sectors_geo.to_json()
+            sectors_json = folium.GeoJson(data=sectors_json,
+                                          style_function=lambda x: {'fillColor': 'orange'})
+            sectors_json.add_to(sectors_map)
 
-        # folium.GeoJson(data=sectors_json,
-        #                                style_function=lambda x: {'fillColor': 'orange'}).add_to(sectors_map)
-
-        # sectors_bounding_box = sectors_polys.get_bounds()
-        # sectors_map.fit_bounds([sectors_bounding_box])
-        # folium_static(sectors_map, width=800, height=800)
+        x1, y1, x2, y2 = sectors_gdf['geometry'].total_bounds
+        sectors_map.fit_bounds([y1, x1], [y2, x2])
+        folium_static(sectors_map, width=800, height=800)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
