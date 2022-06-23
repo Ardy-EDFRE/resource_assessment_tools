@@ -899,11 +899,12 @@ def app():
 
         from shapely.geometry import Polygon
 
-        sectors_poly = Polygon(paired_results)
+        st.write(paired_results)
 
-        # sectors_df = pd.DataFrame({'Geometry': paired_results})
+        # sectors_poly = Polygon(paired_results)
+        sectors_df = pd.DataFrame({'Geometry': paired_results})
 
-        sectors_gdf = geopandas.GeoSeries(sectors_poly)
+        sectors_gdf = geopandas.GeoSeries(sectors_df)
 
         sectors_gdf.set_crs(epsg=4326, inplace=True)
         sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
