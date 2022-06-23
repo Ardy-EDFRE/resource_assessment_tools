@@ -898,14 +898,14 @@ def app():
                           icon=met_icon).add_to(mets_cluster)
 
         sectors_df = pd.DataFrame({'Geometry': paired_results})
-        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry', crs="EPSG:4326")
+        sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry', crs="EPSG:26916")
 
         # sectors_df = {'geometry': paired_results}
 
         for _, r in sectors_gdf.iterrows():
             sectors_geo = geopandas.GeoSeries(r['Geometry'])
-            sectors_geo.set_crs(epsg=4326, inplace=True)
-            sectors_geo = sectors_geo.to_crs("EPSG:4326")
+            sectors_geo.set_crs(epsg=26916, inplace=True)
+            sectors_geo = sectors_geo.to_crs("EPSG:26916")
             sectors_json = sectors_geo.to_json()
             sectors_json = folium.GeoJson(data=sectors_json,
                                           style_function=lambda x: {'fillColor': 'orange'})
