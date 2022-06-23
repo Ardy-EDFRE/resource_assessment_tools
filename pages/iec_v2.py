@@ -901,8 +901,8 @@ def app():
 
         sectors_gdf = geopandas.GeoDataFrame(sectors_df, geometry='Geometry')
 
-        sectors_gdf.set_crs(epsg=26916, inplace=True)
-        sectors_gdf = sectors_gdf.to_crs("EPSG:26916")
+        sectors_gdf.set_crs(epsg=4326, inplace=True)
+        sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
 
         x1, y1, x2, y2 = sectors_gdf['Geometry'].total_bounds
 
