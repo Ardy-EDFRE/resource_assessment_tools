@@ -72,7 +72,7 @@ def app():
         return (line + points + tooltips).interactive()
 
     @st.cache(allow_output_mutation=True)
-    def dnv_dnv_json_response(lat, long, id, acc,
+    def dnv_json_response(lat, long, id, acc,
                       dcc, mount, tilt, azi,
                       mtech, msize, mconfig,
                       isbi, invtype, land, mwash,
