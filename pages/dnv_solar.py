@@ -300,14 +300,22 @@ def app():
             st.dataframe(sum_annual_df)
             st.subheader('Summary Result Monthly')
             st.dataframe(sum_monthly_df)
-            st.subheader('Hourly Energy Result')
-            st.write(hourly_df)
+
+            hourly_csv = convert_df(hourly_df)
 
             st.sidebar.download_button(
-                label="Download",
+                label="Download Energy Report",
                 data=excel,
                 file_name="EnergyEstimate.xlsx",
                 mime="application/vnd.ms-excel"
+            )
+
+            st.sidebar.download_button(
+                label="Download Energy Report",
+                data=hourly_csv,
+                file_name="Hourly_Estimate.csv",
+                mime="text/csv",
+                key='download-csv'
             )
 
     st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png", width=50)
