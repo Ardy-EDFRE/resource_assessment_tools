@@ -11,26 +11,12 @@ import streamlit as st
 
 
 def app():
-    st.title("DNV Solar Resource Compass API ")
+    st.title("Solar Resource Estimate Comparisons")
 
     st.markdown("**How it works**")
     st.markdown(f"""
-                Solar Resource Compass accesses and compares irradiance data from multiple data providers
-                and allows you to see how they compare for your project location. By default,
-                Solar Resource Compass will access data from NREL (satellite and MTS datasets), 
-                SolarGIS, Meteonorm and DNV’s SunSpot irradiance model. The results of the analysis
-                include a statistical comparison of the available sources presented in a convenient
-                table, chart and map. User can also upload their own data for comparsion.
-
-                Solar Resource Compass also generates monthly soiling  loss estimates for both dust soiling
-                and snow soiling. By incorporating industry standard models and DNV analytics, precipitation
-                and snowfall data is automatically accessed and used to estimate the impact on energy generation.
-                The loss profiles are presented in a monthly table to use in popular energy modeling software.
-
-                With the proliferation of bifacial modules, developers and investors also need guidance
-                on albedo - the light reflected off the ground and on to the back surface of solar modules.
-                Solar Resource Compass addresses this need through the use of a proprietary model that calculates
-                a monthly albedo profile that can be used in any commerical energy modeling software.
+                This is a very early stage tool to show comparisons for multiple
+                sources for solar energy estimates.
                 """)
 
     @st.cache(allow_output_mutation=True)
@@ -245,36 +231,36 @@ def app():
     base_maps['Google Maps'].add_to(m)
     base_maps['Google Satellite Hybrid'].add_to(m)
 
+    address_option = st.sidebar.selectbox('Would you like to get coordinates from an address?', ('Yes', 'No'))
+
+    if address_option == 'Yes':
+        locator = Nominatim(user_agent="MyGeocoder")
+        # 1 - conveneint function to delay between geocoding calls
+        geocode = RateLimiter(locator.geocode, min_delay_seconds=1)
+        # 2- - create location column
+        address = st.sidebar.text_input('Please enter a address to get location.',
+                                help="Example: 18450 Bernardo Trails Dr San Diego California")
+        location = locator.geocode(address)
+        if location:
+            # st.write("Latitude = {}, Longitude = {}".format(location.latitude, location.longitude))
+            Latitude = location.latitude
+            Longitude = location.longitude
+    else:
+        # Streamlit user input values
+        Latitude = st.sidebar.text_input('Please enter your latitude')
+        Longitude = st.sidebar.text_input('Please enter your longitude')
+
+    if Latitude and Longitude:
+        poi = folium.Marker(location=[Latitude, Longitude], popup="Your selected point of interest")
+        poi.add_to(m)
+        bounding_box = poi.get_bounds()
+        m.fit_bounds([bounding_box])
+        folium_static(m, width=800, height=800)
+
     dnv_column, pvgis_col = st.columns(2)
 
     with dnv_column:
         # design for the app
-        address_option = st.selectbox('Would you like to get coordinates from an address?', ('Yes', 'No'))
-
-        if address_option == 'Yes':
-            locator = Nominatim(user_agent="MyGeocoder")
-            # 1 - conveneint function to delay between geocoding calls
-            geocode = RateLimiter(locator.geocode, min_delay_seconds=1)
-            # 2- - create location column
-            address = st.text_input('Please enter a address to get location.',
-                                    help="Example: 18450 Bernardo Trails Dr San Diego California")
-            location = locator.geocode(address)
-            if location:
-                # st.write("Latitude = {}, Longitude = {}".format(location.latitude, location.longitude))
-                Latitude = location.latitude
-                Longitude = location.longitude
-        else:
-            # Streamlit user input values
-            Latitude = st.text_input('Please enter your latitude')
-            Longitude = st.text_input('Please enter your longitude')
-
-        if Latitude and Longitude:
-            poi = folium.Marker(location=[Latitude, Longitude], popup="Your selected point of interest")
-            poi.add_to(m)
-            bounding_box = poi.get_bounds()
-            m.fit_bounds([bounding_box])
-            folium_static(m, width=800, height=800)
-
         if address_option and Latitude and Longitude:
             ProjRefID = st.text_input('Please input the name for this project')
             ACCapacity = st.text_input('Insert the AC Capacity (kWAC)',
@@ -315,32 +301,6 @@ def app():
 
     with pvgis_col:
         # design for the app
-        address_option = st.selectbox('Would you like to get coordinates from an address?', ('Yes', 'No'))
-
-        if address_option == 'Yes':
-            locator = Nominatim(user_agent="MyGeocoder")
-            # 1 - conveneint function to delay between geocoding calls
-            geocode = RateLimiter(locator.geocode, min_delay_seconds=1)
-            # 2- - create location column
-            address = st.text_input('Please enter a address to get location.',
-                                    help="Example: 18450 Bernardo Trails Dr San Diego California")
-            location = locator.geocode(address)
-            if location:
-                # st.write("Latitude = {}, Longitude = {}".format(location.latitude, location.longitude))
-                Latitude = location.latitude
-                Longitude = location.longitude
-        else:
-            # Streamlit user input values
-            Latitude = st.text_input('Please enter your latitude')
-            Longitude = st.text_input('Please enter your longitude')
-
-        if Latitude and Longitude:
-            poi = folium.Marker(location=[Latitude, Longitude], popup="Your selected point of interest")
-            poi.add_to(m)
-            bounding_box = poi.get_bounds()
-            m.fit_bounds([bounding_box])
-            folium_static(m, width=800, height=800)
-
         if address_option and Latitude and Longitude:
             pvgis_peakpower = st.text_input('Please enter the peak power for the site',
                                             help="Nominal power of the PV system, in kW.")
