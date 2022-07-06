@@ -141,7 +141,7 @@ def app():
         return system_attributes_df, metadata_df, ghi_chart, ghi_df, summary_annually_df, summary_monthly_df, hourly_energy_df
 
     @st.cache(allow_output_mutation=True)
-    def write_excel(sys_df, meta_df, eng_df, sum_an_df, sum_m_df, hr_df):
+    def write_excel(sys_df, meta_df, eng_df, sum_an_df, sum_m_df):
         with io.BytesIO() as buffer:
             writer = pd.ExcelWriter(buffer)
             sys_df.to_excel(writer, sheet_name="SystemAttributes", index=False)
@@ -149,7 +149,6 @@ def app():
             eng_df.to_excel(writer, sheet_name="NetEnergyMonthly", index=False)
             sum_an_df.to_excel(writer, sheet_name="SummaryAnnually", index=False)
             sum_m_df.to_excel(writer, sheet_name="SummaryMonthly", index=False)
-            hr_df.to_excel(writer, sheet_name="HourlyEnergy", index=False)
             writer.save()
 
             csv = buffer.getvalue()
