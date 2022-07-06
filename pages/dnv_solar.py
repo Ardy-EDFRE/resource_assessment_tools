@@ -72,7 +72,7 @@ def app():
         return (line + points + tooltips).interactive()
 
     @st.cache(allow_output_mutation=True)
-    def json_response(lat, long, id, acc,
+    def dnv_dnv_json_response(lat, long, id, acc,
                       dcc, mount, tilt, azi,
                       mtech, msize, mconfig,
                       isbi, invtype, land, mwash,
@@ -100,14 +100,14 @@ def app():
                                 f'&Availability={avail}', headers={'X-ApiKey': src_key},
                                 verify=False)
 
-        dnv_json_response = dnv_post.json()
+        dnv_json_resp = dnv_post.json()
 
-        monthly_result = dnv_json_response['SummaryMonthly']
+        monthly_result = dnv_json_resp['SummaryMonthly']
         monthly_ghi = monthly_result['GlobHor']
 
-        system_attributes_df = pd.DataFrame.from_dict(json_normalize(dnv_json_response['SystemAttributes']),
+        system_attributes_df = pd.DataFrame.from_dict(json_normalize(dnv_json_resp['SystemAttributes']),
                                                       orient='columns')
-        metadata_df = pd.DataFrame.from_dict(json_normalize(dnv_json_response['Metadata']), orient='columns')
+        metadata_df = pd.DataFrame.from_dict(json_normalize(dnv_json_resp['Metadata']), orient='columns')
 
         ghi_x = []
 
@@ -129,13 +129,13 @@ def app():
                               "Month",
                               "GHI (kWh/m\u00B2)")
 
-        summary_annually_df = pd.DataFrame.from_dict(json_normalize(dnv_json_response['SummaryAnnual']),
+        summary_annually_df = pd.DataFrame.from_dict(json_normalize(dnv_json_resp['SummaryAnnual']),
                                                      orient='columns')
 
-        summary_monthly_df = pd.DataFrame.from_dict(json_normalize(dnv_json_response['SummaryMonthly']),
+        summary_monthly_df = pd.DataFrame.from_dict(json_normalize(dnv_json_resp['SummaryMonthly']),
                                                     orient='columns')
 
-        hourly_energy_df = pd.DataFrame.from_dict(json_normalize(dnv_json_response['Hourly']),
+        hourly_energy_df = pd.DataFrame.from_dict(json_normalize(dnv_json_resp['Hourly']),
                                                   orient='columns')
 
         return system_attributes_df, metadata_df, ghi_chart, ghi_df, summary_annually_df, summary_monthly_df, hourly_energy_df
@@ -270,7 +270,7 @@ def app():
     RunDnv = st.sidebar.button("Submit for DNV run")
 
     if RunDnv:
-        dnv_values = json_response(Latitude, Longitude, ProjRefID, ACCapacity,
+        dnv_values = dnv_json_response(Latitude, Longitude, ProjRefID, ACCapacity,
                                    DCCapacity, Mounting, Tilt, Azimuth,
                                    ModuleTech, ModuleSize, ModuleConfig,
                                    IsBifacial, InverterType, LandUse, ManualWash,
