@@ -301,7 +301,7 @@ def app():
             st.subheader('Summary Result Monthly')
             st.dataframe(sum_monthly_df)
             st.subheader('Hourly Energy Result')
-            st.dataframe(hourly_df)
+            st.write(hourly_df)
 
             st.sidebar.download_button(
                 label="Download",
