@@ -288,7 +288,7 @@ def app():
 
             excel = write_excel(system_attr_df, metadata_df,
                                 energy_df, sum_annual_df,
-                                sum_monthly_df, hourly_df)
+                                sum_monthly_df)
 
             st.subheader('System Attribute Inputs')
             st.dataframe(system_attr_df)
