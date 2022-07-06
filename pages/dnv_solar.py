@@ -135,9 +135,10 @@ def app():
         summary_monthly_df = pd.DataFrame.from_dict(json_normalize(dnv_json_response['SummaryMonthly']),
                                                     orient='columns')
 
-        data_values = [system_attributes_df, metadata_df, ghi_chart, ghi_df, summary_annually_df, summary_monthly_df]
+        hourly_energy_df = pd.DataFrame.from_dict(json_normalize(dnv_json_response['Hourly']),
+                                                  orient='columns')
 
-        return system_attributes_df, metadata_df, ghi_chart, ghi_df, summary_annually_df, summary_monthly_df
+        return system_attributes_df, metadata_df, ghi_chart, ghi_df, summary_annually_df, summary_monthly_df, hourly_energy_df
 
     @st.cache(allow_output_mutation=True)
     def write_excel(sys_df, meta_df, eng_df, sum_an_df, sum_m_df):
@@ -282,10 +283,11 @@ def app():
             energy_df = dnv_values[3]
             sum_annual_df = dnv_values[4]
             sum_monthly_df = dnv_values[5]
+            hourly_df = dnv_values[6]
 
             excel = write_excel(system_attr_df, metadata_df,
                                 energy_df, sum_annual_df,
-                                sum_monthly_df)
+                                sum_monthly_df, hourly_df)
 
             st.subheader('System Attribute Inputs')
             st.dataframe(system_attr_df)
@@ -294,10 +296,12 @@ def app():
             st.subheader("Monthly Net Energy")
             st.altair_chart(energy_chart.interactive(), use_container_width=True)
             st.dataframe(energy_df)
-            st.subheader('Summary result annually')
+            st.subheader('Summary Result Annually')
             st.dataframe(sum_annual_df)
-            st.subheader('Summary result monthly')
+            st.subheader('Summary Result Monthly')
             st.dataframe(sum_monthly_df)
+            st.subheader('Hourly Energy Result')
+            st.dataframe(hourly_df)
 
             st.sidebar.download_button(
                 label="Download",
