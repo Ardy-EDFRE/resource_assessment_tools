@@ -929,9 +929,9 @@ def app():
         # folium.GeoJson(data=sectors_gdf['Geometry']).add_to(sectors_map)
         # folium_static(sectors_map, width=800, height=800)
         #
-        # bounding_box = turbines_cluster.get_bounds()
-        # turbine_map.fit_bounds([bounding_box])
-        # folium_static(turbine_map, width=800, height=800)
+        bounding_box = turbines_cluster.get_bounds()
+        turbine_map.fit_bounds([bounding_box])
+        folium_static(turbine_map, width=800, height=800)
 
     run_iec = st.sidebar.button("Run IEC Terrain Assessment",
                                 help="This will run the process for evaluation sectors and generate an output for display & download")
