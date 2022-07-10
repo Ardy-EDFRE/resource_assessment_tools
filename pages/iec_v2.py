@@ -914,20 +914,20 @@ def app():
         # st.pyplot(fig)
 
         # sectors_poly = Polygon(paired_results)
-        # sectors_df = pd.DataFrame({'Geometry': paired_results_polys})
-        #
-        # sectors_gdf = geopandas.GeoSeries(sectors_df)
-        #
-        # sectors_gdf.set_crs(epsg=4326, inplace=True)
-        # sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
+        sectors_df = pd.DataFrame({'Geometry': paired_results_polys})
+
+        sectors_gdf = geopandas.GeoSeries(sectors_df)
+
+        sectors_gdf.set_crs(epsg=4326, inplace=True)
+        sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
         #
         # x1, y1, x2, y2 = sectors_gdf['Geometry'].total_bounds
         #
         # st.write(x1, y1, x2, y2)
         #
         # sectors_map.fit_bounds([[x1, y1], [x2, y2]])
-        # folium.GeoJson(sectors_gdf['Geometry']).add_to(sectors_map)
-        # folium_static(sectors_map, width=800, height=800)
+        folium.GeoJson(data=sectors_gdf['Geometry']).add_to(sectors_map)
+        folium_static(sectors_map, width=800, height=800)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
