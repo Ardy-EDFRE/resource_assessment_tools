@@ -898,26 +898,12 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        # sector_cords_list = []
-        #
-        # for sector_poly in paired_results_polys:
-        #     x, y = sector_poly.exterior.coords.xy
-        #     sector_cords_list.append(x, y)
-        #
-        # test_poly = paired_results_polys[0]
-        # x, y = test_poly.exterior.coords.xy
-        #
-        #
-        #
-        # fig = plt.figure(figsize=(10, 3))
-        # plt.plot(x, y, c='red')
-        # st.pyplot(fig)
+        sectors_df = pd.DataFrame({'Geometry': paired_results_polys})
 
-        # sectors_poly = Polygon(paired_results)
-        # sectors_df = pd.DataFrame({'Geometry': paired_results_polys})
-        #
+        st.dataframe(sectors_df)
+
         # sectors_gdf = geopandas.GeoSeries(sectors_df)
-        #
+
         # sectors_gdf.set_crs(epsg=4326, inplace=True)
         # sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
         # #
