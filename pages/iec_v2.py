@@ -903,14 +903,18 @@ def app():
         from shapely.ops import unary_union
 
         sectors_gdf = unary_union(paired_results_polys)
-        sectors_gdf = geopandas.GeoDataFrame(index=[0], crs='epsg:4326', geometry=[sectors_gdf])
+        sectors_gdf = geopandas.GeoDataFrame(index=[0], geometry=[sectors_gdf])
 
-        folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
-        folium_static(sectors_map, width=800, height=800)
+        sectors_gdf = sectors_gdf.to_crs(epsg='4326')
 
-        bounding_box = turbines_cluster.get_bounds()
-        turbine_map.fit_bounds([bounding_box])
-        folium_static(turbine_map, width=800, height=800)
+        st.dataframe(sectors_gdf)
+
+        # folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
+        # folium_static(sectors_map, width=800, height=800)
+        #
+        # bounding_box = turbines_cluster.get_bounds()
+        # turbine_map.fit_bounds([bounding_box])
+        # folium_static(turbine_map, width=800, height=800)
 
     run_iec = st.sidebar.button("Run IEC Terrain Assessment",
                                 help="This will run the process for evaluation sectors and generate an output for display & download")
