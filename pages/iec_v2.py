@@ -899,12 +899,21 @@ def app():
                           icon=met_icon).add_to(mets_cluster)
 
         st.write("Sectors Dataframe")
+        st.write(paired_results_polys)
 
-        for poly in paired_results_polys:
-            sectors_gdf = geopandas.GeoDataFrame(index=[0], crs='epsg:4326', geometry=[poly])
-            sectors_gdf.append(sectors_gdf)
+        paired_results_polys = [x[0] for x in paired_results_polys]
+
+        from shapely.ops import unary_union
+
+        sectors_gdf = unary_union(paired_results_polys)
 
         st.write(sectors_gdf)
+
+        # for poly in paired_results_polys:
+        #     sectors_gdf = geopandas.GeoDataFrame(index=[0], crs='epsg:4326', geometry=[poly])
+        #     sectors_gdf.append(sectors_gdf)
+        #
+        # st.write(sectors_gdf)
 
         # sectors_gdf = geopandas.GeoSeries(sectors_df)
 
