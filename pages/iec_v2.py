@@ -900,7 +900,8 @@ def app():
 
         sectors_df = pd.DataFrame({'Geometry': paired_results_polys})
 
-        st.dataframe(sectors_df)
+        st.write("Sectors Dataframe")
+        st.write(sectors_df)
 
         # sectors_gdf = geopandas.GeoSeries(sectors_df)
 
