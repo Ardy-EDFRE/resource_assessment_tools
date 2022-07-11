@@ -905,8 +905,10 @@ def app():
         sectors_gdf = unary_union(paired_results_polys)
         sectors_gdf = geopandas.GeoDataFrame(index=[0], crs='epsg:4326', geometry=[sectors_gdf])
 
-        folium.GeoJson(data=sectors_gdf['Geometry']).add_to(sectors_map)
-        folium_static(sectors_map, width=800, height=800)
+        st.write(sectors_gdf)
+
+        # folium.GeoJson(data=sectors_gdf['Geometry']).add_to(sectors_map)
+        # folium_static(sectors_map, width=800, height=800)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
