@@ -901,7 +901,7 @@ def app():
         st.write("Sectors Dataframe")
 
         for poly in paired_results_polys:
-            sectors_gdf = geopandas.gpd(index=[0], crs='epsg:4326', geometry=[poly])
+            sectors_gdf = geopandas.GeoDataFrame(index=[0], crs='epsg:4326', geometry=[poly])
             st.write(sectors_gdf)
 
         # sectors_gdf = geopandas.GeoSeries(sectors_df)
