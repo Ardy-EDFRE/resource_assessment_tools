@@ -898,10 +898,11 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        sectors_df = pd.DataFrame({'Geometry': paired_results_polys})
-
         st.write("Sectors Dataframe")
-        st.write(sectors_df)
+
+        for poly in paired_results_polys:
+            sectors_gdf = geopandas.gpd(index=[0], crs='epsg:4326', geometry=[poly])
+            st.write(sectors_gdf)
 
         # sectors_gdf = geopandas.GeoSeries(sectors_df)
 
