@@ -901,8 +901,6 @@ def app():
         st.write("Sectors Dataframe")
         st.write(paired_results_polys)
 
-        paired_results_polys = [x[0] for x in paired_results_polys]
-
         from shapely.ops import unary_union
 
         sectors_gdf = unary_union(paired_results_polys)
