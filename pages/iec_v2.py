@@ -903,8 +903,7 @@ def app():
         from shapely.ops import unary_union
 
         sectors_gdf = unary_union(paired_results_polys)
-        sectors_gdf = geopandas.GeoDataFrame(index=[0], geometry=[sectors_gdf])
-
+        sectors_gdf = geopandas.GeoDataFrame(index=[0], crs=4326, geometry=[sectors_gdf])
         sectors_gdf = sectors_gdf.to_crs(epsg='4326')
 
         st.dataframe(sectors_gdf)
