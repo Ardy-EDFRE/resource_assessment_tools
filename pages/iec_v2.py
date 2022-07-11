@@ -900,19 +900,16 @@ def app():
 
         st.write("Sectors Dataframe")
 
+        import shapely
         from shapely.ops import unary_union
 
         sectors_gdf = unary_union(paired_results_polys)
-        sectors_gdf = geopandas.GeoDataFrame(index=[0], crs=4326, geometry=[sectors_gdf])
+        sectors_gdf = geopandas.GeoDataFrame(index=[0], crs=4326, geometry=[sectors_gdf].apply(shapely.wkt.loads))
         sectors_gdf = sectors_gdf.to_crs(epsg='4326')
 
-        sectors_gdf["long"] = sectors_gdf.geometry.x
-        sectors_gdf["lat"] = sectors_gdf.geometry.y
+        sectors_gdf["geometry"].apply(lambda p: list(p.exterior.coords)).explode().apply(pd.Series).rename(columns=({0:"x", 1:"y"}))
 
-        sectors_points = sectors_gdf[["lat", "long"]]
-        sectors_list = sectors_points.values.tolist()
-
-        st.write(sectors_list)
+        st.write(sectors_gdf)
 
         # folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
         # folium_static(sectors_map, width=800, height=800)
