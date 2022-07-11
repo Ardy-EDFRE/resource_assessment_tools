@@ -906,7 +906,13 @@ def app():
         sectors_gdf = geopandas.GeoDataFrame(index=[0], crs=4326, geometry=[sectors_gdf])
         sectors_gdf = sectors_gdf.to_crs(epsg='4326')
 
-        st.dataframe(sectors_gdf)
+        sectors_gdf["long"] = sectors_gdf.geometry.x
+        sectors_gdf["lat"] = sectors_gdf.geometry.y
+
+        sectors_points = sectors_gdf[["lat", "long"]]
+        sectors_list = sectors_points.values.tolist()
+
+        st.write(sectors_list)
 
         # folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
         # folium_static(sectors_map, width=800, height=800)
