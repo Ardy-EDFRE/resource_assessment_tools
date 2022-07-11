@@ -260,12 +260,12 @@ class Sector(object):
             sector_vertex_array += [(p[0], p[1]) for p in center_circle.exterior.coords]
             sector_polygon = shapely.geometry.Polygon((p[0], p[1]) for p in sector_vertex_array)
             self._get_polygon = sector_polygon
-            # return self._get_polygon
-            return sector_polygon
+            return self._get_polygon
         else:
             origin = shapely.geometry.Point(self.origin['X'], self.origin['Y'])
             circle = origin.buffer(self._upper_distance_bound)
-            return circle
+            self._get_polygon = circle
+            return self._get_polygon
 
     @property
     def polygon(self):
