@@ -899,33 +899,15 @@ def app():
                           icon=met_icon).add_to(mets_cluster)
 
         st.write("Sectors Dataframe")
-        st.write(paired_results_polys)
 
         from shapely.ops import unary_union
 
         sectors_gdf = unary_union(paired_results_polys)
+        sectors_gdf = geopandas.GeoDataFrame(index=[0], crs='epsg:4326', geometry=[sectors_gdf])
 
-        st.write(sectors_gdf)
+        folium.GeoJson(data=sectors_gdf['Geometry']).add_to(sectors_map)
+        folium_static(sectors_map, width=800, height=800)
 
-        # for poly in paired_results_polys:
-        #     sectors_gdf = geopandas.GeoDataFrame(index=[0], crs='epsg:4326', geometry=[poly])
-        #     sectors_gdf.append(sectors_gdf)
-        #
-        # st.write(sectors_gdf)
-
-        # sectors_gdf = geopandas.GeoSeries(sectors_df)
-
-        # sectors_gdf.set_crs(epsg=4326, inplace=True)
-        # sectors_gdf = sectors_gdf.to_crs("EPSG:4326")
-        # #
-        # # x1, y1, x2, y2 = sectors_gdf['Geometry'].total_bounds
-        # #
-        # # st.write(x1, y1, x2, y2)
-        # #
-        # # sectors_map.fit_bounds([[x1, y1], [x2, y2]])
-        # folium.GeoJson(data=sectors_gdf['Geometry']).add_to(sectors_map)
-        # folium_static(sectors_map, width=800, height=800)
-        #
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
         folium_static(turbine_map, width=800, height=800)
