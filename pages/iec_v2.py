@@ -915,8 +915,8 @@ def app():
 
         sectors_map = leafmap.Map(center=[20, 0], zoom=1)
         sectors_map.add_gdf(sectors_gdf, "Sectors")
-
-        st.map(sectors_map)
+        sectors_map
+        folium_static(sectors_map.to_streamlit(sectors_map, width=800, height=800))
 
         # folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
         # folium_static(sectors_map, width=800, height=800)
