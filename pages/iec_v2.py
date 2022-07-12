@@ -905,8 +905,6 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        st.write("Sectors Dataframe")
-
         import shapely
         from shapely.ops import unary_union
         import leafmap.kepler as leafmap
