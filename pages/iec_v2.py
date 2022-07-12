@@ -913,10 +913,14 @@ def app():
         sectors_gdf = geopandas.GeoDataFrame(index=[0], crs="EPSG:26916", geometry=[sectors_gdf])
         sectors_gdf.to_crs("EPSG:4326")
 
-        sectors_map = leafmap.Map(center=[20, 0], zoom=1)
-        sectors_map.add_gdf(sectors_gdf, "Sectors")
-        sectors_map
-        folium_static(sectors_map.to_streamlit(sectors_map, width=800, height=800))
+        sectors_gdf_csv = convert_df(sectors_gdf)
+
+        st.download_button(
+            label="Download Sector Data as CSV",
+            data=sectors_gdf_csv,
+            file_name="Sectors_csv",
+            mime='text/csv',
+        )
 
         # folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
         # folium_static(sectors_map, width=800, height=800)
