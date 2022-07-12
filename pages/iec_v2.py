@@ -910,20 +910,12 @@ def app():
         import leafmap.kepler as leafmap
 
         sectors_gdf = unary_union(paired_results_polys)
-        sectors_gdf = geopandas.GeoDataFrame(index=[0], crs="EPSG:26916", geometry=[sectors_gdf])
-        sectors_gdf.to_crs("EPSG:4326")
+        sectors_gdf = geopandas.GeoDataFrame(sectors_gdf)
+        sectors_gdf = sectors_gdf.set_crs(epsg=4326)
+        sectors_gdf = sectors_gdf.to_crs(epsg=4326)
 
-        sectors_gdf_csv = convert_df(sectors_gdf)
-
-        st.download_button(
-            label="Download Sector Data as CSV",
-            data=sectors_gdf_csv,
-            file_name="Sectors_csv",
-            mime='text/csv',
-        )
-
-        # folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
-        # folium_static(sectors_map, width=800, height=800)
+        folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
+        folium_static(sectors_map, width=800, height=800)
         #
         # bounding_box = turbines_cluster.get_bounds()
         # turbine_map.fit_bounds([bounding_box])
