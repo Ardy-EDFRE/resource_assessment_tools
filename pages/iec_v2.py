@@ -909,12 +909,16 @@ def app():
 
         import shapely
         from shapely.ops import unary_union
+        import leafmap.kepler as leafmap
 
         sectors_gdf = unary_union(paired_results_polys)
         sectors_gdf = geopandas.GeoDataFrame(index=[0], crs="EPSG:26916", geometry=[sectors_gdf])
         sectors_gdf.to_crs("EPSG:4326")
 
-        st.write(sectors_gdf)
+        sectors_map = leafmap.Map(center=[20, 0], zoom=1)
+        sectors_map.add_gdf(sectors_gdf, "Sectors")
+
+        st.map(sectors_map)
 
         # folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
         # folium_static(sectors_map, width=800, height=800)
