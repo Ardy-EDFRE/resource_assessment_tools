@@ -915,21 +915,12 @@ def app():
         sectors_gdf = sectors_gdf.set_crs(epsg=epsg_code)
         sectors_gdf = sectors_gdf.to_crs(epsg=4326)
 
-        sectors_gdf_csv = convert_df(sectors_gdf)
+        folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
+        folium_static(sectors_map, width=800, height=800)
 
-        st.download_button(
-            label="Download Sector Data as CSV",
-            data=sectors_gdf_csv,
-            file_name="Sectors_csv.csv",
-            mime='text/csv',
-        )
-
-        # folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
-        # folium_static(sectors_map, width=800, height=800)
-        #
-        # bounding_box = turbines_cluster.get_bounds()
-        # turbine_map.fit_bounds([bounding_box])
-        # folium_static(turbine_map, width=800, height=800)
+        bounding_box = turbines_cluster.get_bounds()
+        turbine_map.fit_bounds([bounding_box])
+        folium_static(turbine_map, width=800, height=800)
 
     run_iec = st.sidebar.button("Run IEC Terrain Assessment",
                                 help="This will run the process for evaluation sectors and generate an output for display & download")
