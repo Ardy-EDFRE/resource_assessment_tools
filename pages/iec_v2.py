@@ -774,6 +774,8 @@ def app():
         turbine_CRSCheck = geopandas.read_file(turbine_layout)
         raster_CRSCheck = rasterio.open(elevation_raster)
 
+        turbine_epsg_code = turbine_CRSCheck.crs.to_epsg()
+
         if turbine_CRSCheck.crs == raster_CRSCheck.crs:
             st.write(f'Input values coordinate systems match - {turbine_CRSCheck.crs} - {raster_CRSCheck.crs}!')
         else:
@@ -905,13 +907,12 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        import shapely
         from shapely.ops import unary_union
-        import leafmap.kepler as leafmap
 
         sectors_gdf = unary_union(paired_results_polys)
         sectors_gdf = geopandas.GeoDataFrame(sectors_gdf)
-        sectors_gdf = sectors_gdf.set_crs(epsg=4326)
+
+        sectors_gdf = sectors_gdf.set_crs(epsg=turbine_epsg_code)
         sectors_gdf = sectors_gdf.to_crs(epsg=4326)
 
         folium.GeoJson(data=sectors_gdf['geometry']).add_to(sectors_map)
