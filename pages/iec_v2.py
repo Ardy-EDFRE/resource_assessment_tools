@@ -891,19 +891,19 @@ def app():
         turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
         mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
 
-        for point in range(0, len(turbine_list)):
+        for t_point in range(0, len(turbine_list)):
             turbine_icon = folium.features.CustomIcon(
                 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
                 icon_size=(40, 40))
-            folium.Marker(turbine_list[point],
+            folium.Marker(turbine_list[t_point],
                           popup="Turbine",
                           icon=turbine_icon).add_to(turbines_cluster)
 
-        for point in range(0, len(mets_list)):
+        for m_point in range(0, len(mets_list)):
             met_icon = folium.features.CustomIcon(
                 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
                 icon_size=(40, 40))
-            folium.Marker(mets_list[point],
+            folium.Marker(mets_list[m_point],
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
@@ -915,7 +915,7 @@ def app():
         sectors_gdf = sectors_gdf.set_crs(epsg=epsg_code)
         sectors_gdf = sectors_gdf.to_crs(epsg=4326)
 
-        folium.GeoJson(data=sectors_gdf['geometry']).add_to(turbine_map)
+        folium.GeoJson(data=sectors_gdf['geometry'], popup=f'Evaluated Sector').add_to(turbine_map)
 
         bounding_box = turbines_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
@@ -926,10 +926,6 @@ def app():
     if run_iec:
         # process all pairs
         startTime = time.time()
-
-        # testing pairs 110RD 80HH 2.3RD
-        # G:\Projects\USA_North\Slate_Creek\03_Wind\035_Operational Analysis\20200302_NPC\SlateCreek_IEC_data.mxd
-        # G:\Projects\USA_North\Slate_Creek\03_Wind\035_Operational Analysis\20200302_NPC\iec_SlateCreek_WTGs_nad83utm14\mets_buff_2_3RD.shp
 
         paramsFiles = {"turbine_shapefile_path": turbine_layout,
                        "raster_path": elevation_raster,
