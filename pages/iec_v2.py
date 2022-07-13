@@ -866,6 +866,8 @@ def app():
         mets_points = mets_df[["lat", "long"]]
         mets_list = mets_points.values.tolist()
 
+        st.write(mets_list)
+
         paramsFiles = {"turbine_shapefile_path": turbine_layout,
                        "raster_path": elevation_raster,
                        "pair_path": mets_turbs_pairs}
