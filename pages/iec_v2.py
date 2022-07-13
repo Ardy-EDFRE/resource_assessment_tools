@@ -907,10 +907,11 @@ def app():
                           popup='Met',
                           icon=met_icon).add_to(mets_cluster)
 
-        from shapely.ops import unary_union
-
-        sectors_gdf = unary_union(paired_results_polys)
-        sectors_gdf = geopandas.GeoDataFrame(index=[0], geometry=[sectors_gdf])
+        # from shapely.ops import unary_union
+        #
+        # sectors_gdf = unary_union(paired_results_polys)
+        # sectors_gdf = geopandas.GeoDataFrame(index=[0], geometry=[sectors_gdf])
+        sectors_gdf = geopandas.GeoDataFrame(geometry=paired_results_polys)
 
         sectors_gdf = sectors_gdf.set_crs(epsg=epsg_code)
         sectors_gdf = sectors_gdf.to_crs(epsg=4326)
