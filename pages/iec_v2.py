@@ -888,16 +888,16 @@ def app():
                 pairResults = process_pair(params)
                 paired_results_polys.append(pairResults[0]['polygon'])
 
-        turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
+        # turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
         mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
 
-        for t_point in range(0, len(turbine_list)):
-            turbine_icon = folium.features.CustomIcon(
-                'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
-                icon_size=(40, 40))
-            folium.Marker(turbine_list[t_point],
-                          popup="Turbine",
-                          icon=turbine_icon).add_to(turbines_cluster)
+        # for t_point in range(0, len(turbine_list)):
+        #     turbine_icon = folium.features.CustomIcon(
+        #         'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
+        #         icon_size=(40, 40))
+        #     folium.Marker(turbine_list[t_point],
+        #                   popup="Turbine",
+        #                   icon=turbine_icon).add_to(turbines_cluster)
 
         for m_point in range(0, len(mets_list)):
             met_icon = folium.features.CustomIcon(
@@ -918,7 +918,8 @@ def app():
 
         folium.GeoJson(data=sectors_gdf['geometry'], popup=f'Evaluated Sector').add_to(turbine_map)
 
-        bounding_box = turbines_cluster.get_bounds()
+        # bounding_box = turbines_cluster.get_bounds()
+        bounding_box = mets_cluster.get_bounds()
         turbine_map.fit_bounds([bounding_box])
         folium_static(turbine_map, width=800, height=800)
 
