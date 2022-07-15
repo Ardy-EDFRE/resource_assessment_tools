@@ -910,7 +910,9 @@ def app():
         sector_results_output = pd.read_csv(outputResultsFileName)
         details_output_csv = pd.read_csv(outputResultsFileName[:-4] + '_details.csv')
 
+        st.write("Final Sector Results")
         st.write(sector_results_output)
+        st.write("Detailed Sector Results")
         st.write(details_output_csv)
 
         convert_csv = convert_df(details_output_csv)
