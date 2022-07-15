@@ -807,19 +807,13 @@ def app():
     if display_turbine_layout_map:
         turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
         turbines_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Primary Turbine']
-        mets_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Alt']
+
+        met_pairs_gdf = geopandas.GeoDataFrame(met_pairs_df, geometry=geopandas.points_from_xy(met_pairs_df.target_met_x, met_pairs_df.target_met_y))
+        met_pairs_gdf = met_pairs_gdf.set_crs(epsg=epsg_code)
+        met_pairs_gdf = met_pairs_gdf.to_crs(epsg=4326)
 
         turbine_list = points_to_lists(turbines_df)
-        mets_list = points_to_lists(mets_df)
-
-        # turbines_df["long"] = turbines_df.geometry.x
-        # turbines_df["lat"] = turbines_df.geometry.y
-        # mets_df["long"] = mets_df.geometry.x
-        # mets_df["lat"] = mets_df.geometry.y
-        # turbine_points = turbines_df[["lat", "long"]]
-        # turbine_list = turbine_points.values.tolist()
-        # mets_points = mets_df[["lat", "long"]]
-        # mets_list = mets_points.values.tolist()
+        mets_list = [(y, x) for y, x in zip(met_pairs_gdf['geometry'].y, met_pairs_gdf['geometry'].x)]
 
         paramsFiles = {"turbine_shapefile_path": turbine_layout,
                        "raster_path": elevation_raster,
@@ -843,31 +837,6 @@ def app():
         turbines_cluster = create_cluster_marker(turbine_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Turbine").add_to(iec_map)
         # create cluster for mets but not used since bounding box is on turbines
         create_cluster_marker(mets_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png', "Met").add_to(iec_map)
-
-        # turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
-        # mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
-        #
-        # for t_point in range(0, len(turbine_list)):
-        #     turbine_icon = folium.features.CustomIcon(
-        #         'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
-        #         icon_size=(40, 40))
-        #     folium.Marker(turbine_list[t_point],
-        #                   popup="Turbine",
-        #                   icon=turbine_icon).add_to(turbines_cluster)
-        #
-        # for m_point in range(0, len(mets_list)):
-        #     met_icon = folium.features.CustomIcon(
-        #         'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
-        #         icon_size=(40, 40))
-        #     folium.Marker(mets_list[m_point],
-        #                   popup='Met',
-        #                   icon=met_icon).add_to(mets_cluster)
-
-        # This is the way to create multipolygons
-        # from shapely.ops import unary_union
-        #
-        # sectors_gdf = unary_union(paired_results_polys)
-        # sectors_gdf = geopandas.GeoDataFrame(index=[0], geometry=[sectors_gdf])
 
         # Individual polygons
         sectors_gdf = geopandas.GeoDataFrame(geometry=paired_results_polys)
