@@ -689,7 +689,6 @@ def app():
             f.write(uploadedfile.getbuffer())
         return st.success("Saved File:{} to tempDir".format(uploadedfile.name))
 
-    @st.cache
     def create_cluster_marker(marker_data, custom_icon_url, popup_info):
         cluster = folium.plugins.MarkerCluster()
 
