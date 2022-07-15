@@ -829,7 +829,7 @@ def app():
 
         turbine_list = points_to_lists(turbines_df)
 
-        nominated_gdfs = nominated_selection_gdfs(met_pairs_df)
+        nominated_gdfs = nominated_selection_gdfs(met_pairs_df, epsg_code)
         target_turbine_pairs_gdf = nominated_gdfs[0]
         target_met_pairs_gdf = nominated_gdfs[1]
 
