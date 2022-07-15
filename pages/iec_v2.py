@@ -42,7 +42,6 @@ def app():
 
     st.markdown("We need all the files into UTM WGS84 coordinates")
 
-    @st.cache
     # BUSINESS LOGIC
     def createResultTxtFiles(outputResultsFileName):
         try:
@@ -64,7 +63,6 @@ def app():
                              'max_terrain_variation'))
         csvfile.close()
 
-    @st.cache
     def getParamsFromFile(paramsFiles):
         pairLines = []
         pairsFile = open(paramsFiles["pair_path"], "r+")
@@ -73,7 +71,6 @@ def app():
 
         return pairLines
 
-    @st.cache
     def createParams(pl):
         plList = pl.split(',')
         params = {}
@@ -93,7 +90,6 @@ def app():
 
         return params
 
-    @st.cache
     def results2csv(pairResults, outputResultsFileName):
         # write detail output
         outputResultsFileDetailsName = outputResultsFileName[:-4] + '_details.csv'
@@ -134,7 +130,6 @@ def app():
             (str(pairResults[0]['target_turbine_fid']), str(pairResults[0]['target_met_fid']), str(pairPassesIEC)))
         outputResultsFile.close()
 
-    @st.cache
     def format_sectors(origin, centered_on, include_angles, exclude_angles, target_turbine_fid, target_met_fid, L, H,
                        D):
         sectors = []
@@ -243,7 +238,6 @@ def app():
         # JL shouldn't you assign the raster_crs to the df dataframe itself df.crs = raster_crs
         return df
 
-    @st.cache
     def get_turbine_elevation(target, raster_elevation):
         """
         Given a raster of elevation data and a set of data about turbine location,
@@ -255,7 +249,6 @@ def app():
         # row, col = elevation.index(x, y) # spatial --> image coordinates
         return {'Z': float(elevation_band_1[raster_elevation.index(target['X'], target['Y'])])}
 
-    @st.cache
     def get_utm_distance(po, p):
         """
         Given Universal Transverse Mercator points p_0 and p, find the Euclidean distance between them
@@ -265,7 +258,6 @@ def app():
         dist = math.sqrt(difX ** 2 + difY ** 2)
         return dist
 
-    @st.cache
     def get_sectors(target_turbine, target_met, df):
         """
         For both the target turbine and the target met tower, find a list of
@@ -300,7 +292,6 @@ def app():
         )
         return pd.concat([df_target_turbine, df_target_met])
 
-    @st.cache
     def alpha_sector(LD):
         """
         Calculate alpha, the angle (in radians) which is blocked out by the ratio
@@ -313,7 +304,6 @@ def app():
         alpha = 1.3 * degree + 10
         return alpha
 
-    @st.cache
     def calc_angles(direction, alpha):
         """
         Given a direction and an alpha, return the angle as a tuple
@@ -326,7 +316,6 @@ def app():
             alphaFin = alphaFin - 360
         return int(round(alphaOri)), int(round(alphaFin))
 
-    @st.cache
     def get_direction_degrees(po, p):
         """
         Given two points p_0 and p, find the direction of the vector connection them
@@ -340,7 +329,6 @@ def app():
         bearing2 = (90 - angle) % 360
         return bearing2
 
-    @st.cache
     def condense(list_of_tuples):
         """
         Given a list of tuples, find the overlapping pairs and
@@ -379,7 +367,6 @@ def app():
 
         return l
 
-    @st.cache
     def evaluate_sector(sector, raster):
         """
         For each sector, there are rules governing whether or not the sector passes the test:
@@ -473,7 +460,6 @@ def app():
 
         return sector.to_dict()
 
-    @st.cache
     def slope_interpolated_plane_and_terrain_variation(sector, rasterData, nodataMask, raster_noDataValue,
                                                        rasterCellSize,
                                                        xCellsFromLeft2Origin, yCellsFromLeft2Origin, xxMatrixInd,
@@ -523,7 +509,6 @@ def app():
 
         sector.actual_slope = slp_perc
 
-    @st.cache
     def slope_perc_from_origin_to_all_other_pnts(sector, rasterData, nodataMask, rasterCellSize, xxInd, yyInd):
         """
         Get the maximum slope in percentage from the sector origin to all other terrain points
@@ -539,7 +524,6 @@ def app():
             np.divide(difElev, dist_from_origin, out=np.zeros_like(difElev), where=dist_from_origin != 0)), np.NaN)
         sector.actual_slope = np.nanmax(slopes) * 100
 
-    @st.cache
     def get_sector_terrain_as_xyz_grid_surface_centeredInOrigin(sector, rasterData, raster_noDataValue,
                                                                 xCellsFromLeft2Origin, yCellsFromLeft2Origin):
         """
