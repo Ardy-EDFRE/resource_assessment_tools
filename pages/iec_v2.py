@@ -704,6 +704,21 @@ def app():
         return cluster
 
     @st.cache
+    def nominated_selection_gdfs(gdf, crs_code):
+        target_turbine_gdf = geopandas.GeoDataFrame(gdf,
+                                                    geometry=geopandas.points_from_xy(met_pairs_df.target_turbine_x,
+                                                                                      met_pairs_df.target_turbine_y))
+        target_turbine_gdf = target_turbine_gdf.set_crs(epsg=crs_code)
+        target_turbine_gdf = target_turbine_gdf.to_crs(epsg=4326)
+
+        target_met_gdf = geopandas.GeoDataFrame(gdf, geometry=geopandas.points_from_xy(met_pairs_df.target_met_x,
+                                                                                       met_pairs_df.target_met_y))
+        target_met_gdf = target_met_gdf.set_crs(epsg=crs_code)
+        target_met_gdf = target_met_gdf.to_crs(epsg=4326)
+
+        return target_turbine_gdf, target_met_gdf
+
+    @st.cache
     def points_to_lists(df):
         df["long"] = df.geometry.x
         df["lat"] = df.geometry.y
@@ -808,12 +823,18 @@ def app():
         turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
         turbines_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Primary Turbine']
 
-        met_pairs_gdf = geopandas.GeoDataFrame(met_pairs_df, geometry=geopandas.points_from_xy(met_pairs_df.target_met_x, met_pairs_df.target_met_y))
-        met_pairs_gdf = met_pairs_gdf.set_crs(epsg=epsg_code)
-        met_pairs_gdf = met_pairs_gdf.to_crs(epsg=4326)
+        # target_met_pairs_gdf = geopandas.GeoDataFrame(met_pairs_df, geometry=geopandas.points_from_xy(met_pairs_df.target_met_x, met_pairs_df.target_met_y))
+        # target_met_pairs_gdf = target_met_pairs_gdf.set_crs(epsg=epsg_code)
+        # target_met_pairs_gdf = target_met_pairs_gdf.to_crs(epsg=4326)
 
         turbine_list = points_to_lists(turbines_df)
-        mets_list = [(y, x) for y, x in zip(met_pairs_gdf['geometry'].y, met_pairs_gdf['geometry'].x)]
+
+        nominated_gdfs = nominated_selection_gdfs(met_pairs_df)
+        target_turbine_pairs_gdf = nominated_gdfs[0]
+        target_met_pairs_gdf = nominated_gdfs[1]
+
+        nominated_turbines_list = [(y, x) for y, x in zip(target_turbine_pairs_gdf['geometry'].y, target_turbine_pairs_gdf['geometry'].x)]
+        nominated_mets_list = [(y, x) for y, x in zip(target_met_pairs_gdf['geometry'].y, target_met_pairs_gdf['geometry'].x)]
 
         paramsFiles = {"turbine_shapefile_path": turbine_layout,
                        "raster_path": elevation_raster,
@@ -835,8 +856,10 @@ def app():
                 paired_results_polys.append(pairResults[0]['polygon'])
 
         turbines_cluster = create_cluster_marker(turbine_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Turbine").add_to(iec_map)
-        # create cluster for mets but not used since bounding box is on turbines
-        create_cluster_marker(mets_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png', "Met").add_to(iec_map)
+
+        # create cluster for nominated turbines & mets but not used since bounding box is on turbines
+        create_cluster_marker(nominated_turbines_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Turbine").add_to(iec_map)
+        create_cluster_marker(nominated_mets_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png', "Met").add_to(iec_map)
 
         # Individual polygons
         sectors_gdf = geopandas.GeoDataFrame(geometry=paired_results_polys)
