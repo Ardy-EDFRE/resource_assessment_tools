@@ -867,7 +867,7 @@ def app():
         sectors_gdf = sectors_gdf.set_crs(epsg=epsg_code)
         sectors_gdf = sectors_gdf.to_crs(epsg=4326)
 
-        folium.GeoJson(data=sectors_gdf['geometry'], popup=f'Evaluated Sector').add_to(iec_map)
+        folium.GeoJson(data=sectors_gdf['geometry'], popup='Evaluated Sector').add_to(iec_map)
 
         bounding_box = turbines_cluster.get_bounds()
         iec_map.fit_bounds([bounding_box])
