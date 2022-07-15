@@ -840,7 +840,7 @@ def app():
                 pairResults = process_pair(params)
                 paired_results_polys.append(pairResults[0]['polygon'])
 
-        turbines_cluster = create_cluster_marker(turbine_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Turbine")
+        turbines_cluster = create_cluster_marker(turbine_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Turbine").add_to(iec_map)
         # create cluster for mets but not used since bounding box is on turbines
         create_cluster_marker(mets_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png', "Met").add_to(iec_map)
 
