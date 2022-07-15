@@ -589,7 +589,6 @@ def app():
         plt3d.scatter(X, Y, Z)
         plt.show()
 
-    @st.cache
     def process_pair(params):
         try:
             turbine_shapefile_path = params['turbine_shapefile_path']
