@@ -690,8 +690,8 @@ def app():
         return st.success("Saved File:{} to tempDir".format(uploadedfile.name))
 
     @st.cache
-    def create_cluster_marker(marker_data, custom_icon_url, popup_info, output_map):
-        cluster = folium.plugins.MarkerCluster().add_to(output_map)
+    def create_cluster_marker(marker_data, custom_icon_url, popup_info):
+        cluster = folium.plugins.MarkerCluster()
 
         for point in range(0, len(marker_data)):
             icon = folium.features.CustomIcon(
@@ -841,9 +841,9 @@ def app():
                 pairResults = process_pair(params)
                 paired_results_polys.append(pairResults[0]['polygon'])
 
-        turbines_cluster = create_cluster_marker(turbine_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Turbine", iec_map)
+        turbines_cluster = create_cluster_marker(turbine_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Turbine")
         # create cluster for mets but not used since bounding box is on turbines
-        create_cluster_marker(mets_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png', "Met", iec_map)
+        create_cluster_marker(mets_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png', "Met").add_to(iec_map)
 
         # turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
         # mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
