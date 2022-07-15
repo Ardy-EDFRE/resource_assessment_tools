@@ -915,14 +915,22 @@ def app():
         st.write("Detailed Sector Results")
         st.write(details_output_csv)
 
-        convert_csv = convert_df(details_output_csv)
+        sectors_csv = convert_df(sector_results_output)
+        details_csv = convert_df(details_output_csv)
 
         st.download_button(
-            label="Download data as CSV",
-            data=convert_csv,
+            label="Download Sector Data as CSV",
+            data=sectors_csv,
             file_name=outputResultsFileName,
             mime='text/csv',
         )
+        st.download_button(
+            label="Download Detailed Sector Data as CSV",
+            data=details_csv,
+            file_name=outputResultsFileName[:-4] + '_details.csv',
+            mime='text/csv',
+        )
+
         #
         # if os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv'):
         #     path1 = os.path.expanduser(f'~/Downloads/{outputResultsFileName[:-4]}' + '_details.csv')
