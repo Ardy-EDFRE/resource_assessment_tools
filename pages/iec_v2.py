@@ -42,6 +42,7 @@ def app():
 
     st.markdown("We need all the files into UTM WGS84 coordinates")
 
+    @st.cache
     # BUSINESS LOGIC
     def createResultTxtFiles(outputResultsFileName):
         try:
@@ -63,6 +64,7 @@ def app():
                              'max_terrain_variation'))
         csvfile.close()
 
+    @st.cache
     def getParamsFromFile(paramsFiles):
         pairLines = []
         pairsFile = open(paramsFiles["pair_path"], "r+")
@@ -71,6 +73,7 @@ def app():
 
         return pairLines
 
+    @st.cache
     def createParams(pl):
         plList = pl.split(',')
         params = {}
@@ -90,6 +93,7 @@ def app():
 
         return params
 
+    @st.cache
     def results2csv(pairResults, outputResultsFileName):
         # write detail output
         outputResultsFileDetailsName = outputResultsFileName[:-4] + '_details.csv'
@@ -130,6 +134,7 @@ def app():
             (str(pairResults[0]['target_turbine_fid']), str(pairResults[0]['target_met_fid']), str(pairPassesIEC)))
         outputResultsFile.close()
 
+    @st.cache
     def format_sectors(origin, centered_on, include_angles, exclude_angles, target_turbine_fid, target_met_fid, L, H,
                        D):
         sectors = []
@@ -238,6 +243,7 @@ def app():
         # JL shouldn't you assign the raster_crs to the df dataframe itself df.crs = raster_crs
         return df
 
+    @st.cache
     def get_turbine_elevation(target, raster_elevation):
         """
         Given a raster of elevation data and a set of data about turbine location,
@@ -249,6 +255,7 @@ def app():
         # row, col = elevation.index(x, y) # spatial --> image coordinates
         return {'Z': float(elevation_band_1[raster_elevation.index(target['X'], target['Y'])])}
 
+    @st.cache
     def get_utm_distance(po, p):
         """
         Given Universal Transverse Mercator points p_0 and p, find the Euclidean distance between them
@@ -258,6 +265,7 @@ def app():
         dist = math.sqrt(difX ** 2 + difY ** 2)
         return dist
 
+    @st.cache
     def get_sectors(target_turbine, target_met, df):
         """
         For both the target turbine and the target met tower, find a list of
@@ -292,6 +300,7 @@ def app():
         )
         return pd.concat([df_target_turbine, df_target_met])
 
+    @st.cache
     def alpha_sector(LD):
         """
         Calculate alpha, the angle (in radians) which is blocked out by the ratio
@@ -304,6 +313,7 @@ def app():
         alpha = 1.3 * degree + 10
         return alpha
 
+    @st.cache
     def calc_angles(direction, alpha):
         """
         Given a direction and an alpha, return the angle as a tuple
@@ -316,6 +326,7 @@ def app():
             alphaFin = alphaFin - 360
         return int(round(alphaOri)), int(round(alphaFin))
 
+    @st.cache
     def get_direction_degrees(po, p):
         """
         Given two points p_0 and p, find the direction of the vector connection them
@@ -329,6 +340,7 @@ def app():
         bearing2 = (90 - angle) % 360
         return bearing2
 
+    @st.cache
     def condense(list_of_tuples):
         """
         Given a list of tuples, find the overlapping pairs and
@@ -367,6 +379,7 @@ def app():
 
         return l
 
+    @st.cache
     def evaluate_sector(sector, raster):
         """
         For each sector, there are rules governing whether or not the sector passes the test:
@@ -460,6 +473,7 @@ def app():
 
         return sector.to_dict()
 
+    @st.cache
     def slope_interpolated_plane_and_terrain_variation(sector, rasterData, nodataMask, raster_noDataValue,
                                                        rasterCellSize,
                                                        xCellsFromLeft2Origin, yCellsFromLeft2Origin, xxMatrixInd,
@@ -509,6 +523,7 @@ def app():
 
         sector.actual_slope = slp_perc
 
+    @st.cache
     def slope_perc_from_origin_to_all_other_pnts(sector, rasterData, nodataMask, rasterCellSize, xxInd, yyInd):
         """
         Get the maximum slope in percentage from the sector origin to all other terrain points
@@ -524,6 +539,7 @@ def app():
             np.divide(difElev, dist_from_origin, out=np.zeros_like(difElev), where=dist_from_origin != 0)), np.NaN)
         sector.actual_slope = np.nanmax(slopes) * 100
 
+    @st.cache
     def get_sector_terrain_as_xyz_grid_surface_centeredInOrigin(sector, rasterData, raster_noDataValue,
                                                                 xCellsFromLeft2Origin, yCellsFromLeft2Origin):
         """
@@ -573,6 +589,7 @@ def app():
         plt3d.scatter(X, Y, Z)
         plt.show()
 
+    @st.cache
     def process_pair(params):
         try:
             turbine_shapefile_path = params['turbine_shapefile_path']
@@ -689,63 +706,81 @@ def app():
             f.write(uploadedfile.getbuffer())
         return st.success("Saved File:{} to tempDir".format(uploadedfile.name))
 
-    # G:\Projects\USA_North\Livingston_County\03_Wind\030_Associated_Met_Masts\Location Selection\nominated_turbines_v3.csv
-    # G:\Projects\USA_North\Livingston_County\05_GIS\053_Data\Turbines_v45_UTM_NAD83_20220330.zip
+    @st.cache
+    def create_cluster_marker(marker_data, custom_icon_url, popup_info, output_map):
+        cluster = folium.plugins.MarkerCluster().add_to(output_map)
 
-    # G:\Projects\USA_North\Livingston_County\05_GIS\053_Data\DEM_10m_Large_Clip_NAD_UTM.tif
-    # G:\Projects\CAN_West\Red_Rock\03_Wind\032_Other_Analyses\Met_tower_siting\IEC_Lv22_Results_ed2.csv
+        for point in range(0, len(marker_data)):
+            icon = folium.features.CustomIcon(
+                custom_icon_url,
+                icon_size=(40, 40)
+            )
+            folium.Marker(marker_data[point],
+                          popup=popup_info,
+                          icon=icon).add_to(cluster)
 
-    # showing the maps
-    turbine_map = folium.Map(tiles='OpenStreetMap')
-    mets_map = folium.Map(tiles='OpenStreetMap')
-    sectors_map = folium.Map(tiles='OpenStreetMap')
+        return cluster
 
-    # Add custom base maps to folium
-    basemaps = {
-        'Google Maps': folium.TileLayer(
-            tiles='https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-            attr='Google',
-            name='Google Maps',
-            overlay=True,
-            control=True
-        ),
-        'Google Satellite': folium.TileLayer(
-            tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-            attr='Google',
-            name='Google Satellite',
-            overlay=True,
-            control=True
-        ),
-        'Google Terrain': folium.TileLayer(
-            tiles='https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
-            attr='Google',
-            name='Google Terrain',
-            overlay=True,
-            control=True
-        ),
-        'Google Satellite Hybrid': folium.TileLayer(
-            tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
-            attr='Google',
-            name='Google Satellite',
-            overlay=True,
-            control=True
-        ),
-        'Esri Satellite': folium.TileLayer(
-            tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-            attr='Esri',
-            name='Esri Satellite',
-            overlay=True,
-            control=True
-        )
-    }
+    @st.cache
+    def points_to_lists(df):
+        df["long"] = df.geometry.x
+        df["lat"] = df.geometry.y
 
-    # Add custom basemaps
-    basemaps['Google Maps'].add_to(mets_map)
-    basemaps['Google Satellite Hybrid'].add_to(mets_map)
-    basemaps['Google Maps'].add_to(turbine_map)
-    basemaps['Google Satellite Hybrid'].add_to(turbine_map)
-    basemaps['Google Maps'].add_to(sectors_map)
-    basemaps['Google Satellite Hybrid'].add_to(sectors_map)
+        df_points = df[["lat", "long"]]
+        points_list = df_points.values.tolist()
+
+        return points_list
+
+    def create_map():
+        map = folium.Map(tiles='OpenStreetMap')
+
+        # Add custom base maps to folium
+        basemaps = {
+            'Google Maps': folium.TileLayer(
+                tiles='https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                attr='Google',
+                name='Google Maps',
+                overlay=True,
+                control=True
+            ),
+            'Google Satellite': folium.TileLayer(
+                tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+                attr='Google',
+                name='Google Satellite',
+                overlay=True,
+                control=True
+            ),
+            'Google Terrain': folium.TileLayer(
+                tiles='https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
+                attr='Google',
+                name='Google Terrain',
+                overlay=True,
+                control=True
+            ),
+            'Google Satellite Hybrid': folium.TileLayer(
+                tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+                attr='Google',
+                name='Google Satellite',
+                overlay=True,
+                control=True
+            ),
+            'Esri Satellite': folium.TileLayer(
+                tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                attr='Esri',
+                name='Esri Satellite',
+                overlay=True,
+                control=True
+            )
+        }
+
+        # Add custom basemaps
+        basemaps['Google Maps'].add_to(map)
+        basemaps['Google Satellite Hybrid'].add_to(map)
+
+        return map
+
+    # get map
+    iec_map = create_map()
 
     # Input CSV
     mets_turbs_pairs = st.sidebar.file_uploader("Upload Met Turbine Pairs file location", type='csv',
@@ -784,72 +819,6 @@ def app():
                 'CRS {} '.format(
                     turbine_CRSCheck.crs, raster_CRSCheck.crs))
 
-    # display_met_pairs_map = st.sidebar.checkbox("Display Met Pairs on Map")
-    # if display_met_pairs_map:
-    #     met_pairs_df = met_pairs_df.astype(
-    #         {"target_turbine_x": float, "target_turbine_y": float, "target_met_x": float, "target_met_y": float})
-    #
-    #     turbines_pairs_df = met_pairs_df.iloc[:, [met_pairs_df.columns.get_loc(c) for c in
-    #                                               ['target_turbine_fid', 'target_turbine_x', 'target_turbine_y']]]
-    #
-    #     turbines_utm = utm.to_latlon(met_pairs_df['target_turbine_x'], met_pairs_df['target_turbine_y'], 14, northern=True)
-    #
-    #     turbines_pairs_df['target_met_x'] = turbines_utm[0]
-    #     turbines_pairs_df['target_met_y'] = turbines_utm[1]
-    #
-    #     mets_unique_df = met_pairs_df.iloc[:, [met_pairs_df.columns.get_loc(c) for c in ['target_met_fid', 'target_met_x', 'target_met_y']]]
-    #
-    #     mets_utm = utm.to_latlon(met_pairs_df['target_met_x'], met_pairs_df['target_met_y'], 14, northern=True)
-    #
-    #     mets_unique_df['target_met_x'] = mets_utm[0]
-    #     mets_unique_df['target_met_y'] = mets_utm[1]
-    #
-    #     turbines_pairs_df['geometry'] = [Point(xy) for xy in
-    #                                      zip(turbines_pairs_df.target_turbine_x, turbines_pairs_df.target_turbine_y)]
-    #
-    #     mets_unique_df['geometry'] = [Point(xy) for xy in
-    #                                   zip(mets_unique_df.target_met_x, mets_unique_df.target_met_y)]
-    #
-    #     turbines_pairs_df = turbines_pairs_df.set_crs(4326, allow_override=True)
-    #     mets_unique_df = mets_unique_df.set_crs(4326, allow_override=True)
-    #
-    #
-    #
-    #
-    #     turbines_pairs_df["long"] = turbines_pairs_df.geometry.x
-    #     turbines_pairs_df["lat"] = turbines_pairs_df.geometry.y
-    #     mets_unique_df["long"] = mets_unique_df.geometry.x
-    #     mets_unique_df["lat"] = mets_unique_df.geometry.y
-    #     turbine_pair_points = turbines_pairs_df[["lat", "long"]]
-    #     turbine_pairs_list = turbine_pair_points.values.tolist()
-    #     mets_points = mets_unique_df[["lat", "long"]]
-    #     mets_list = mets_points.values.tolist()
-    #
-    #     turbines_pairs_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
-    #     mets_pairs_cluster = folium.plugins.MarkerCluster().add_to(mets_map)
-    #
-    #     for point in range(0, len(turbine_pairs_list)):
-    #         turbine_icon = folium.features.CustomIcon(
-    #             'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
-    #             icon_size=(40, 40))
-    #         folium.Marker(turbine_pairs_list[point],
-    #                       popup='Turbine',
-    #                       icon=turbine_icon
-    #                       ).add_to(turbines_pairs_cluster)
-    #
-    #     for point in range(0, len(mets_list)):
-    #         met_icon = folium.features.CustomIcon(
-    #             'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
-    #             icon_size=(40, 40))
-    #         folium.Marker(mets_list[point],
-    #                       popup='Met',
-    #                       icon=met_icon
-    #                       ).add_to(mets_pairs_cluster)
-    #
-    #     bounding_box = turbines_pairs_cluster.get_bounds()
-    #     mets_map.fit_bounds([bounding_box])
-    #     folium_static(mets_map, width=800, height=800)
-
     display_turbine_layout_map = st.sidebar.checkbox("Display Turbine Layout on Map",
                                                      help="This checkbox will display a map visualization of the input Turbine shapefiles")
 
@@ -857,21 +826,22 @@ def app():
         turbine_CRSCheck = turbine_CRSCheck.to_crs("EPSG:4326")
         turbines_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Primary Turbine']
         mets_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Alt']
-        turbines_df["long"] = turbines_df.geometry.x
-        turbines_df["lat"] = turbines_df.geometry.y
-        mets_df["long"] = mets_df.geometry.x
-        mets_df["lat"] = mets_df.geometry.y
-        turbine_points = turbines_df[["lat", "long"]]
-        turbine_list = turbine_points.values.tolist()
-        mets_points = mets_df[["lat", "long"]]
-        mets_list = mets_points.values.tolist()
+
+        turbine_list = points_to_lists(turbines_df)
+        mets_list = points_to_lists(mets_df)
+
+        # turbines_df["long"] = turbines_df.geometry.x
+        # turbines_df["lat"] = turbines_df.geometry.y
+        # mets_df["long"] = mets_df.geometry.x
+        # mets_df["lat"] = mets_df.geometry.y
+        # turbine_points = turbines_df[["lat", "long"]]
+        # turbine_list = turbine_points.values.tolist()
+        # mets_points = mets_df[["lat", "long"]]
+        # mets_list = mets_points.values.tolist()
 
         paramsFiles = {"turbine_shapefile_path": turbine_layout,
                        "raster_path": elevation_raster,
                        "pair_path": mets_turbs_pairs}
-
-        # create txt file to hold output results
-        createResultTxtFiles(outputResultsFileName)
 
         # get pairs from file
         pairLines = getParamsFromFile(paramsFiles)
@@ -888,39 +858,46 @@ def app():
                 pairResults = process_pair(params)
                 paired_results_polys.append(pairResults[0]['polygon'])
 
-        turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
-        mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
+        turbines_cluster = create_cluster_marker(turbine_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Turbine", iec_map)
+        # create cluster for mets but not used since bounding box is on turbines
+        create_cluster_marker(mets_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png', "Met", iec_map)
 
-        for t_point in range(0, len(turbine_list)):
-            turbine_icon = folium.features.CustomIcon(
-                'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
-                icon_size=(40, 40))
-            folium.Marker(turbine_list[t_point],
-                          popup="Turbine",
-                          icon=turbine_icon).add_to(turbines_cluster)
+        # turbines_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
+        # mets_cluster = folium.plugins.MarkerCluster().add_to(turbine_map)
+        #
+        # for t_point in range(0, len(turbine_list)):
+        #     turbine_icon = folium.features.CustomIcon(
+        #         'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
+        #         icon_size=(40, 40))
+        #     folium.Marker(turbine_list[t_point],
+        #                   popup="Turbine",
+        #                   icon=turbine_icon).add_to(turbines_cluster)
+        #
+        # for m_point in range(0, len(mets_list)):
+        #     met_icon = folium.features.CustomIcon(
+        #         'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
+        #         icon_size=(40, 40))
+        #     folium.Marker(mets_list[m_point],
+        #                   popup='Met',
+        #                   icon=met_icon).add_to(mets_cluster)
 
-        for m_point in range(0, len(mets_list)):
-            met_icon = folium.features.CustomIcon(
-                'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
-                icon_size=(40, 40))
-            folium.Marker(mets_list[m_point],
-                          popup='Met',
-                          icon=met_icon).add_to(mets_cluster)
-
+        # This is the way to create multipolygons
         # from shapely.ops import unary_union
         #
         # sectors_gdf = unary_union(paired_results_polys)
         # sectors_gdf = geopandas.GeoDataFrame(index=[0], geometry=[sectors_gdf])
+
+        # Individual polygons
         sectors_gdf = geopandas.GeoDataFrame(geometry=paired_results_polys)
 
         sectors_gdf = sectors_gdf.set_crs(epsg=epsg_code)
         sectors_gdf = sectors_gdf.to_crs(epsg=4326)
 
-        folium.GeoJson(data=sectors_gdf['geometry'], popup=f'Evaluated Sector').add_to(turbine_map)
+        folium.GeoJson(data=sectors_gdf['geometry'], popup=f'Evaluated Sector').add_to(iec_map)
 
         bounding_box = turbines_cluster.get_bounds()
-        turbine_map.fit_bounds([bounding_box])
-        folium_static(turbine_map, width=1000, height=1000)
+        iec_map.fit_bounds([bounding_box])
+        folium_static(iec_map, width=1000, height=1000)
 
     run_iec = st.sidebar.button("Run IEC Terrain Assessment",
                                 help="This will run the process for evaluation sectors and generate an output for display & download")
@@ -934,9 +911,6 @@ def app():
 
         # create txt file to hold output results
         createResultTxtFiles(outputResultsFileName)
-
-        # get pairs from file
-        pairLines = getParamsFromFile(paramsFiles)
 
         counter = 1
 
