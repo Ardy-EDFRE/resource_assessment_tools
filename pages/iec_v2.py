@@ -858,8 +858,8 @@ def app():
         turbines_cluster = create_cluster_marker(turbine_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Turbine").add_to(iec_map)
 
         # create cluster for nominated turbines & mets but not used since bounding box is on turbines
-        create_cluster_marker(nominated_turbines_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Turbine").add_to(iec_map)
-        create_cluster_marker(nominated_mets_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png', "Met").add_to(iec_map)
+        create_cluster_marker(nominated_turbines_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Nominated Turbine").add_to(iec_map)
+        create_cluster_marker(nominated_mets_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png', "Nominated Met").add_to(iec_map)
 
         # Individual polygons
         sectors_gdf = geopandas.GeoDataFrame(geometry=paired_results_polys)
