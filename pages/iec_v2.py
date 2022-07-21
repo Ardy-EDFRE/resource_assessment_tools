@@ -883,6 +883,8 @@ def app():
                        "raster_path": elevation_raster,
                        "pair_path": mets_turbs_pairs}
 
+        pairLines = getParamsFromFile(paramsFiles)
+
         # create txt file to hold output results
         createResultTxtFiles(outputResultsFileName)
 
