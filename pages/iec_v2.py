@@ -435,24 +435,21 @@ def app():
                                                            rasterCellSize,
                                                            xCellsFromLeft2Origin, yCellsFromLeft2Origin, xxMatrixInd,
                                                            yyMatrixInd)
-            st.write(sector, rasterData, nodataMask, raster_noDataValue,
-                     rasterCellSize,
-                     xCellsFromLeft2Origin, yCellsFromLeft2Origin, xxMatrixInd,
-                     yyMatrixInd)
-            st.write(sector.actual_slope_method)
 
         elif sector.actual_slope_method == 'maximum_slope':
             # use maximum slope from the sector.origin to any point of the terrain
             slope_perc_from_origin_to_all_other_pnts(sector, rasterData, nodataMask, rasterCellSize, xxInd, yyInd)
-            st.write(sector, rasterData, nodataMask, rasterCellSize, xxInd, yyInd)
-            st.write(sector.actual_slope_method)
 
         else:
             sector.pass_IEC_Test = True
-            st.write("Passed")
             return sector.to_dict()
 
         # evaluate if the sector passes the IEC test
+        for sectors in sector:
+            st.write(sectors.actual_slope_method)
+            if sectors.pass_IEC_Test:
+                st.write("Passed")
+
         sector.evaluate()
 
         return sector.to_dict()
