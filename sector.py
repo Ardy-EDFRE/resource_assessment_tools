@@ -384,15 +384,15 @@ class Sector(object):
                 else:
                     self._terrain_assessment = True
 
-            if self.actual_slope is None:
-                self._slope_assessment = False
-
             if self._max_slope:
-                if self.actual_slope > self._max_slope:
-                    # Fail if actual > max allowed
+                if self.actual_slope is None:
                     self._slope_assessment = False
                 else:
-                    self._slope_assessment = True
+                    if self.actual_slope > self._max_slope:
+                        # Fail if actual > max allowed
+                        self._slope_assessment = False
+                    else:
+                        self._slope_assessment = True
 
             if self._terrain_assessment and self._slope_assessment:
                 self._pass_IEC_Test = True
@@ -401,6 +401,9 @@ class Sector(object):
 
         elif self._actual_slope_method == 'maximum_slope':
             # slope to all points
+            if self.actual_slope is None:
+                self._slope_assessment = False
+                self._pass_IEC_Test = False
             if self.actual_slope > self._max_slope:
                 # Fail if actual > max allowed
                 self._slope_assessment = False
