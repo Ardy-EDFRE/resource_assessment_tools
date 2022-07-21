@@ -408,14 +408,6 @@ def app():
         #     with rasterio.open(r'G:\Projects\USA_North\Lincoln_Valley\05_GIS\053_Data\working\IEC\circle_terrain_2.tif', 'w', **out_meta) as dst:
         #         dst.write_band(1, rasterData[0].astype(rasterio.float32))
 
-        #     sector nodata mask
-        #     avoid this
-        #     investigate how to fix none value for tif files & why the file gives raster.nodata = None
-        #     if raster.nodata:
-        #         raster_noDataValue = 0
-        #     else:
-        #         raster_noDataValue = raster.nodata
-
         raster_noDataValue = raster.nodata
         nodataMask = (rasterData != raster_noDataValue)
 
@@ -444,15 +436,16 @@ def app():
                                                            rasterCellSize,
                                                            xCellsFromLeft2Origin, yCellsFromLeft2Origin, xxMatrixInd,
                                                            yyMatrixInd)
-            # print(sector.actual_slope_method)
+            st.write(sector.actual_slope_method)
 
         elif sector.actual_slope_method == 'maximum_slope':
             # use maximum slope from the sector.origin to any point of the terrain
             slope_perc_from_origin_to_all_other_pnts(sector, rasterData, nodataMask, rasterCellSize, xxInd, yyInd)
-            # print(sector.actual_slope_method)
+            st.write(sector.actual_slope_method)
 
         else:
             sector.pass_IEC_Test = True
+            st.write("Passed")
             return sector.to_dict()
 
         # evaluate if the sector passes the IEC test
