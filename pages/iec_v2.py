@@ -445,11 +445,6 @@ def app():
             return sector.to_dict()
 
         # evaluate if the sector passes the IEC test
-        for sectors in sector:
-            st.write(sectors.actual_slope_method)
-            if sectors.pass_IEC_Test:
-                st.write("Passed")
-
         sector.evaluate()
 
         return sector.to_dict()

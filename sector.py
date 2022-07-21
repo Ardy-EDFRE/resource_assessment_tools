@@ -5,32 +5,32 @@ import numpy as np
 
 class Sector(object):
     def __init__(
-        self,
-        name=None,
-        origin=None,
-        target_met_fid=None,
-        target_turbine_fid=None,
-        hub_height=None,
-        diameter=None,
-        centered_on=None,
-        angle=None,
-        L=None,
-        lower_distance_bound=None,
-        upper_distance_bound=None,
-        include=True,
-        actual_slope_method=None,
-        max_terrain_variation=None,
-        max_slope=None,
-        actual_terrain_variation=None,
-        actual_above_plane_terrain_variation=None,
-        actual_below_plane_terrain_variation=None,
-        actual_slope=None,
-        terrain_assessment=None,
-        slope_assessment=None,
-        pass_IEC_Test=None,
-        type='segment',
-        polygon=None,
-        coords=None,
+            self,
+            name=None,
+            origin=None,
+            target_met_fid=None,
+            target_turbine_fid=None,
+            hub_height=None,
+            diameter=None,
+            centered_on=None,
+            angle=None,
+            L=None,
+            lower_distance_bound=None,
+            upper_distance_bound=None,
+            include=True,
+            actual_slope_method=None,
+            max_terrain_variation=None,
+            max_slope=None,
+            actual_terrain_variation=None,
+            actual_above_plane_terrain_variation=None,
+            actual_below_plane_terrain_variation=None,
+            actual_slope=None,
+            terrain_assessment=None,
+            slope_assessment=None,
+            pass_IEC_Test=None,
+            type='segment',
+            polygon=None,
+            coords=None,
 
     ):
         self._type = type
@@ -61,7 +61,6 @@ class Sector(object):
         self._polygon = polygon
         self._coords = coords
         self._plane = None
-
 
     @property
     def origin(self):
@@ -133,7 +132,7 @@ class Sector(object):
     @actual_slope.setter
     def actual_slope(self, value):
         if isinstance(value, float):
-            self._actual_slope=value
+            self._actual_slope = value
         else:
             raise ValueError("actual_slope must be type 'float'")
 
@@ -145,10 +144,10 @@ class Sector(object):
     @actual_terrain_variation.setter
     def actual_terrain_variation(self, value):
         if isinstance(value, float):
-            self._actual_terrain_variation=value
+            self._actual_terrain_variation = value
         else:
             raise ValueError("actual_terrain_variation must be type 'float'")
-        
+
     @property
     def actual_above_plane_terrain_variation(self):
         if self._actual_above_plane_terrain_variation:
@@ -157,7 +156,7 @@ class Sector(object):
     @actual_above_plane_terrain_variation.setter
     def actual_above_plane_terrain_variation(self, value):
         if isinstance(value, float):
-            self._actual_above_plane_terrain_variation=value
+            self._actual_above_plane_terrain_variation = value
         else:
             raise ValueError("actual_above_plane_terrain_variation must be type 'float'")
 
@@ -169,7 +168,7 @@ class Sector(object):
     @actual_below_plane_terrain_variation.setter
     def actual_below_plane_terrain_variation(self, value):
         if isinstance(value, float):
-            self._actual_below_plane_terrain_variation=value
+            self._actual_below_plane_terrain_variation = value
         else:
             raise ValueError("actual_below_plane_terrain_variation must be type 'float'")
 
@@ -185,7 +184,7 @@ class Sector(object):
         and a sector distance (eg. 2L, 4L, etc.) create an annulus section
         which geometrically represents the sector
         """
-        if self._type=='segment':
+        if self._type == 'segment':
             sector_vertex_array = []
 
             # initial bearing
@@ -206,11 +205,11 @@ class Sector(object):
 
             # external arc
             tmpAngle0 = self.angle[0]
-            if self.angle[0]!=self.angle[1]:
-                tmpAngle1=self.angle[1]
+            if self.angle[0] != self.angle[1]:
+                tmpAngle1 = self.angle[1]
             else:
                 tmpAngle1 = self.angle[0] + 360
-                
+
             intermediate_angle_list = get_angle_range(tmpAngle0, tmpAngle1, 0.2)
             intermediate_angle_list = intermediate_angle_list[1:]
 
@@ -241,7 +240,7 @@ class Sector(object):
             sector_vertex_array.append(arc_final_upper_distance_bound)
 
             # internal arc
-            #intermediate_angle_list.reverse()
+            # intermediate_angle_list.reverse()
             intermediate_angle_list = intermediate_angle_list[::-1]
             for intermediate_point in intermediate_angle_list:
                 intermediate_point = rotate_point(
@@ -278,14 +277,14 @@ class Sector(object):
     @polygon.setter
     def polygon(self, value):
         if isinstance(value, shapely.geometry.polygon.Polygon):
-            self._polygon=value
+            self._polygon = value
         else:
             raise ValueError("Sector.polygon must be of type shapely.geometry.polygon.Polygon")
 
     @property
     def coords(self):
         if self._polygon is not None:
-            self._coords = [tuple((x,y)) for x,y in self._polygon.exterior.coords]
+            self._coords = [tuple((x, y)) for x, y in self._polygon.exterior.coords]
             return self._coords
         else:
             self._polygon = self.get_polygon()
@@ -355,7 +354,7 @@ class Sector(object):
         sector_vertex_array.append(arc_final_upper_distance_bound)
 
         # internal arc
-        #intermediate_angle_list.reverse()
+        # intermediate_angle_list.reverse()
         intermediate_angle_list = intermediate_angle_list[::-1]
         for intermediate_point in intermediate_angle_list:
             intermediate_point = rotate_point(
@@ -376,7 +375,7 @@ class Sector(object):
         """
         Evaluate sector
         """
-        if self._actual_slope_method=='plane_slope':
+        if self._actual_slope_method == 'plane_slope':
             # interpolation plane and terrain variation
             if self._max_terrain_variation:
                 if self.actual_terrain_variation > self._max_terrain_variation:
@@ -384,6 +383,9 @@ class Sector(object):
                     self._terrain_assessment = False
                 else:
                     self._terrain_assessment = True
+
+            if self.actual_slope is None:
+                self._slope_assessment = False
 
             if self._max_slope:
                 if self.actual_slope > self._max_slope:
@@ -396,8 +398,8 @@ class Sector(object):
                 self._pass_IEC_Test = True
             else:
                 self._pass_IEC_Test = False
-                
-        elif self._actual_slope_method=='maximum_slope':
+
+        elif self._actual_slope_method == 'maximum_slope':
             # slope to all points
             if self.actual_slope > self._max_slope:
                 # Fail if actual > max allowed
@@ -413,20 +415,20 @@ class Sector(object):
 
     def to_dict(self):
         return {
-            "origin" : self._origin,
+            "origin": self._origin,
             "name": self._name,
             "target_met_fid": self._target_met_fid,
             "target_turbine_fid": self._target_turbine_fid,
-            "hub_height" : self._hub_height,
-            "diameter" : self._diameter,
+            "hub_height": self._hub_height,
+            "diameter": self._diameter,
             "centered_on": self._centered_on,
-            "angle" : self._angle,
-            "lower_distance_bound" : self._lower_distance_bound,
-            "upper_distance_bound" : self._upper_distance_bound,
-            "include" : self._include,
+            "angle": self._angle,
+            "lower_distance_bound": self._lower_distance_bound,
+            "upper_distance_bound": self._upper_distance_bound,
+            "include": self._include,
             "actual_slope_method": self._actual_slope_method,
-            "max_terrain_variation" : self._max_terrain_variation,
-            "max_slope" : self._max_slope,
+            "max_terrain_variation": self._max_terrain_variation,
+            "max_slope": self._max_slope,
             "actual_terrain_variation": self.actual_terrain_variation,
             "actual_above_terrain_variation": self.actual_above_plane_terrain_variation,
             "actual_below_terrain_variation": self.actual_below_plane_terrain_variation,
@@ -434,10 +436,11 @@ class Sector(object):
             "terrain_assessment": self._terrain_assessment,
             "slope_assessment": self._slope_assessment,
             "pass_IEC_Test": self._pass_IEC_Test,
-            "type" : self._type,
+            "type": self._type,
             "polygon": self._get_polygon,
             "coords": self._coords
         }
+
 
 def create_point_from_distance_and_angle(x, y, distance, angle):
     """
@@ -446,6 +449,7 @@ def create_point_from_distance_and_angle(x, y, distance, angle):
     disp_x, disp_y = (distance * math.sin(math.radians(angle)), distance * math.cos(math.radians(angle)))
     pnt = (x + disp_x, y + disp_y)
     return pnt
+
 
 def rotate_point(angle_rad, x0, y0, x, y):
     """
@@ -456,10 +460,11 @@ def rotate_point(angle_rad, x0, y0, x, y):
     x = x - x0
     y = y - y0
     rotated_point = (
-        x0 + x*math.cos(angle_rad) - y*math.sin(angle_rad),
-        y0 + x*math.sin(angle_rad) + y*math.cos(angle_rad)
+        x0 + x * math.cos(angle_rad) - y * math.sin(angle_rad),
+        y0 + x * math.sin(angle_rad) + y * math.cos(angle_rad)
     )
     return rotated_point
+
 
 def get_angle_range(angle_0, angle_1, step):
     """
