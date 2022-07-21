@@ -21,7 +21,6 @@ import warnings
 from shapely.geometry import Polygon
 import os
 
-
 warnings.filterwarnings('ignore')
 
 
@@ -436,11 +435,16 @@ def app():
                                                            rasterCellSize,
                                                            xCellsFromLeft2Origin, yCellsFromLeft2Origin, xxMatrixInd,
                                                            yyMatrixInd)
+            st.write(sector, rasterData, nodataMask, raster_noDataValue,
+                     rasterCellSize,
+                     xCellsFromLeft2Origin, yCellsFromLeft2Origin, xxMatrixInd,
+                     yyMatrixInd)
             st.write(sector.actual_slope_method)
 
         elif sector.actual_slope_method == 'maximum_slope':
             # use maximum slope from the sector.origin to any point of the terrain
             slope_perc_from_origin_to_all_other_pnts(sector, rasterData, nodataMask, rasterCellSize, xxInd, yyInd)
+            st.write(sector, rasterData, nodataMask, rasterCellSize, xxInd, yyInd)
             st.write(sector.actual_slope_method)
 
         else:
@@ -826,8 +830,10 @@ def app():
         target_turbine_pairs_gdf = nominated_gdfs[0]
         target_met_pairs_gdf = nominated_gdfs[1]
 
-        nominated_turbines_list = [(y, x) for y, x in zip(target_turbine_pairs_gdf['geometry'].y, target_turbine_pairs_gdf['geometry'].x)]
-        nominated_mets_list = [(y, x) for y, x in zip(target_met_pairs_gdf['geometry'].y, target_met_pairs_gdf['geometry'].x)]
+        nominated_turbines_list = [(y, x) for y, x in
+                                   zip(target_turbine_pairs_gdf['geometry'].y, target_turbine_pairs_gdf['geometry'].x)]
+        nominated_mets_list = [(y, x) for y, x in
+                               zip(target_met_pairs_gdf['geometry'].y, target_met_pairs_gdf['geometry'].x)]
 
         paramsFiles = {"turbine_shapefile_path": turbine_layout,
                        "raster_path": elevation_raster,
@@ -848,11 +854,17 @@ def app():
                 pairResults = process_pair(params)
                 paired_results_polys.append(pairResults[0]['polygon'])
 
-        turbines_cluster = create_cluster_marker(turbine_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Turbine").add_to(iec_map)
+        turbines_cluster = create_cluster_marker(turbine_list,
+                                                 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
+                                                 "Turbine").add_to(iec_map)
 
         # create cluster for nominated turbines & mets but not used since bounding box is on turbines
-        create_cluster_marker(nominated_turbines_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png', "Nominated Turbine").add_to(iec_map)
-        create_cluster_marker(nominated_mets_list, 'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png', "Nominated Met").add_to(iec_map)
+        create_cluster_marker(nominated_turbines_list,
+                              'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/turbines.png',
+                              "Nominated Turbine").add_to(iec_map)
+        create_cluster_marker(nominated_mets_list,
+                              'https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/met_tower.png',
+                              "Nominated Met").add_to(iec_map)
 
         # Individual polygons
         sectors_gdf = geopandas.GeoDataFrame(geometry=paired_results_polys)
@@ -935,4 +947,3 @@ def app():
 
     st.image("https://raw.githubusercontent.com/Ardy-EDFRE/resource_assessment_tools/main/images/edf_small_logo.png",
              width=50)
-
