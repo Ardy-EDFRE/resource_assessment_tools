@@ -22,7 +22,7 @@ from shapely.geometry import Polygon
 import os
 
 warnings.filterwarnings('ignore')
-
+pd.options.mode.chained_assignment = None  # default='warn'
 
 def app():
     st.markdown("# IEC Terrain Assessment")
