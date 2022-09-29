@@ -377,13 +377,15 @@ class Sector(object):
         """
         if self._actual_slope_method == 'plane_slope':
             # interpolation plane and terrain variation
+            if self._max_terrain_variation is None:
+                self._terrain_assessment = False
             if self._max_terrain_variation:
-                if self.actual_terrain_variation > self._max_terrain_variation:
+                if self.actual_terrain_variation > str(self._max_terrain_variation):
                     # Fail if actual > max allowed
                     self._terrain_assessment = False
                 else:
                     self._terrain_assessment = True
-
+                
             if self._max_slope:
                 if self.actual_slope is None:
                     self._slope_assessment = False
