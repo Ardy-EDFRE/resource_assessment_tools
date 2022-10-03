@@ -382,7 +382,7 @@ class Sector(object):
                 if self._max_terrain_variation is None:
                     self._max_terrain_variation = 0
                 if self.actual_terrain_variation is None:
-                    self.actual_terrain_variation = 0.01
+                    self.actual_terrain_variation = 0.00
                 elif self.actual_terrain_variation > self._max_terrain_variation:
                     # Fail if actual > max allowed
                     self._terrain_assessment = False
