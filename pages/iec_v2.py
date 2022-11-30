@@ -813,7 +813,7 @@ def app():
         if 'Alternate' in turbine_CRSCheck.columns:
             turbines_df = turbine_CRSCheck.loc[turbine_CRSCheck['Alternate'] == 'Primary Turbine']
             
-        turbine_df = turbine_CRSCheck
+        turbines_df = turbine_CRSCheck
 
         # target_met_pairs_gdf = geopandas.GeoDataFrame(met_pairs_df, geometry=geopandas.points_from_xy(met_pairs_df.target_met_x, met_pairs_df.target_met_y))
         # target_met_pairs_gdf = target_met_pairs_gdf.set_crs(epsg=epsg_code)
