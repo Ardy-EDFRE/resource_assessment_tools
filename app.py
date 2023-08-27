@@ -17,6 +17,6 @@ app.add_page("About the page", about_me.app)
 app.add_page("IEC Terrain Assessment", iec_v2.app)
 app.add_page("DNV Solar Energy Estimate", dnv_solar.app)
 app.add_page("Solar Estimate Comparisons", solar_comparisons.app)
-app.add_page("Aggrid Example", table_edits_aggrid.app)
+app.add_page("Geoportal Data", geoportal_data.app)
 # The main app
 app.run()
