@@ -1,7 +1,7 @@
 # Custom imports
 from multipage import MultiPage
 # import your pages here
-from pages import iec_v2, table_edits_aggrid, dnv_solar, about_me, solar_comparisons
+from pages import iec_v2, dnv_solar, about_me, solar_comparisons
 
 import streamlit as st
 import matplotlib.pyplot as plt
